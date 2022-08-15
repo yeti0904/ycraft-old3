@@ -7,3 +7,6 @@ $ make
 ```
 
 a binary will be placed in the `bin` folder
+
+## screenshots
+<img src="/img/screenshot.png">
