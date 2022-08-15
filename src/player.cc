@@ -55,7 +55,7 @@ void Player::GoRight(double delta, double multiplier) {
 	state       =  PlayerState::Moving;
 }
 
-void Player::Collision(Level level) {
+void Player::Collision(Level& level) {
 	if (
 		(position.x < 0) ||
 		(position.y < 0) ||

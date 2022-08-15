@@ -32,6 +32,6 @@ class Player {
 		void        GoDown(double delta, double multiplier);
 		void        GoLeft(double delta, double multiplier);
 		void        GoRight(double delta, double multiplier);
-		void        Collision(Level level);
+		void        Collision(Level& level);
 		textureID_t GetTextureID();
 };
