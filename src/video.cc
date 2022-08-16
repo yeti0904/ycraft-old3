@@ -9,7 +9,7 @@ void VideoComponents::Init() {
 	}
 
 	window = SDL_CreateWindow(
-		APP_NAME,
+		(std::string(APP_NAME) + " " + APP_VERSION).c_str(),
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		640, 480,
 		SDL_WINDOW_RESIZABLE

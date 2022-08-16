@@ -1,7 +1,8 @@
 #pragma once
 
-#define APP_NAME   "ycraft"
-#define APP_AUTHOR "MESYETI"
+#define APP_NAME    "ycraft"
+#define APP_VERSION "demo 0.0.1"
+#define APP_AUTHOR  "MESYETI"
 #define APP_SCREEN_SIZE_W 640
 #define APP_SCREEN_SIZE_H 360
 
