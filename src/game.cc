@@ -7,6 +7,7 @@ void Game::Init() {
 	blockdefs.Create(1, "Stone", 4, BlockType::Solid);
 	blockdefs.Create(2, "Dirt", 1, BlockType::Solid);
 	blockdefs.Create(3, "Grass", 0, BlockType::Solid);
+	blockdefs.Create(4, "Bricks", 12, BlockType::Solid);
 
 	/*camera.x = 0;
 	camera.y = 0;
@@ -35,6 +36,9 @@ void Game::Init() {
 	};
 	player.inventory.hotbar[1] = {
 		false, 1, 1
+	};
+	player.inventory.hotbar[2] = {
+		false, 4, 1
 	};
 }
 
@@ -371,6 +375,10 @@ void Game::GetHighlightedBlock() {
 }
 
 void Game::PlaceBlock() {
+	if (!blockHighlighted) {
+		return;
+	}
+	
 	size_t y = highlightedBlock.y;
 	size_t x = highlightedBlock.x;
 	if (
@@ -392,6 +400,10 @@ void Game::PlaceBlock() {
 }
 
 void Game::DeleteBlock() {
+	if (!blockHighlighted) {
+		return;
+	}
+	
 	size_t y = highlightedBlock.y;
 	size_t x = highlightedBlock.x;
 	if (
