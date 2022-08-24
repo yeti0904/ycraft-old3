@@ -7,7 +7,7 @@ OBJ   = ${addsuffix .o,${subst src/,bin/,${basename ${SRC}}}}
 APP = ./bin/ycraft
 
 # compiler related
-CXX = g++
+CXX = clang++
 CXXVER = c++17
 CXXFLAGS = \
 	-O3 \

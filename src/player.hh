@@ -4,6 +4,7 @@
 #include "level.hh"
 #include "inventory.hh"
 #include "animation.hh"
+#include "blockdefs.hh"
 
 enum class PlayerState {
 	Static = 0,
@@ -28,10 +29,10 @@ class Player {
 		Player();
 		void        Reset();
 		void        Update();
-		void        GoUp(double delta, double multiplier);
-		void        GoDown(double delta, double multiplier);
-		void        GoLeft(double delta, double multiplier);
-		void        GoRight(double delta, double multiplier);
-		void        Collision(Level& level);
+		void        GoUp(double delta, double multiplier, Level& level, Blockdefs& defs);
+		void        GoDown(double delta, double multiplier, Level& level, Blockdefs& defs);
+		void        GoLeft(double delta, double multiplier, Level& level, Blockdefs& defs);
+		void        GoRight(double delta, double multiplier, Level& level, Blockdefs& defs);
+		void        EdgeCollision(Level& level);
 		textureID_t GetTextureID();
 };

@@ -99,23 +99,23 @@ void Game::HandleInput(const Uint8* keystate, double delta) {
 
     player.Reset();
 	if (keystate[SDL_SCANCODE_W]) {
-		player.GoUp(delta, multiplier);
-		player.Collision(level);
+		player.GoUp(delta, multiplier, level, blockdefs);
+		player.EdgeCollision(level);
 		UpdateCamera();
 	}
 	if (keystate[SDL_SCANCODE_S]) {
-		player.GoDown(delta, multiplier);
-		player.Collision(level);
+		player.GoDown(delta, multiplier, level, blockdefs);
+		player.EdgeCollision(level);
 		UpdateCamera();
 	}
 	if (keystate[SDL_SCANCODE_A]) {
-		player.GoLeft(delta, multiplier);
-		player.Collision(level);
+		player.GoLeft(delta, multiplier, level, blockdefs);
+		player.EdgeCollision(level);
 		UpdateCamera();
 	}
 	if (keystate[SDL_SCANCODE_D]) {
-		player.GoRight(delta, multiplier);
-		player.Collision(level);
+		player.GoRight(delta, multiplier, level, blockdefs);
+		player.EdgeCollision(level);
 		UpdateCamera();
 	}
 	player.Update();

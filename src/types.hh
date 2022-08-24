@@ -16,3 +16,9 @@ struct FVec2 { // float Vec2
 struct WVec2 { // word Vec2
 	size_t x, y;
 };
+
+typedef SDL_Rect Rect;
+
+struct FRect { // float Rect
+	float x, y, w, h;
+};
