@@ -8,6 +8,7 @@ void Game::Init() {
 	blockdefs.Create(2, "Dirt", 1, BlockType::Solid);
 	blockdefs.Create(3, "Grass", 0, BlockType::Solid);
 	blockdefs.Create(4, "Bricks", 12, BlockType::Solid);
+	blockdefs.Create(5, "Cobble", 5, BlockType::Solid);
 
 	/*camera.x = 0;
 	camera.y = 0;
@@ -39,6 +40,9 @@ void Game::Init() {
 	};
 	player.inventory.hotbar[2] = {
 		false, 4, 1
+	};
+	player.inventory.hotbar[3] = {
+		false, 5, 1
 	};
 }
 

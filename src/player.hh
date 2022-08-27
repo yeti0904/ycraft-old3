@@ -35,4 +35,5 @@ class Player {
 		void        GoRight(double delta, double multiplier, Level& level, Blockdefs& defs);
 		void        EdgeCollision(Level& level);
 		textureID_t GetTextureID();
+		FVec2       CorrectPosition();
 };

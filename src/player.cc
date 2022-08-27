@@ -33,15 +33,18 @@ void Player::Update() {
 }
 
 void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs) {
+	oldPosition =  position;
 	position.y  -= 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
+	FVec2 corrected = CorrectPosition();
+
 	// collision
 	std::vector <Vec2> blockPositions = {
-		{(int) floor(position.x), (int) floor(position.y)},
-		{(int) ceil(position.x), (int) floor(position.y)},
-		{(int) floor(position.x), (int) ceil(position.y)},
-		{(int) ceil(position.x), (int) ceil(position.y)}
+		{(int) floor(corrected.x), (int) floor(corrected.y)},
+		{(int) ceil(corrected.x), (int) floor(corrected.y)},
+		{(int) floor(corrected.x), (int) ceil(corrected.y)},
+		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
 		if (
@@ -50,7 +53,7 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 		) {
 			if (
 				Collision::RectVsRect(
-					{position.x, position.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
+					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
@@ -61,15 +64,18 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 }
 
 void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& defs) {
+	oldPosition =  position;
 	position.y  += 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
+	FVec2 corrected = CorrectPosition();
+	
 	// collision
 	std::vector <Vec2> blockPositions = {
-		{(int) floor(position.x), (int) floor(position.y)},
-		{(int) ceil(position.x), (int) floor(position.y)},
-		{(int) floor(position.x), (int) ceil(position.y)},
-		{(int) ceil(position.x), (int) ceil(position.y)}
+		{(int) floor(corrected.x), (int) floor(corrected.y)},
+		{(int) ceil(corrected.x), (int) floor(corrected.y)},
+		{(int) floor(corrected.x), (int) ceil(corrected.y)},
+		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
 		if (
@@ -78,7 +84,7 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 		) {
 			if (
 				Collision::RectVsRect(
-					{position.x, position.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
+					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
@@ -89,15 +95,18 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 }
 
 void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& defs) {
+	oldPosition =  position;
 	position.x  -= 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
+	FVec2 corrected = CorrectPosition();
+
 	// collision
 	std::vector <Vec2> blockPositions = {
-		{(int) floor(position.x), (int) floor(position.y)},
-		{(int) ceil(position.x), (int) floor(position.y)},
-		{(int) floor(position.x), (int) ceil(position.y)},
-		{(int) ceil(position.x), (int) ceil(position.y)}
+		{(int) floor(corrected.x), (int) floor(corrected.y)},
+		{(int) ceil(corrected.x), (int) floor(corrected.y)},
+		{(int) floor(corrected.x), (int) ceil(corrected.y)},
+		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
 		if (
@@ -106,7 +115,7 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 		) {
 			if (
 				Collision::RectVsRect(
-					{position.x, position.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
+					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
@@ -117,15 +126,18 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 }
 
 void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& defs) {
+	oldPosition =  position;
 	position.x  += 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
+	FVec2 corrected = CorrectPosition();
+
 	// collision
 	std::vector <Vec2> blockPositions = {
-		{(int) floor(position.x), (int) floor(position.y)},
-		{(int) ceil(position.x), (int) floor(position.y)},
-		{(int) floor(position.x), (int) ceil(position.y)},
-		{(int) ceil(position.x), (int) ceil(position.y)}
+		{(int) floor(corrected.x), (int) floor(corrected.y)},
+		{(int) ceil(corrected.x), (int) floor(corrected.y)},
+		{(int) floor(corrected.x), (int) ceil(corrected.y)},
+		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
 		if (
@@ -134,7 +146,7 @@ void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& d
 		) {
 			if (
 				Collision::RectVsRect(
-					{position.x, position.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
+					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
@@ -161,4 +173,11 @@ textureID_t Player::GetTextureID() {
 		case PlayerState::Moving: return walkAnimation.GetFrame();
 	}
 	return 0;
+}
+
+FVec2 Player::CorrectPosition() {
+	return {
+		round(position.x * 10) / 10,
+		round(position.y * 10) / 10
+	};
 }
