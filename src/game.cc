@@ -373,6 +373,27 @@ void Game::GetHighlightedBlock() {
 				}
 				blockHighlighted = true;
 				highlightedBlock = {(size_t) j, (size_t) i};
+
+				if (
+					(
+						((size_t) floor(player.position.x) == highlightedBlock.x) &&
+						((size_t) floor(player.position.y) == highlightedBlock.y)
+					) ||
+					(
+						((size_t) ceil(player.position.x) == highlightedBlock.x) &&
+						((size_t) floor(player.position.y) == highlightedBlock.y)
+					) ||
+					(
+						((size_t) floor(player.position.x) == highlightedBlock.x) &&
+						((size_t) ceil(player.position.y) == highlightedBlock.y)
+					) ||
+					(
+						((size_t) ceil(player.position.x) == highlightedBlock.x) &&
+						((size_t) ceil(player.position.y) == highlightedBlock.y)
+					)
+				) {
+					blockHighlighted = false;
+				}
 			}
 		}
 	}
