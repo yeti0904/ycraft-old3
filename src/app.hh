@@ -5,6 +5,12 @@
 #include "image.hh"
 #include "tiles.hh"
 #include "game.hh"
+#include "titleScreen.hh"
+
+enum class AppState {
+	InGame = 0,
+	TitleScreen
+};
 
 class App {
 	public:
@@ -21,6 +27,9 @@ class App {
 		Uint64                    deltaLast;
 		double                    deltaTime;
 		uint16_t                  fps;
+		AppState                  state;
+
+		Menus::TitleScreen titleScreen;
 
 		// functions
 		App();

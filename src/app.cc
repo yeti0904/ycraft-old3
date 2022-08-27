@@ -14,6 +14,7 @@ App::App() {
 	gameFolder = Util::DirName(Util::GetExecutableLocation());
 	deltaLast  = 0;
 	deltaNow   = SDL_GetPerformanceCounter();
+	state      = AppState::TitleScreen;
 
 	credits = {
 		"programming: MESYETI",
@@ -26,7 +27,7 @@ App::App() {
 	video.Init();
 	text.Init(gameFolder + "/font.ttf");
 	image.Init();
-
+/*
 	game.Init();
 
 	gameTextures.Init(
@@ -34,7 +35,7 @@ App::App() {
 	);
 
 	SDL_ShowCursor(SDL_DISABLE);
-
+*/
 	Util::Log("Ready");
 }
 
@@ -67,16 +68,46 @@ void App::Update() {
 				break;
 			}
 			default: {
-				game.HandleEvent(event);
+				switch (state) {
+					case AppState::InGame: {
+						game.HandleEvent(event);
+						break;
+					}
+					case AppState::TitleScreen: {
+						titleScreen.HandleEvent(event);
+						break;
+					}
+				}
 				break;
 			}
 		}
 	}
 
-	game.Update();
+	switch (state) {
+		case AppState::InGame: {
+			game.Update();
+		
+			const Uint8* keystate = SDL_GetKeyboardState(NULL);
+			game.HandleInput(keystate, deltaTime);
+			break;			
+		}
+		case AppState::TitleScreen: {
+			if (!titleScreen.Update(state)) {
+				run = false;
+			}
 
-	const Uint8* keystate = SDL_GetKeyboardState(NULL);
-	game.HandleInput(keystate, deltaTime);
+			if (state == AppState::InGame) {
+				game.Init();
+
+				gameTextures.Init(
+					video.renderer, gameFolder + "/texpacks/default.png", GAME_BLOCK_SIZE
+				);
+
+				SDL_ShowCursor(SDL_DISABLE);
+			}
+			break;
+		}
+	}
 
 	Render();
 }
@@ -85,7 +116,16 @@ void App::Render() {
 	SDL_SetRenderDrawColor(video.renderer, 0, 0, 25, 255);
 	SDL_RenderClear(video.renderer);
 
-	game.Render(*this);	
+	switch (state) {
+		case AppState::InGame: {
+			game.Render(*this);
+			break;
+		}
+		case AppState::TitleScreen: {
+			titleScreen.Render(video.renderer, text);
+			break;
+		}
+	}
 
 	SDL_RenderPresent(video.renderer);
 }
