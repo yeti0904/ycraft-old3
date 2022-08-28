@@ -6,10 +6,12 @@
 #include "tiles.hh"
 #include "game.hh"
 #include "titleScreen.hh"
+#include "worldMenu.hh"
 
 enum class AppState {
 	InGame = 0,
-	TitleScreen
+	TitleScreen,
+	WorldMenu
 };
 
 class App {
@@ -30,6 +32,7 @@ class App {
 		AppState                  state;
 
 		Menus::TitleScreen titleScreen;
+		Menus::WorldsMenu  worldsMenu;
 
 		// functions
 		App();

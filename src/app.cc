@@ -77,6 +77,10 @@ void App::Update() {
 						titleScreen.HandleEvent(event);
 						break;
 					}
+					case AppState::WorldMenu: {
+						worldsMenu.HandleEvent(event);
+						break;
+					}
 				}
 				break;
 			}
@@ -95,6 +99,10 @@ void App::Update() {
 			if (!titleScreen.Update(state)) {
 				run = false;
 			}
+			break;
+		}
+		case AppState::WorldMenu: {
+			worldsMenu.Update(state);
 
 			if (state == AppState::InGame) {
 				game.Init();
@@ -123,6 +131,10 @@ void App::Render() {
 		}
 		case AppState::TitleScreen: {
 			titleScreen.Render(video.renderer, text);
+			break;
+		}
+		case AppState::WorldMenu: {
+			worldsMenu.Render(video.renderer, text);
 			break;
 		}
 	}

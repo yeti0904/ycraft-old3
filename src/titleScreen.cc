@@ -3,6 +3,7 @@
 #include "app.hh"
 
 Menus::TitleScreen::TitleScreen():
+	mousePosition{0, 0},
 	mousePressed(false)
 {
 	playButton.label         = "Play";
@@ -54,9 +55,11 @@ bool Menus::TitleScreen::Update(AppState& state) {
 	exitButton.outlineColour = exitButton.MouseIsOver(mousePosition)? white : black;
 
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
-		state = AppState::InGame;
+		state = AppState::WorldMenu;
+		mousePressed = false;
 	}
 	if (mousePressed && exitButton.MouseIsOver(mousePosition)) {
+		mousePressed = false;
 		return false;
 	}
 	return true;
