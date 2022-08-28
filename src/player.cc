@@ -48,6 +48,12 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 	};
 	for (auto& block : blockPositions) {
 		if (
+			(block.x < 0) || (block.y < 0) ||
+			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
+		) {
+			continue;
+		}
+		if (
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
@@ -78,6 +84,12 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
+		if (
+			(block.x < 0) || (block.y < 0) ||
+			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
+		) {
+			continue;
+		}
 		if (
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
@@ -110,6 +122,12 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 	};
 	for (auto& block : blockPositions) {
 		if (
+			(block.x < 0) || (block.y < 0) ||
+			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
+		) {
+			continue;
+		}
+		if (
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
@@ -140,6 +158,12 @@ void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& d
 		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 	for (auto& block : blockPositions) {
+		if (
+			(block.x < 0) || (block.y < 0) ||
+			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
+		) {
+			continue;
+		}
 		if (
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
