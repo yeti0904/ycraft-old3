@@ -39,7 +39,7 @@ void Menus::TitleScreen::HandleEvent(SDL_Event& event) {
 			break;
 		}
 		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_RIGHT) {
+			if (event.button.button == SDL_BUTTON_LEFT) {
 				mousePressed = false;
 			}
 			break;
