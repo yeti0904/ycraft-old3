@@ -19,7 +19,7 @@ CXXFLAGS = \
 	-Wall \
 	-Wextra \
 	-pedantic \
-	-g -lm \
+	-g \
 	-Wno-deprecated-declarations
 
 ifeq (${platform}, windows)
@@ -38,7 +38,7 @@ else
 CXXFLAGS += -I/usr/include/SDL2
 endif
 
-CXXLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image
+CXXLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lm
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
