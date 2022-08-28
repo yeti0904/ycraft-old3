@@ -48,7 +48,7 @@ compile: ./bin ${OBJ} ${SRC}
 	mkdir -p bin
 
 bin/%.o: src/%.cc ${DEPS}
-	${CXX} -c $< ${CXXFLAGS} -o $@
+	${CXX} -c $< ${CXXFLAGS} -o $@ ${CXXLIBS}
 
 clean:
 	rm bin/*.o $(APP)
