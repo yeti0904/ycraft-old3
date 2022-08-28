@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_LEVEL_HH
+#define YCRAFT_LEVEL_HH
+
 #include "_components.hh"
 #include "types.hh"
 
@@ -17,3 +19,5 @@ class Level {
 		Level() {}
 		void Generate(UVec2 p_size);
 };
+
+#endif

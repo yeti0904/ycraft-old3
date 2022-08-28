@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_UI_HH
+#define YCRAFT_UI_HH
+
 #include "_components.hh"
 #include "types.hh"
 #include "text.hh"
@@ -28,3 +30,5 @@ namespace UI {
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 	};
 }
+
+#endif

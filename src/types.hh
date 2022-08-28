@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_TYPES_HH
+#define YCRAFT_TYPES_HH
+
 #include "_components.hh"
 
 struct Vec2 {
@@ -22,3 +24,5 @@ typedef SDL_Rect Rect;
 struct FRect { // float Rect
 	float x, y, w, h;
 };
+
+#endif

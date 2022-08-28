@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_PLAYER_HH
+#define YCRAFT_PLAYER_HH
+
 #include "_components.hh"
 #include "types.hh"
 #include "level.hh"
@@ -37,3 +39,5 @@ class Player {
 		textureID_t GetTextureID();
 		FVec2       CorrectPosition();
 };
+
+#endif

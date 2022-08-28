@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_ANIMATION_HH
+#define YCRAFT_ANIMATION_HH
+
 #include "_components.hh"
 
 class Animation {
@@ -10,3 +12,5 @@ class Animation {
 		void        NextFrame();
 		textureID_t GetFrame();
 };
+
+#endif

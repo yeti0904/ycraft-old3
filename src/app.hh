@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_APP_HH
+#define YCRAFT_APP_HH
+
 #include "_components.hh"
 #include "video.hh"
 #include "text.hh"
@@ -40,3 +42,5 @@ class App {
 		void Update();
 		void Render();
 };
+
+#endif

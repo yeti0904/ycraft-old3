@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_TITLESCREEN_HH
+#define YCRAFT_TITLESCREEN_HH
+
 #include "_components.hh"
 #include "ui.hh"
 
@@ -20,3 +22,5 @@ namespace Menus {
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 	};
 }
+
+#endif

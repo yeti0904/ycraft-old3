@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_GAME_HH
+#define YCRAFT_GAME_HH
+
 #include "_components.hh"
 #include "blockdefs.hh"
 #include "types.hh"
@@ -30,3 +32,5 @@ class Game {
 		void PlaceBlock();
 		void DeleteBlock();
 };
+
+#endif

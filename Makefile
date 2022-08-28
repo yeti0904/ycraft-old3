@@ -19,7 +19,7 @@ CXXFLAGS = \
 	-Wall \
 	-Wextra \
 	-pedantic \
-	-g \
+	-g -lm \
 	-Wno-deprecated-declarations
 
 ifeq (${platform}, windows)

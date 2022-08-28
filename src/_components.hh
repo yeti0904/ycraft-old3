@@ -1,4 +1,5 @@
-#pragma once
+#ifndef YCRAFT__COMPONENTS_HH
+#define YCRAFT__COMPONENTS_HH
 
 // macros
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -41,3 +42,5 @@
 typedef uint16_t blockID_t;
 typedef uint16_t itemID_t;
 typedef uint32_t textureID_t;
+
+#endif

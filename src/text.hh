@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_TEXT_HH
+#define YCRAFT_TEXT_HH
+
 #include "_components.hh"
 #include "video.hh"
 #include "types.hh"
@@ -18,3 +20,5 @@ class TextComponents {
 		);
 		Vec2 GetTextSize(std::string text, float size);
 };
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_UTIL_HH
+#define YCRAFT_UTIL_HH
+
 #include "_components.hh"
 
 namespace Util {
@@ -8,3 +10,5 @@ namespace Util {
 	std::string DirName(std::string path);
 	double      Clamp(double x, double min, double max);
 }
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_BLOCKDEFS_HH
+#define YCRAFT_BLOCKDEFS_HH
+
 #include "_components.hh"
 
 enum class BlockType {
@@ -25,3 +27,5 @@ class Blockdefs {
 			blockID_t id, std::string name, uint32_t textureID, BlockType type
 		);
 };
+
+#endif

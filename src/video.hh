@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_VIDEO_HH
+#define YCRAFT_VIDEO_HH
+
 #include "_components.hh"
 
 class VideoComponents {
@@ -12,3 +14,5 @@ class VideoComponents {
 		void Init();
 		void Free();
 };
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_COLLISION_HH
+#define YCRAFT_COLLISION_HH
+
 #include "_components.hh"
 #include "types.hh"
 #include "level.hh"
@@ -18,3 +20,5 @@ namespace Collision {
 		float& time, const FVec2& vel
 	);
 }
+
+#endif

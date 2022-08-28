@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_TILES_HH
+#define YCRAFT_TILES_HH
+
 #include "_components.hh"
 #include "types.hh"
 
@@ -15,3 +17,5 @@ class TileSheet {
 		UVec2 GetTexturePosition(uint32_t id);
 		void  RenderTile(SDL_Renderer* renderer, uint32_t id, Vec2 pos);
 };
+
+#endif

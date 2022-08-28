@@ -1,4 +1,6 @@
-#pragma once
+#ifndef YCRAFT_INVENTORY_HH
+#define YCRAFT_INVENTORY_HH
+
 #include "_components.hh"
 
 struct InventoryEntry {
@@ -16,3 +18,5 @@ class Inventory {
 		// functions
 		Inventory();	
 };
+
+#endif
