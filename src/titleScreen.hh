@@ -12,6 +12,7 @@ namespace Menus {
 			// variables
 			UI::Button playButton;
 			UI::Button exitButton;
+			UI::Button settingsButton;
 			Vec2       mousePosition;
 			bool       mousePressed;
 	

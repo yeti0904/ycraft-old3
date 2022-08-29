@@ -31,14 +31,12 @@ void Menus::WorldsMenu::HandleEvent(SDL_Event& event) {
 		case SDL_MOUSEBUTTONDOWN: {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				mousePressed = true;
-				puts("down");
 			}
 			break;
 		}
 		case SDL_MOUSEBUTTONUP: {
 			if (event.button.button == SDL_BUTTON_LEFT) {
 				mousePressed = false;
-				puts("up");
 			}
 			break;
 		}

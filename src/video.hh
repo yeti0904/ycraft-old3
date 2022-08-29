@@ -2,6 +2,7 @@
 #define YCRAFT_VIDEO_HH
 
 #include "_components.hh"
+#include "settings.hh"
 
 class VideoComponents {
 	public:

@@ -9,11 +9,14 @@
 #include "game.hh"
 #include "titleScreen.hh"
 #include "worldMenu.hh"
+#include "settingsMenu.hh"
+#include "settings.hh"
 
 enum class AppState {
 	InGame = 0,
 	TitleScreen,
-	WorldMenu
+	WorldMenu,
+	SettingsMenu
 };
 
 class App {
@@ -32,15 +35,19 @@ class App {
 		double                    deltaTime;
 		uint16_t                  fps;
 		AppState                  state;
+		SettingsManager           settings;
 
-		Menus::TitleScreen titleScreen;
-		Menus::WorldsMenu  worldsMenu;
+		Menus::TitleScreen  titleScreen;
+		Menus::WorldsMenu   worldsMenu;
+		Menus::SettingsMenu settingsMenu;
 
 		// functions
 		App();
 		~App();
 		void Update();
 		void Render();
+
+		void UpdateSettings();
 };
 
 #endif

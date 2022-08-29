@@ -54,3 +54,8 @@ std::string Util::DirName(std::string path) {
 double Util::Clamp(double x, double min, double max) {
 	return std::max(min, std::min(x, max));
 }
+
+std::string Util::Trim(const std::string& str) {
+	// an improved version of thishttps://stackoverflow.com/a/58773060
+	return std::regex_replace(str, std::regex("^ +| +$"),"");
+}

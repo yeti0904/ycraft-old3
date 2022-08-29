@@ -15,13 +15,22 @@ Menus::TitleScreen::TitleScreen():
 		100
 	};
 
+	settingsButton.label = "Settings";
+	settingsButton.outlineColour = {0, 0, 0, 255};
+	settingsButton.filledColour  = {54, 54, 54, 255};
+	settingsButton.size          = {200, 25};
+	settingsButton.position      = {
+		(APP_SCREEN_SIZE_W / 2) - (settingsButton.size.x / 2),
+		130
+	};
+
 	exitButton.label = "Exit";
 	exitButton.outlineColour = {0, 0, 0, 255};
 	exitButton.filledColour  = {54, 54, 54, 255};
 	exitButton.size          = {200, 25};
 	exitButton.position      = {
 		(APP_SCREEN_SIZE_W / 2) - (exitButton.size.x / 2),
-		130
+		160
 	};
 }
 
@@ -53,9 +62,15 @@ bool Menus::TitleScreen::Update(AppState& state) {
 
 	playButton.outlineColour = playButton.MouseIsOver(mousePosition)? white : black;
 	exitButton.outlineColour = exitButton.MouseIsOver(mousePosition)? white : black;
+	settingsButton.outlineColour =
+		settingsButton.MouseIsOver(mousePosition)? white : black;
 
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
 		state = AppState::WorldMenu;
+		mousePressed = false;
+	}
+	if (mousePressed && settingsButton.MouseIsOver(mousePosition)) {
+		state = AppState::SettingsMenu;
 		mousePressed = false;
 	}
 	if (mousePressed && exitButton.MouseIsOver(mousePosition)) {
@@ -84,4 +99,5 @@ void Menus::TitleScreen::Render(SDL_Renderer* renderer, TextComponents& text) {
 	// draw menu
 	playButton.Render(renderer, text);
 	exitButton.Render(renderer, text);
+	settingsButton.Render(renderer, text);
 }

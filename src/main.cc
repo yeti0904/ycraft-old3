@@ -1,4 +1,5 @@
 #include "app.hh"
+#include "util.hh"
 
 int main(void) {
 	App app;

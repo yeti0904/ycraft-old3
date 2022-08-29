@@ -9,6 +9,7 @@ namespace Util {
 	std::string GetExecutableLocation();
 	std::string DirName(std::string path);
 	double      Clamp(double x, double min, double max);
+	std::string Trim(const std::string& str);
 }
 
 #endif

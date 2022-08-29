@@ -27,6 +27,11 @@ App::App() {
 	video.Init();
 	text.Init(gameFolder + "/font.ttf");
 	image.Init();
+
+	settings.Load(gameFolder);
+	UpdateSettings();
+	settingsMenu.settings = &settings;
+	
 /*
 	game.Init();
 
@@ -81,6 +86,9 @@ void App::Update() {
 						worldsMenu.HandleEvent(event);
 						break;
 					}
+					case AppState::SettingsMenu: {
+						settingsMenu.HandleEvent(event);
+					}
 				}
 				break;
 			}
@@ -99,6 +107,9 @@ void App::Update() {
 			if (!titleScreen.Update(state)) {
 				run = false;
 			}
+			if (state == AppState::SettingsMenu) {
+				settingsMenu.Init();
+			}
 			break;
 		}
 		case AppState::WorldMenu: {
@@ -112,6 +123,12 @@ void App::Update() {
 				);
 
 				SDL_ShowCursor(SDL_DISABLE);
+			}
+			break;
+		}
+		case AppState::SettingsMenu: {
+			if (settingsMenu.Update(state)) {
+				UpdateSettings();
 			}
 			break;
 		}
@@ -137,7 +154,18 @@ void App::Render() {
 			worldsMenu.Render(video.renderer, text);
 			break;
 		}
+		case AppState::SettingsMenu: {
+			settingsMenu.Render(video.renderer, text);
+			break;
+		}
 	}
 
 	SDL_RenderPresent(video.renderer);
+}
+
+void App::UpdateSettings() {
+	SDL_SetWindowFullscreen(
+		video.window,
+		settings.settings["fullscreen"] == "true"? SDL_WINDOW_FULLSCREEN : 0
+	);
 }
