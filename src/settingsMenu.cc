@@ -118,7 +118,7 @@ void Menus::SettingsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	fullscreenCheckbox.Render(renderer);
 	text.RenderText(
 		renderer, "Enable fullscreen",
-		{fullscreenCheckbox.position.x + 9, fullscreenCheckbox.position.y - 3},
+		{fullscreenCheckbox.position.x + 12, fullscreenCheckbox.position.y - 3},
 		1.0, true
 	);
 }
