@@ -166,6 +166,6 @@ void App::Render() {
 void App::UpdateSettings() {
 	SDL_SetWindowFullscreen(
 		video.window,
-		settings.settings["fullscreen"] == "true"? SDL_WINDOW_FULLSCREEN : 0
+		settings.settings["fullscreen"] == "true"? SDL_WINDOW_FULLSCREEN_DESKTOP : 0
 	);
 }

@@ -14,7 +14,7 @@ a binary will be placed in the `bin` folder
 ## todo list
 - [X] collision
 - [X] menu screen
-- [ ] settings menu with graphics settings
+- [X] settings menu with graphics settings
 - [ ] world options
 - [ ] world saving and loading
 - [ ] in game menu
