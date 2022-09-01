@@ -144,9 +144,9 @@ void Game::Render(App& app) {
 		max.y = camera.y + (APP_SCREEN_SIZE_H / GAME_BLOCK_SIZE) + 2;
 		
 		Vec2 start;
-		start.x = (camera.x / GAME_BLOCK_SIZE) > 0? camera.x / GAME_BLOCK_SIZE : 0;
-		start.y = (camera.y / GAME_BLOCK_SIZE) > 0? camera.y / GAME_BLOCK_SIZE : 0;
-		
+		start.x = camera.x > 0? camera.x : 0;
+		start.y = camera.y > 0? camera.y : 0;
+
 		for (
 			ssize_t i = start.y / GAME_BLOCK_SIZE; (i < max.y) && (i < level.size.y); ++i
 		) {
