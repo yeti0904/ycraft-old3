@@ -57,13 +57,12 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
-			while (
+			if (
 				Collision::RectVsRect(
 					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
-				corrected = CorrectPosition();
 				position.y = ceil(position.y);
 			}
 		}
@@ -95,13 +94,12 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
-			while (
+			if (
 				Collision::RectVsRect(
 					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
-				corrected = CorrectPosition();
 				position.y = floor(position.y);
 			}
 		}
@@ -133,13 +131,12 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
-			while (
+			if (
 				Collision::RectVsRect(
 					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
-				corrected = CorrectPosition();
 				position.x = ceil(position.x);
 			}
 		}
@@ -171,13 +168,12 @@ void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& d
 			defs.defs[level.layers[0].front[block.y][block.x]].type ==
 			BlockType::Solid
 		) {
-			while (
+			if (
 				Collision::RectVsRect(
 					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
 					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
 				)
 			) {
-				corrected = CorrectPosition();
 				position.x = floor(position.x);
 			}
 		}
