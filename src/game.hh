@@ -22,7 +22,7 @@ class Game {
 
 		// functions
 		Game() {}
-		void Init();
+		void Init(UVec2 levelSize);
 		void Update();
 		void HandleEvent(SDL_Event& event);
 		void UpdateCamera();

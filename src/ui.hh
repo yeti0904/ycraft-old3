@@ -49,6 +49,29 @@ namespace UI {
 			bool MouseIsOver(Vec2 cursor);
 			void Render(SDL_Renderer* renderer);	
 	};
+
+	class ButtonArray : public UIElement {
+		// a form of selection, you can only select 1 at a time
+		public:
+			// variables
+			SDL_Color                 selectedOutline;
+			SDL_Color                 selectedFilled;
+			SDL_Color                 outline;
+			SDL_Color                 filled;
+			std::vector <std::string> options;
+			ssize_t                   selected;
+			ssize_t                   set;
+		
+			ButtonArray():
+				selected(-1),
+				set(0)
+			{
+				UIElement();
+			}
+			ssize_t MouseIsOver(Vec2 cursor);
+			void    Render(SDL_Renderer* renderer, TextComponents& text);
+			void    UpdateSelected(Vec2 cursor);
+	};
 }
 
 #endif

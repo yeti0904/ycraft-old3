@@ -2,7 +2,7 @@
 #include "app.hh"
 #include "constants.hh"
 
-void Game::Init() {
+void Game::Init(UVec2 levelSize) {
 	blockdefs.Create(0, "Air", 0, BlockType::Gas);
 	blockdefs.Create(1, "Stone", 4, BlockType::Solid);
 	blockdefs.Create(2, "Dirt", 1, BlockType::Solid);
@@ -26,7 +26,8 @@ void Game::Init() {
 	// player.position.x = 5;
 	// player.position.y = 5;
 
-	level.Generate({256, 256});
+	level.size = levelSize;
+	level.Generate();
 
 	player.position.x = level.size.x / 2;
 	player.position.y = level.size.y / 2;

@@ -11,12 +11,14 @@
 #include "worldMenu.hh"
 #include "settingsMenu.hh"
 #include "settings.hh"
+#include "newWorldMenu.hh"
 
 enum class AppState {
 	InGame = 0,
 	TitleScreen,
 	WorldMenu,
-	SettingsMenu
+	SettingsMenu,
+	NewWorldMenu
 };
 
 class App {
@@ -40,6 +42,7 @@ class App {
 		Menus::TitleScreen  titleScreen;
 		Menus::WorldsMenu   worldsMenu;
 		Menus::SettingsMenu settingsMenu;
+		Menus::NewWorldMenu newWorldMenu;
 
 		// functions
 		App();

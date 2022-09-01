@@ -52,7 +52,7 @@ void Menus::WorldsMenu::Update(AppState& state) {
 		newWorldButton.MouseIsOver(mousePosition)? white : black;
 
 	if (mousePressed && newWorldButton.MouseIsOver(mousePosition)) {
-		state = AppState::InGame;
+		state = AppState::NewWorldMenu;
 		mousePressed = false;
 	}
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {

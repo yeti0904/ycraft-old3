@@ -91,6 +91,13 @@ Vec2 TextComponents::GetTextSize(std::string text, float size) {
 	SDL_Rect     textRect;
 
 	textSurface = TTF_RenderText_Solid(font, text.c_str(), colour);
+	if (textSurface == nullptr) {
+		fprintf(
+			stderr, "[ERROR] TTF_RenderText_Solid returned NULL: %s\n",
+			TTF_GetError()
+		);
+		exit(EXIT_FAILURE);
+	}
 	textRect = {
 		0, 0,
 		(int)((float) textSurface->w * size), (int)((float)textSurface->h * size)

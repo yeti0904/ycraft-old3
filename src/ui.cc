@@ -24,6 +24,9 @@ void UI::Button::Render(SDL_Renderer* renderer, TextComponents& text) {
 	SDL_RenderDrawRect(renderer, &shape);
 
 	// render text
+	if (label.empty()) {
+		return;
+	}
 	Vec2 labelSize = text.GetTextSize(label, 1.0);
 	Vec2 textPos = {
 		(size.x / 2) - (labelSize.x / 2),
@@ -63,4 +66,74 @@ void UI::Checkbox::Render(SDL_Renderer* renderer) {
 
 		SDL_RenderFillRect(renderer, &indicator);
 	}
+}
+
+ssize_t UI::ButtonArray::MouseIsOver(Vec2 cursor) {
+	for (size_t i = 0; i < options.size(); ++i) {
+		UI::Button buttonCast;
+		buttonCast.position = {
+			static_cast <int32_t> (position.x + ((size.x / options.size()) * i)),
+			position.y
+		};
+		buttonCast.size = {
+			static_cast <int32_t> (size.x / options.size()), size.y
+		};
+
+		if (buttonCast.MouseIsOver(cursor)) {
+			return i;
+		}
+	}
+	return -1;
+}
+
+void UI::ButtonArray::Render(SDL_Renderer* renderer, TextComponents& text) {
+	for (size_t i = 0; i < options.size(); ++i) {
+		UI::Button buttonCast;
+		buttonCast.label    = options[i];
+		buttonCast.position = {
+			static_cast <int32_t> (position.x + ((size.x / options.size()) * i)),
+			position.y
+		};
+		buttonCast.size     = {
+			static_cast <int32_t> (size.x / options.size()), size.y
+		};
+
+		if ((i == (size_t) selected) || (i == (size_t) set)) {
+			continue;
+		}
+		else {
+			buttonCast.outlineColour = outline;
+			buttonCast.filledColour  = filled;
+		}
+
+		buttonCast.Render(renderer, text);
+	}
+
+	UI::Button buttonCast;
+	buttonCast.label    = options[set];
+	buttonCast.position = {
+		static_cast <int32_t> (position.x + ((size.x / options.size()) * set)),
+		position.y
+	};
+	buttonCast.size          = {
+		static_cast <int32_t> (size.x / options.size()), size.y
+	};
+	buttonCast.outlineColour = selectedOutline;
+	buttonCast.filledColour  = selectedFilled;
+	buttonCast.Render(renderer, text);
+	
+	if (selected < 0) {
+		return;
+	}
+
+	buttonCast.label    = options[selected];
+	buttonCast.position = {
+		static_cast <int32_t> (position.x + ((size.x / options.size()) * selected)),
+		position.y
+	};
+	buttonCast.Render(renderer, text);
+}
+
+void UI::ButtonArray::UpdateSelected(Vec2 cursor) {
+	selected = MouseIsOver(cursor);
 }

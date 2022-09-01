@@ -17,7 +17,7 @@ class Level {
 
 		// functions
 		Level() {}
-		void Generate(UVec2 p_size);
+		void Generate();
 };
 
 #endif

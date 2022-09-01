@@ -88,6 +88,11 @@ void App::Update() {
 					}
 					case AppState::SettingsMenu: {
 						settingsMenu.HandleEvent(event);
+						break;
+					}
+					case AppState::NewWorldMenu: {
+						newWorldMenu.HandleEvent(event);
+						break;
 					}
 				}
 				break;
@@ -114,21 +119,26 @@ void App::Update() {
 		}
 		case AppState::WorldMenu: {
 			worldsMenu.Update(state);
-
-			if (state == AppState::InGame) {
-				game.Init();
-
-				gameTextures.Init(
-					video.renderer, gameFolder + "/texpacks/default.png", GAME_BLOCK_SIZE
-				);
-
-				SDL_ShowCursor(SDL_DISABLE);
-			}
 			break;
 		}
 		case AppState::SettingsMenu: {
 			if (settingsMenu.Update(state)) {
 				UpdateSettings();
+			}
+			break;
+		}
+		case AppState::NewWorldMenu: {
+			newWorldMenu.Update(state);
+			if (state == AppState::InGame) {
+				uint32_t size = pow(2, (newWorldMenu.worldSizeSelection.set * 2) + 6);
+				game.Init({size, size});
+
+				gameTextures.Init(
+					video.renderer, gameFolder + "/texpacks/default.png",
+					GAME_BLOCK_SIZE
+				);
+
+				SDL_ShowCursor(SDL_DISABLE);
 			}
 			break;
 		}
@@ -156,6 +166,10 @@ void App::Render() {
 		}
 		case AppState::SettingsMenu: {
 			settingsMenu.Render(video.renderer, text);
+			break;
+		}
+		case AppState::NewWorldMenu: {
+			newWorldMenu.Render(video.renderer, text);
 			break;
 		}
 	}
