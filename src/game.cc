@@ -148,10 +148,10 @@ void Game::Render(App& app) {
 		start.y = camera.y > 0? camera.y : 0;
 
 		for (
-			ssize_t i = start.y / GAME_BLOCK_SIZE; (i < max.y) && (i < level.size.y); ++i
+			ssize_t i = start.y; (i < max.y) && (i < level.size.y); ++i
 		) {
 			for (
-				ssize_t j = start.x / GAME_BLOCK_SIZE; (j < max.x) && (j < level.size.x); 
+				ssize_t j = start.x; (j < max.x) && (j < level.size.x); 
 				++j
 			) {
 			    
