@@ -40,12 +40,7 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 	FVec2 corrected = CorrectPosition();
 
 	// collision
-	std::vector <Vec2> blockPositions = {
-		{(int) floor(corrected.x), (int) floor(corrected.y)},
-		{(int) ceil(corrected.x), (int) floor(corrected.y)},
-		{(int) floor(corrected.x), (int) ceil(corrected.y)},
-		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
-	};
+	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
 		if (
 			(block.x < 0) || (block.y < 0) ||
@@ -77,12 +72,7 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 	FVec2 corrected = CorrectPosition();
 	
 	// collision
-	std::vector <Vec2> blockPositions = {
-		{(int) floor(corrected.x), (int) floor(corrected.y)},
-		{(int) ceil(corrected.x), (int) floor(corrected.y)},
-		{(int) floor(corrected.x), (int) ceil(corrected.y)},
-		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
-	};
+	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
 		if (
 			(block.x < 0) || (block.y < 0) ||
@@ -114,12 +104,7 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 	FVec2 corrected = CorrectPosition();
 
 	// collision
-	std::vector <Vec2> blockPositions = {
-		{(int) floor(corrected.x), (int) floor(corrected.y)},
-		{(int) ceil(corrected.x), (int) floor(corrected.y)},
-		{(int) floor(corrected.x), (int) ceil(corrected.y)},
-		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
-	};
+	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
 		if (
 			(block.x < 0) || (block.y < 0) ||
@@ -151,12 +136,7 @@ void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& d
 	FVec2 corrected = CorrectPosition();
 
 	// collision
-	std::vector <Vec2> blockPositions = {
-		{(int) floor(corrected.x), (int) floor(corrected.y)},
-		{(int) ceil(corrected.x), (int) floor(corrected.y)},
-		{(int) floor(corrected.x), (int) ceil(corrected.y)},
-		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
-	};
+	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
 		if (
 			(block.x < 0) || (block.y < 0) ||
@@ -203,5 +183,16 @@ FVec2 Player::CorrectPosition() {
 	return {
 		round(position.x * 10) / 10,
 		round(position.y * 10) / 10
+	};
+}
+
+std::vector <Vec2> Player::GetTouchingBlocks() {
+	FVec2 corrected = CorrectPosition();
+
+	return {
+		{(int) floor(corrected.x), (int) floor(corrected.y)},
+		{(int) ceil(corrected.x), (int) floor(corrected.y)},
+		{(int) floor(corrected.x), (int) ceil(corrected.y)},
+		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
 }

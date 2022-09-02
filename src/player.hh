@@ -38,6 +38,8 @@ class Player {
 		void        EdgeCollision(Level& level);
 		textureID_t GetTextureID();
 		FVec2       CorrectPosition();
+
+		std::vector <Vec2> GetTouchingBlocks();
 };
 
 #endif
