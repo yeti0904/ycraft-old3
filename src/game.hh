@@ -6,8 +6,10 @@
 #include "types.hh"
 #include "level.hh"
 #include "player.hh"
+#include "pauseMenu.hh"
 
 class App;
+enum class AppState;
 
 class Game {
 	public:
@@ -19,11 +21,15 @@ class Game {
 		Vec2      mousePosition;
 		WVec2     highlightedBlock;
 		bool      blockHighlighted;
+		bool      paused;
+
+		Menus::PauseMenu pauseMenu;
 
 		// functions
 		Game() {}
 		void Init(UVec2 levelSize);
-		void Update();
+		void Deinit();
+		void Update(AppState& state);
 		void HandleEvent(SDL_Event& event);
 		void UpdateCamera();
 		void HandleInput(const Uint8* keystate, double delta);

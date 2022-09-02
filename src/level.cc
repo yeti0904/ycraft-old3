@@ -14,3 +14,7 @@ void Level::Generate() {
 		}
 	}
 }
+
+void Level::Destroy() {
+	layers = {};
+}

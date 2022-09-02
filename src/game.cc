@@ -20,6 +20,7 @@ void Game::Init(UVec2 levelSize) {
 
 	mousePosition = {0, 0};
 
+	paused        = false;
 	blockHighlighted = false;
 	highlightedBlock = {0, 0};
     
@@ -47,11 +48,22 @@ void Game::Init(UVec2 levelSize) {
 	};
 }
 
-void Game::Update() {
+void Game::Deinit() {
+	level.Destroy();
+}
+
+void Game::Update(AppState& state) {
+	if (paused) {
+		pauseMenu.Update(state, *this);
+	}
 	GetHighlightedBlock();
 }
 
 void Game::HandleEvent(SDL_Event& event) {
+	if (paused) {
+		pauseMenu.HandleEvent(event);
+		return;
+	}
 	switch (event.type) {
 		case SDL_MOUSEMOTION: {
 			mousePosition.x = event.motion.x;
@@ -88,6 +100,17 @@ void Game::HandleEvent(SDL_Event& event) {
 			}
 			break;
 		}
+		case SDL_KEYUP: {
+		    switch (event.key.keysym.scancode) {
+		        case SDL_SCANCODE_ESCAPE: {
+		            paused = true;
+		            SDL_ShowCursor(SDL_ENABLE);
+		            break;
+		        }
+		        default: break;
+		    }
+		    break;
+		}
 	}
 }
 
@@ -97,6 +120,9 @@ void Game::UpdateCamera() {
 }
 
 void Game::HandleInput(const Uint8* keystate, double delta) {
+	if (paused) {
+		return;
+	}
 	double multiplier =
 		keystate[SDL_SCANCODE_LSHIFT]?
 			GAME_PLAYER_FAST_SPEED : keystate[SDL_SCANCODE_RSHIFT]?
@@ -302,6 +328,12 @@ void Game::Render(App& app) {
 		outline.h += 2;
 		SDL_SetRenderDrawColor(app.video.renderer, 31, 16, 42, 127);
 		SDL_RenderDrawRect(app.video.renderer, &outline);
+	}
+
+	// render paused menu
+	if (paused) {
+		pauseMenu.Render(app.video.renderer, app.text);
+		return;
 	}
 	
 	// render UI

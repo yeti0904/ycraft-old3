@@ -19,10 +19,10 @@ SDL2, SDL2_ttf, SDL2_image
 - [X] menu screen
 - [X] settings menu with graphics settings
 - [X] world options
-- [ ] add sound effects
+- [X] in game menu
 - [ ] texture pack menu
 - [ ] world saving and loading
-- [ ] in game menu
+- [ ] add sound effects
 - [ ] lighting
 - [ ] actually good world generation
 - [ ] multiplayer

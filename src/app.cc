@@ -102,7 +102,7 @@ void App::Update() {
 
 	switch (state) {
 		case AppState::InGame: {
-			game.Update();
+			game.Update(state);
 		
 			const Uint8* keystate = SDL_GetKeyboardState(NULL);
 			game.HandleInput(keystate, deltaTime);

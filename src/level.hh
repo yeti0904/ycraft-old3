@@ -18,6 +18,7 @@ class Level {
 		// functions
 		Level() {}
 		void Generate();
+		void Destroy();
 };
 
 #endif
