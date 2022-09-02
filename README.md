@@ -23,6 +23,7 @@ SDL2, SDL2_ttf, SDL2_image
 - [ ] texture pack menu
 - [ ] world saving and loading
 - [ ] add sound effects
+- [ ] inventory
 - [ ] lighting
 - [ ] actually good world generation
 - [ ] multiplayer
