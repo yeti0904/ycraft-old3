@@ -2,10 +2,9 @@
 #include "constants.hh"
 #include "app.hh"
 
-Menus::TitleScreen::TitleScreen():
-	mousePosition{0, 0},
-	mousePressed(false)
-{
+Menus::TitleScreen::TitleScreen() {
+	MenuBase();
+
 	playButton.label         = "Play";
 	playButton.outlineColour = {0, 0, 0, 255};
 	playButton.filledColour  = {54, 54, 54, 255};
@@ -32,28 +31,6 @@ Menus::TitleScreen::TitleScreen():
 		(APP_SCREEN_SIZE_W / 2) - (exitButton.size.x / 2),
 		160
 	};
-}
-
-void Menus::TitleScreen::HandleEvent(SDL_Event& event) {
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
-			break;
-		}
-	}
 }
 
 bool Menus::TitleScreen::Update(AppState& state) {

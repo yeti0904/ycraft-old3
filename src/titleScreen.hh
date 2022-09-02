@@ -3,22 +3,20 @@
 
 #include "_components.hh"
 #include "ui.hh"
+#include "menuBase.hh"
 
 enum class AppState;
 
 namespace Menus {
-	class TitleScreen {
+	class TitleScreen : public MenuBase {
 		public:
 			// variables
 			UI::Button playButton;
 			UI::Button exitButton;
 			UI::Button settingsButton;
-			Vec2       mousePosition;
-			bool       mousePressed;
 	
 			// functions
 			TitleScreen();
-			void HandleEvent(SDL_Event& event);
 			bool Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 	};

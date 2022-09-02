@@ -3,10 +3,9 @@
 #include "game.hh"
 #include "constants.hh"
 
-Menus::PauseMenu::PauseMenu():
-    mousePosition{0, 0},
-    mousePressed(false)
-{
+Menus::PauseMenu::PauseMenu() {
+	MenuBase();
+
 	resumeButton.label         = "Resume";
 	resumeButton.outlineColour = {0, 0, 0, 255};
 	resumeButton.filledColour  = {54, 54, 54, 255};
@@ -18,28 +17,6 @@ Menus::PauseMenu::PauseMenu():
 	quitButton.filledColour  = {54, 54, 54, 255};
 	quitButton.size          = {200, 25};
 	quitButton.position      = {5, 80};
-}
-
-void Menus::PauseMenu::HandleEvent(SDL_Event& event) {
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
-			break;
-		}
-	}
 }
 
 void Menus::PauseMenu::Update(AppState& state, Game& game) {

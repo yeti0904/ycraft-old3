@@ -3,10 +3,10 @@
 #include "app.hh"
 
 Menus::SettingsMenu::SettingsMenu():
-	mousePosition{0, 0},
-	mousePressed(false),
 	settings(nullptr)
 {
+	MenuBase();
+
 	backButton.label         = "Back";
 	backButton.position.x    = (APP_SCREEN_SIZE_W / 2) - 215;
 	backButton.position.y    = APP_SCREEN_SIZE_H - 30;
@@ -30,28 +30,6 @@ Menus::SettingsMenu::SettingsMenu():
 
 void Menus::SettingsMenu::Init() {
 	fullscreenCheckbox.activated = settings->settings["fullscreen"] == "true";
-}
-
-void Menus::SettingsMenu::HandleEvent(SDL_Event& event) {
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
-			break;
-		}
-	}
 }
 
 bool Menus::SettingsMenu::Update(AppState& state) {

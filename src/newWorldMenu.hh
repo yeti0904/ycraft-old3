@@ -4,22 +4,20 @@
 #include "_components.hh"
 #include "ui.hh"
 #include "level.hh"
+#include "menuBase.hh"
 
 enum class AppState;
 
 namespace Menus {
-	class NewWorldMenu {
+	class NewWorldMenu : public MenuBase {
 		public:
 			// variables
 			UI::ButtonArray worldSizeSelection;
 			UI::Button      backButton;
 			UI::Button      startButton;
-			Vec2            mousePosition;
-			bool            mousePressed;
 	
 			// functions
 			NewWorldMenu();
-			void HandleEvent(SDL_Event& event);
 			void Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 	};

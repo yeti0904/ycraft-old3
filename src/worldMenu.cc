@@ -21,28 +21,6 @@ Menus::WorldsMenu::WorldsMenu() {
 	newWorldButton.filledColour  = {54, 54, 54, 255};
 }
 
-void Menus::WorldsMenu::HandleEvent(SDL_Event& event) {
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
-			break;
-		}
-	}
-}
-
 void Menus::WorldsMenu::Update(AppState& state) {
 	const SDL_Color white = {255, 255, 255, 255};
 	const SDL_Color black = {0, 0, 0, 255};
