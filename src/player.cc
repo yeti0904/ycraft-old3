@@ -37,27 +37,14 @@ void Player::GoUp(double delta, double multiplier, Level& level, Blockdefs& defs
 	position.y  -= 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
-	FVec2 corrected = CorrectPosition();
-
 	// collision
 	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
-		if (
-			(block.x < 0) || (block.y < 0) ||
-			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
-		) {
+		if (!level.ValidBlock(block)) {
 			continue;
 		}
-		if (
-			defs.defs[level.layers[0].front[block.y][block.x]].type ==
-			BlockType::Solid
-		) {
-			if (
-				Collision::RectVsRect(
-					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
-					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
-				)
-			) {
+		if (level.SolidBlock(block, defs)) {
+			if (TouchingBlock(block)) {
 				position.y = ceil(position.y);
 			}
 		}
@@ -68,28 +55,15 @@ void Player::GoDown(double delta, double multiplier, Level& level, Blockdefs& de
 	oldPosition =  position;
 	position.y  += 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
-
-	FVec2 corrected = CorrectPosition();
 	
 	// collision
 	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
-		if (
-			(block.x < 0) || (block.y < 0) ||
-			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
-		) {
+		if (!level.ValidBlock(block)) {
 			continue;
 		}
-		if (
-			defs.defs[level.layers[0].front[block.y][block.x]].type ==
-			BlockType::Solid
-		) {
-			if (
-				Collision::RectVsRect(
-					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
-					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
-				)
-			) {
+		if (level.SolidBlock(block, defs)) {
+			if (TouchingBlock(block)) {
 				position.y = floor(position.y);
 			}
 		}
@@ -101,27 +75,14 @@ void Player::GoLeft(double delta, double multiplier, Level& level, Blockdefs& de
 	position.x  -= 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
-	FVec2 corrected = CorrectPosition();
-
 	// collision
 	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
-		if (
-			(block.x < 0) || (block.y < 0) ||
-			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
-		) {
+		if (!level.ValidBlock(block)) {
 			continue;
 		}
-		if (
-			defs.defs[level.layers[0].front[block.y][block.x]].type ==
-			BlockType::Solid
-		) {
-			if (
-				Collision::RectVsRect(
-					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
-					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
-				)
-			) {
+		if (level.SolidBlock(block, defs)) {
+			if (TouchingBlock(block)) {
 				position.x = ceil(position.x);
 			}
 		}
@@ -133,27 +94,14 @@ void Player::GoRight(double delta, double multiplier, Level& level, Blockdefs& d
 	position.x  += 40 * (delta * 0.0001) * multiplier;
 	state       =  PlayerState::Moving;
 
-	FVec2 corrected = CorrectPosition();
-
 	// collision
 	std::vector <Vec2> blockPositions = GetTouchingBlocks();
 	for (auto& block : blockPositions) {
-		if (
-			(block.x < 0) || (block.y < 0) ||
-			(block.x >= (int) level.size.x) || (block.y >= (int) level.size.y)
-		) {
+		if (!level.ValidBlock(block)) {
 			continue;
 		}
-		if (
-			defs.defs[level.layers[0].front[block.y][block.x]].type ==
-			BlockType::Solid
-		) {
-			if (
-				Collision::RectVsRect(
-					{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
-					{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
-				)
-			) {
+		if (level.SolidBlock(block, defs)) {
+			if (TouchingBlock(block)) {
 				position.x = floor(position.x);
 			}
 		}
@@ -195,4 +143,13 @@ std::vector <Vec2> Player::GetTouchingBlocks() {
 		{(int) floor(corrected.x), (int) ceil(corrected.y)},
 		{(int) ceil(corrected.x), (int) ceil(corrected.y)}
 	};
+}
+
+bool Player::TouchingBlock(Vec2 block) {
+	FVec2 corrected = CorrectPosition();
+
+	return Collision::RectVsRect(
+		{corrected.x, corrected.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE},
+		{(float) block.x, (float) block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE}
+	);
 }

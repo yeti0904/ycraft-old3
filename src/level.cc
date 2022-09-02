@@ -18,3 +18,14 @@ void Level::Generate() {
 void Level::Destroy() {
 	layers = {};
 }
+
+bool Level::ValidBlock(Vec2 block) {
+	return (
+		(block.x > 0) && (block.y > 0) &&
+		(block.x < (int) size.x) && (block.y < (int) size.y)
+	);
+}
+
+bool Level::SolidBlock(Vec2 block, Blockdefs& blockdefs) {
+	return (blockdefs.defs[layers[0].front[block.y][block.x]].type == BlockType::Solid);
+}

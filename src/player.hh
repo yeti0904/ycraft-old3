@@ -40,6 +40,7 @@ class Player {
 		FVec2       CorrectPosition();
 
 		std::vector <Vec2> GetTouchingBlocks();
+		bool               TouchingBlock(Vec2 block);
 };
 
 #endif

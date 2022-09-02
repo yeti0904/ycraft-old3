@@ -3,6 +3,7 @@
 
 #include "_components.hh"
 #include "types.hh"
+#include "blockdefs.hh"
 
 struct LevelLayer {
 	std::vector <std::vector <blockID_t>> front;
@@ -19,6 +20,8 @@ class Level {
 		Level() {}
 		void Generate();
 		void Destroy();
+		bool ValidBlock(Vec2 block);
+		bool SolidBlock(Vec2 block, Blockdefs& blockdefs);
 };
 
 #endif
