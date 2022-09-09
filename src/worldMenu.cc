@@ -1,6 +1,8 @@
 #include "worldMenu.hh"
 #include "constants.hh"
 #include "app.hh"
+#include "constants.hh"
+#include "colours.hh"
 
 Menus::WorldsMenu::WorldsMenu() {
 	mousePosition = {0, 0};
@@ -10,24 +12,22 @@ Menus::WorldsMenu::WorldsMenu() {
 	backButton.position.x    = (APP_SCREEN_SIZE_W / 2) - 215;
 	backButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	backButton.size          = {200, 25};
-	backButton.outlineColour = {0, 0, 0, 255};
-	backButton.filledColour  = {54, 54, 54, 255};
+	backButton.outlineColour = Colours::black;
+	backButton.filledColour  = Colours::grey;
 
 	newWorldButton.label         = "Create new world";
 	newWorldButton.position.x    = (APP_SCREEN_SIZE_W / 2) + 15;
 	newWorldButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	newWorldButton.size          = {200, 25};
-	newWorldButton.outlineColour = {0, 0, 0, 255};
-	newWorldButton.filledColour  = {54, 54, 54, 255};
+	newWorldButton.outlineColour = Colours::black;
+	newWorldButton.filledColour  = Colours::grey;
 }
 
 void Menus::WorldsMenu::Update(AppState& state) {
-	const SDL_Color white = {255, 255, 255, 255};
-	const SDL_Color black = {0, 0, 0, 255};
-
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)? white : black;
+	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
 	newWorldButton.outlineColour =
-		newWorldButton.MouseIsOver(mousePosition)? white : black;
+		newWorldButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 
 	if (mousePressed && newWorldButton.MouseIsOver(mousePosition)) {
 		state = AppState::NewWorldMenu;

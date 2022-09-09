@@ -1,13 +1,14 @@
 #include "titleScreen.hh"
 #include "constants.hh"
 #include "app.hh"
+#include "colours.hh"
 
 Menus::TitleScreen::TitleScreen() {
 	MenuBase();
 
 	playButton.label         = "Play";
-	playButton.outlineColour = {0, 0, 0, 255};
-	playButton.filledColour  = {54, 54, 54, 255};
+	playButton.outlineColour = Colours::black;
+	playButton.filledColour  = Colours::grey;
 	playButton.size          = {200, 25};
 	playButton.position      = {
 		(APP_SCREEN_SIZE_W / 2) - (playButton.size.x / 2),
@@ -15,8 +16,8 @@ Menus::TitleScreen::TitleScreen() {
 	};
 
 	settingsButton.label = "Settings";
-	settingsButton.outlineColour = {0, 0, 0, 255};
-	settingsButton.filledColour  = {54, 54, 54, 255};
+	settingsButton.outlineColour = Colours::black;
+	settingsButton.filledColour  = Colours::grey;
 	settingsButton.size          = {200, 25};
 	settingsButton.position      = {
 		(APP_SCREEN_SIZE_W / 2) - (settingsButton.size.x / 2),
@@ -24,8 +25,8 @@ Menus::TitleScreen::TitleScreen() {
 	};
 
 	exitButton.label = "Exit";
-	exitButton.outlineColour = {0, 0, 0, 255};
-	exitButton.filledColour  = {54, 54, 54, 255};
+	exitButton.outlineColour = Colours::black;
+	exitButton.filledColour  = Colours::grey;
 	exitButton.size          = {200, 25};
 	exitButton.position      = {
 		(APP_SCREEN_SIZE_W / 2) - (exitButton.size.x / 2),
@@ -34,13 +35,12 @@ Menus::TitleScreen::TitleScreen() {
 }
 
 bool Menus::TitleScreen::Update(AppState& state) {
-	const SDL_Color white = {255, 255, 255, 255};
-	const SDL_Color black = {0, 0, 0, 255};
-
-	playButton.outlineColour = playButton.MouseIsOver(mousePosition)? white : black;
-	exitButton.outlineColour = exitButton.MouseIsOver(mousePosition)? white : black;
+	playButton.outlineColour = playButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
+	exitButton.outlineColour = exitButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
 	settingsButton.outlineColour =
-		settingsButton.MouseIsOver(mousePosition)? white : black;
+		settingsButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
 		state = AppState::WorldMenu;

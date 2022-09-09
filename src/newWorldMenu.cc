@@ -1,6 +1,7 @@
 #include "newWorldMenu.hh"
 #include "app.hh"
 #include "constants.hh"
+#include "colours.hh"
 
 Menus::NewWorldMenu::NewWorldMenu() {
 	MenuBase();
@@ -12,9 +13,9 @@ Menus::NewWorldMenu::NewWorldMenu() {
 		"Large",  // 4096x4096 (2^12)
 		"Massive" // 16384x16384 (2^14)
 	};
-	worldSizeSelection.selectedOutline = {255, 255, 255, 255};
-	worldSizeSelection.selectedFilled  = {54, 54, 54, 255};
-	worldSizeSelection.outline         = {0, 0, 0, 255};
+	worldSizeSelection.selectedOutline = Colours::white;
+	worldSizeSelection.selectedFilled  = Colours::grey;
+	worldSizeSelection.outline         = Colours::black;
 	worldSizeSelection.filled          = worldSizeSelection.selectedFilled;
 	worldSizeSelection.position        = {15, 61};
 	worldSizeSelection.size            = {
@@ -26,23 +27,22 @@ Menus::NewWorldMenu::NewWorldMenu() {
 	backButton.position.x    = (APP_SCREEN_SIZE_W / 2) - 215;
 	backButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	backButton.size          = {200, 25};
-	backButton.outlineColour = {0, 0, 0, 255};
-	backButton.filledColour  = {54, 54, 54, 255};
+	backButton.outlineColour = Colours::black;
+	backButton.filledColour  = Colours::grey;
 
 	startButton.label         = "START";
 	startButton.position.x    = (APP_SCREEN_SIZE_W / 2) + 15;
 	startButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	startButton.size          = {200, 25};
-	startButton.outlineColour = {0, 0, 0, 255};
-	startButton.filledColour  = {54, 54, 54, 255};
+	startButton.outlineColour = Colours::black;
+	startButton.filledColour  = Colours::grey;
 }
 
 void Menus::NewWorldMenu::Update(AppState& state) {
-	const SDL_Color white = {255, 255, 255, 255};
-	const SDL_Color black = {0, 0, 0, 255};
-
-	startButton.outlineColour = startButton.MouseIsOver(mousePosition)? white : black;
-	backButton.outlineColour  = backButton.MouseIsOver(mousePosition)? white : black;
+	startButton.outlineColour = startButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
+	backButton.outlineColour  = backButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
 
 	if (mousePressed && startButton.MouseIsOver(mousePosition)) {
 		state = AppState::InGame;

@@ -2,29 +2,29 @@
 #include "app.hh"
 #include "game.hh"
 #include "constants.hh"
+#include "colours.hh"
 
 Menus::PauseMenu::PauseMenu() {
 	MenuBase();
 
 	resumeButton.label         = "Resume";
-	resumeButton.outlineColour = {0, 0, 0, 255};
-	resumeButton.filledColour  = {54, 54, 54, 255};
+	resumeButton.outlineColour = Colours::black;
+	resumeButton.filledColour  = Colours::grey;
 	resumeButton.size          = {200, 25};
 	resumeButton.position      = {5, 50};
 
 	quitButton.label         = "Quit";
-	quitButton.outlineColour = {0, 0, 0, 255};
-	quitButton.filledColour  = {54, 54, 54, 255};
+	quitButton.outlineColour = Colours::black;
+	quitButton.filledColour  = Colours::grey;
 	quitButton.size          = {200, 25};
 	quitButton.position      = {5, 80};
 }
 
 void Menus::PauseMenu::Update(AppState& state, Game& game) {
-	const SDL_Color white = {255, 255, 255, 255};
-	const SDL_Color black = {0, 0, 0, 255};
-
-	resumeButton.outlineColour = resumeButton.MouseIsOver(mousePosition)? white : black;
-	quitButton.outlineColour = quitButton.MouseIsOver(mousePosition)? white : black;
+	resumeButton.outlineColour = resumeButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
+	quitButton.outlineColour = quitButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
 
 	if (mousePressed && resumeButton.MouseIsOver(mousePosition)) {
 		game.paused  = false;

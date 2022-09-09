@@ -1,4 +1,5 @@
 #include "text.hh"
+#include "colours.hh"
 
 TextComponents::TextComponents() {
 	font = nullptr;
@@ -62,7 +63,7 @@ void TextComponents::RenderText(
 	SDL_DestroyTexture(textTexture);
 
 	if (shadow) {
-		colour      = {255, 255, 255, 255};
+		colour      = Colours::white;
 		textRect.x -= shadowOffset;
 		textRect.y -= shadowOffset;
 
@@ -87,7 +88,7 @@ void TextComponents::RenderText(
 
 Vec2 TextComponents::GetTextSize(std::string text, float size) {
 	SDL_Surface* textSurface;
-	SDL_Colour   colour = {255, 255, 255, 255};
+	SDL_Colour   colour = Colours::white;
 	SDL_Rect     textRect;
 
 	textSurface = TTF_RenderText_Solid(font, text.c_str(), colour);

@@ -2,6 +2,7 @@
 #include "app.hh"
 #include "util.hh"
 #include "constants.hh"
+#include "colours.hh"
 
 Menus::TexturePackSelector::TexturePackSelector():
 	page(0)
@@ -9,10 +10,10 @@ Menus::TexturePackSelector::TexturePackSelector():
 	MenuBase();
 
 	options.size            = {200, 25 * itemsPerPage};
-	options.selectedOutline = {255, 255, 255, 255};
-	options.selectedFilled  = {54, 54, 54, 255};
-	options.outline         = {0, 0, 0, 255};
-	options.filled          = {54, 54, 54, 255};
+	options.selectedOutline = Colours::white;
+	options.selectedFilled  = Colours::grey;
+	options.outline         = Colours::black;
+	options.filled          = Colours::grey;
 	options.position        = {
 		(APP_SCREEN_SIZE_W / 2) - (options.size.x / 2),
 		(APP_SCREEN_SIZE_H / 2) - ((int) options.size.y / 2)
@@ -23,31 +24,31 @@ Menus::TexturePackSelector::TexturePackSelector():
 	backButton.position.x    = (APP_SCREEN_SIZE_W / 2) - 215;
 	backButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	backButton.size          = {200, 25};
-	backButton.outlineColour = {0, 0, 0, 255};
-	backButton.filledColour  = {54, 54, 54, 255};
+	backButton.outlineColour = Colours::black;
+	backButton.filledColour  = Colours::grey;
 
 	reloadButton.label         = "Reload list";
 	reloadButton.position.x    = (APP_SCREEN_SIZE_W / 2) + 15;
 	reloadButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	reloadButton.size          = {200, 25};
-	reloadButton.outlineColour = {0, 0, 0, 255};
-	reloadButton.filledColour  = {54, 54, 54, 255};
+	reloadButton.outlineColour = Colours::black;
+	reloadButton.filledColour  = Colours::grey;
 
 	previousButton.label         = "<";
 	previousButton.size          = {25, 25};
 	previousButton.position.x    = options.position.x - 30;
 	previousButton.position.y
 		= ((options.size.y / 2) - (backButton.size.y / 2)) + options.position.y;
-	previousButton.outlineColour = {0, 0, 0, 255};
-	previousButton.filledColour  = {54, 54, 54, 255};
+	previousButton.outlineColour = Colours::black;
+	previousButton.filledColour  = Colours::grey;
 
 	nextButton.label         = ">";
 	nextButton.size          = {25, 25};
 	nextButton.position.x = options.position.x + 5 + options.size.x;
 	nextButton.position.y
 		= ((options.size.y / 2) - (nextButton.size.y / 2)) + options.position.y;
-	nextButton.outlineColour = {0, 0, 0, 255};
-	nextButton.filledColour  = {54, 54, 54, 255};
+	nextButton.outlineColour = Colours::black;
+	nextButton.filledColour  = Colours::grey;
 }
 
 void Menus::TexturePackSelector::Init(std::string gamePath) {
@@ -87,15 +88,14 @@ void Menus::TexturePackSelector::LoadPage() {
 }
 
 void Menus::TexturePackSelector::Update(AppState& state) {
-	const SDL_Color white = {255, 255, 255, 255};
-	const SDL_Color black = {0, 0, 0, 255};
-
 	previousButton.outlineColour =
-		previousButton.MouseIsOver(mousePosition)? white : black;
-	nextButton.outlineColour = nextButton.MouseIsOver(mousePosition)? white : black;
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)? white : black;
+		previousButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+	nextButton.outlineColour = nextButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
+	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+		Colours::white : Colours::black;
 	reloadButton.outlineColour =
-		reloadButton.MouseIsOver(mousePosition)? white : black;
+		reloadButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 
 	if (mousePressed && previousButton.MouseIsOver(mousePosition)) {
 		if (page != 0) {
