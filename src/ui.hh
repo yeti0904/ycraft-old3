@@ -65,7 +65,8 @@ namespace UI {
 		
 			ButtonArray():
 				selected(-1),
-				set(0)
+				set(0),
+				vertical(false)
 			{
 				UIElement();
 			}
