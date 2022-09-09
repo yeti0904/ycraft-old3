@@ -7,7 +7,8 @@ void SettingsManager::Load(std::string gamePath) {
 	if (!FS::File::Exists(settingsPath)) {
 		FS::File::Write(
 			settingsPath,
-			"fullscreen = false"
+			"fullscreen = false\n"
+			"texturePack = default.png"
 		);
 	}
 	settings.Parse(FS::File::Read(settingsPath));

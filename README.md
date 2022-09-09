@@ -21,6 +21,7 @@ SDL2, SDL2_ttf, SDL2_image
 - [X] world options
 - [X] in game menu
 - [ ] texture pack menu
+- [ ] add global colour variables to make code less repetitive
 - [ ] world saving and loading
 - [ ] add sound effects
 - [ ] inventory

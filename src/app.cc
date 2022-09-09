@@ -30,7 +30,9 @@ App::App() {
 
 	settings.Load(gameFolder);
 	UpdateSettings();
-	settingsMenu.settings = &settings;
+	settingsMenu.settings            = &settings;
+	texturePackSelectorMenu.settings = &settings;
+	texturePackSelectorMenu.Init(gameFolder);
 	
 /*
 	game.Init();
@@ -94,6 +96,10 @@ void App::Update() {
 						newWorldMenu.HandleEvent(event);
 						break;
 					}
+					case AppState::TexturePackSelectorMenu: {
+						texturePackSelectorMenu.HandleEvent(event);
+						break;
+					}
 				}
 				break;
 			}
@@ -134,11 +140,29 @@ void App::Update() {
 				game.Init({size, size});
 
 				gameTextures.Init(
-					video.renderer, gameFolder + "/texpacks/default.png",
+					video.renderer,
+					gameFolder + "/texpacks/" + settings.settings["texturePack"],
 					GAME_BLOCK_SIZE
 				);
 
 				SDL_ShowCursor(SDL_DISABLE);
+			}
+			break;
+		}
+		case AppState::TexturePackSelectorMenu: {
+			texturePackSelectorMenu.Update(state);
+
+			if (state != AppState::TexturePackSelectorMenu) {
+				std::string path =
+					texturePackSelectorMenu.options.options[
+						texturePackSelectorMenu.options.set
+					];
+
+				if (path.empty()) {
+					break;
+				}
+			
+				settings.settings["texturePack"] = path;
 			}
 			break;
 		}
@@ -170,6 +194,10 @@ void App::Render() {
 		}
 		case AppState::NewWorldMenu: {
 			newWorldMenu.Render(video.renderer, text);
+			break;
+		}
+		case AppState::TexturePackSelectorMenu: {
+			texturePackSelectorMenu.Render(video.renderer, text);
 			break;
 		}
 	}

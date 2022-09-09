@@ -15,6 +15,7 @@ namespace Menus {
 			UI::Button       backButton;
 			UI::Button       applyButton;
 			UI::Checkbox     fullscreenCheckbox;
+			UI::Button       texturePacksButton;
 			SettingsManager* settings;
 
 			// functions

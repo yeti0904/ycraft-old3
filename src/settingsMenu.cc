@@ -26,6 +26,12 @@ Menus::SettingsMenu::SettingsMenu():
 	fullscreenCheckbox.size.x     = 8;
 	fullscreenCheckbox.size.y     = 9;
 	fullscreenCheckbox.colour     = {255, 255, 255, 255};
+	
+	texturePacksButton.label         = "Texture packs";
+	texturePacksButton.position      = {14, 60};
+	texturePacksButton.size          = {200, 25};
+	texturePacksButton.outlineColour = {0, 0, 0, 255};
+	texturePacksButton.filledColour  = {54, 54, 54, 255};
 }
 
 void Menus::SettingsMenu::Init() {
@@ -39,6 +45,8 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 	backButton.outlineColour = backButton.MouseIsOver(mousePosition)? white : black;
 	applyButton.outlineColour =
 		applyButton.MouseIsOver(mousePosition)? white : black;
+	texturePacksButton.outlineColour =
+		texturePacksButton.MouseIsOver(mousePosition)? white : black;
 
 	if (mousePressed && applyButton.MouseIsOver(mousePosition)) {
 		mousePressed = false;
@@ -54,6 +62,10 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 		mousePressed                     = false;
 		settings->settings["fullscreen"] =
 			fullscreenCheckbox.activated? "true" : "false";
+	}
+	if (mousePressed && texturePacksButton.MouseIsOver(mousePosition)) {
+		state        = AppState::TexturePackSelectorMenu;
+		mousePressed = false;
 	}
 
 	return false;
@@ -91,6 +103,7 @@ void Menus::SettingsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	// draw buttons
 	backButton.Render(renderer, text);
 	applyButton.Render(renderer, text);
+	texturePacksButton.Render(renderer, text);
 
 	// draw settings stuff
 	fullscreenCheckbox.Render(renderer);

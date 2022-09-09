@@ -12,13 +12,15 @@
 #include "settingsMenu.hh"
 #include "settings.hh"
 #include "newWorldMenu.hh"
+#include "texturePackSelectorMenu.hh"
 
 enum class AppState {
 	InGame = 0,
 	TitleScreen,
 	WorldMenu,
 	SettingsMenu,
-	NewWorldMenu
+	NewWorldMenu,
+	TexturePackSelectorMenu
 };
 
 class App {
@@ -39,10 +41,11 @@ class App {
 		AppState                  state;
 		SettingsManager           settings;
 
-		Menus::TitleScreen  titleScreen;
-		Menus::WorldsMenu   worldsMenu;
-		Menus::SettingsMenu settingsMenu;
-		Menus::NewWorldMenu newWorldMenu;
+		Menus::TitleScreen         titleScreen;
+		Menus::WorldsMenu          worldsMenu;
+		Menus::SettingsMenu        settingsMenu;
+		Menus::NewWorldMenu        newWorldMenu;
+		Menus::TexturePackSelector texturePackSelectorMenu;
 
 		// functions
 		App();

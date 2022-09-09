@@ -61,6 +61,7 @@ namespace UI {
 			std::vector <std::string> options;
 			ssize_t                   selected;
 			ssize_t                   set;
+			bool                      vertical;
 		
 			ButtonArray():
 				selected(-1),

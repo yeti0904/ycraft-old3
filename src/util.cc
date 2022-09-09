@@ -56,6 +56,21 @@ double Util::Clamp(double x, double min, double max) {
 }
 
 std::string Util::Trim(const std::string& str) {
-	// an improved version of thishttps://stackoverflow.com/a/58773060
+	// an improved version of this https://stackoverflow.com/a/58773060
 	return std::regex_replace(str, std::regex("^ +| +$"),"");
+}
+
+std::vector <std::string> Util::GetFilesInDirectory(std::string path) {
+	std::vector <std::string> ret;
+	for (auto& entry : std::filesystem::directory_iterator(path)) {
+		if (entry.is_regular_file()) {
+			ret.push_back(entry.path());
+		}
+	}
+	return ret;
+}
+
+std::string Util::BaseName(std::string path) {
+	size_t pos = path.rfind('/');
+	return pos == std::string::npos? path : path.substr(pos + 1);
 }

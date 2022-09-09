@@ -71,13 +71,24 @@ void UI::Checkbox::Render(SDL_Renderer* renderer) {
 ssize_t UI::ButtonArray::MouseIsOver(Vec2 cursor) {
 	for (size_t i = 0; i < options.size(); ++i) {
 		UI::Button buttonCast;
-		buttonCast.position = {
-			static_cast <int32_t> (position.x + ((size.x / options.size()) * i)),
-			position.y
-		};
-		buttonCast.size = {
-			static_cast <int32_t> (size.x / options.size()), size.y
-		};
+		if (vertical) {
+			buttonCast.position = {
+				position.x,
+				static_cast <int32_t>(position.y + ((size.y / options.size()) * i))
+			};
+			buttonCast.size          = {
+				size.x, static_cast <int32_t> (size.y / options.size())
+			};
+		}
+		else {
+			buttonCast.position = {
+				static_cast <int32_t>(position.x + ((size.x / options.size()) * i)),
+				position.y
+			};
+			buttonCast.size     = {
+				static_cast <int32_t>(size.x / options.size()), size.y
+			};
+		}
 
 		if (buttonCast.MouseIsOver(cursor)) {
 			return i;
@@ -90,13 +101,24 @@ void UI::ButtonArray::Render(SDL_Renderer* renderer, TextComponents& text) {
 	for (size_t i = 0; i < options.size(); ++i) {
 		UI::Button buttonCast;
 		buttonCast.label    = options[i];
-		buttonCast.position = {
-			static_cast <int32_t> (position.x + ((size.x / options.size()) * i)),
-			position.y
-		};
-		buttonCast.size     = {
-			static_cast <int32_t> (size.x / options.size()), size.y
-		};
+		if (vertical) {
+			buttonCast.position = {
+				position.x,
+				static_cast <int32_t>(position.y + ((size.y / options.size()) * i))
+			};
+			buttonCast.size          = {
+				size.x, static_cast <int32_t> (size.y / options.size())
+			};
+		}
+		else {
+			buttonCast.position = {
+				static_cast <int32_t>(position.x + ((size.x / options.size()) * i)),
+				position.y
+			};
+			buttonCast.size     = {
+				static_cast <int32_t>(size.x / options.size()), size.y
+			};
+		}
 
 		if ((i == (size_t) selected) || (i == (size_t) set)) {
 			continue;
@@ -108,29 +130,50 @@ void UI::ButtonArray::Render(SDL_Renderer* renderer, TextComponents& text) {
 
 		buttonCast.Render(renderer, text);
 	}
-
+	
 	UI::Button buttonCast;
-	buttonCast.label    = options[set];
-	buttonCast.position = {
-		static_cast <int32_t> (position.x + ((size.x / options.size()) * set)),
-		position.y
-	};
-	buttonCast.size          = {
-		static_cast <int32_t> (size.x / options.size()), size.y
-	};
+	if (vertical) {
+		buttonCast.position = {
+			position.x,
+			static_cast <int32_t>(position.y + ((size.y / options.size()) * set))
+		};
+		buttonCast.size          = {
+			size.x, static_cast <int32_t> (size.y / options.size())
+		};
+	}
+	else {
+		buttonCast.position = {
+			static_cast <int32_t>(position.x + ((size.x / options.size()) * set)),
+			position.y
+		};
+		buttonCast.size          = {
+			static_cast <int32_t> (size.x / options.size()), size.y
+		};
+	}
 	buttonCast.outlineColour = selectedOutline;
 	buttonCast.filledColour  = selectedFilled;
-	buttonCast.Render(renderer, text);
+	if (set >= 0) {
+		buttonCast.label    = options[set];
+		buttonCast.Render(renderer, text);
+	}
 	
 	if (selected < 0) {
 		return;
 	}
 
 	buttonCast.label    = options[selected];
-	buttonCast.position = {
-		static_cast <int32_t> (position.x + ((size.x / options.size()) * selected)),
-		position.y
-	};
+	if (vertical) {
+		buttonCast.position = {
+			position.x,
+			static_cast <int32_t>(position.y + ((size.y / options.size()) * selected))
+		};
+	}
+	else {
+		buttonCast.position = {
+			static_cast <int32_t>(position.x + ((size.x / options.size()) * selected)),
+			position.y
+		};
+	}
 	buttonCast.Render(renderer, text);
 }
 
