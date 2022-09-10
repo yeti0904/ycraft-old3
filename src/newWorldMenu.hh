@@ -12,6 +12,7 @@ namespace Menus {
 	class NewWorldMenu : public MenuBase {
 		public:
 			// variables
+			UI::Textbox     worldName;
 			UI::ButtonArray worldSizeSelection;
 			UI::Button      backButton;
 			UI::Button      startButton;
@@ -20,6 +21,7 @@ namespace Menus {
 			NewWorldMenu();
 			void Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
+			void HandleEvent(SDL_Event& event) override;
 	};
 }
 

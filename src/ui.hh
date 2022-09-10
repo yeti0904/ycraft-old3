@@ -74,6 +74,32 @@ namespace UI {
 			void    Render(SDL_Renderer* renderer, TextComponents& text);
 			void    UpdateSelected(Vec2 cursor);
 	};
+
+	class Textbox : public UIElement {
+		public:
+			// variables
+			SDL_Color   outline;
+			SDL_Color   filled;
+			std::string input;
+			bool        complete;
+			bool        focused;
+			int         cursorPosition;
+
+			// functions
+			Textbox():
+				input(""),
+				complete(false),
+				focused(false),
+				cursorPosition(0)
+			{
+				UIElement();
+			}
+			bool MouseIsOver(Vec2 cursor);
+			void Render(SDL_Renderer* renderer, TextComponents& text);
+			void HandleEvent(SDL_Event& event);
+			void Reset();
+			void Backspace();
+	};
 }
 
 #endif

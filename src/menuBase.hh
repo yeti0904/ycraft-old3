@@ -12,7 +12,7 @@ class MenuBase {
 
 		// functions
 		MenuBase();
-		void HandleEvent(SDL_Event& event);
+		virtual void HandleEvent(SDL_Event& event);
 };
 
 #endif

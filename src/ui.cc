@@ -180,3 +180,67 @@ void UI::ButtonArray::Render(SDL_Renderer* renderer, TextComponents& text) {
 void UI::ButtonArray::UpdateSelected(Vec2 cursor) {
 	selected = MouseIsOver(cursor);
 }
+
+bool UI::Textbox::MouseIsOver(Vec2 cursor) {
+	UI::Button buttonCast;
+	buttonCast.position = position;
+	buttonCast.size     = size;
+
+	return buttonCast.MouseIsOver(cursor);
+}
+
+void UI::Textbox::Render(SDL_Renderer* renderer, TextComponents& text) {
+	SDL_Rect box;
+	box.x = position.x;
+	box.y = position.y;
+	box.w = size.x;
+	box.h = size.y;
+
+	SDL_SetRenderDrawColor(renderer, filled.r, filled.g, filled.b, filled.a);
+	SDL_RenderFillRect(renderer, &box);
+	SDL_SetRenderDrawColor(renderer, outline.r, outline.g, outline.b, outline.a);
+	SDL_RenderDrawRect(renderer, &box);
+
+	// render text
+	text.RenderText(renderer, input, {position.x + 1, position.y + 5}, 1.0, false);
+
+	// render cursor
+	Vec2 cursorOffset = text.GetTextSize(input.substr(0, cursorPosition), 1.0);
+	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+	SDL_RenderDrawLine(
+		renderer,
+		position.x + cursorOffset.x + 1, position.y + 4,
+		position.x + cursorOffset.x + 1, position.y + size.y - 5
+	);
+}
+
+void UI::Textbox::HandleEvent(SDL_Event& event) {
+	if (!focused) {
+		return;
+	}
+	switch (event.type) {
+		case SDL_TEXTINPUT: {
+			input += event.text.text;
+			cursorPosition += std::string(event.text.text).size();
+			if (std::string(event.text.text).back() == '\n') {
+				input.erase(input.find('\n'), 1);
+			}
+			break;
+		}
+		case SDL_TEXTEDITING: {
+			break;
+		}
+	}
+}
+
+void UI::Textbox::Reset() {
+	Textbox();
+}
+
+void UI::Textbox::Backspace() {
+	if (input.empty()) {
+		return;
+	}
+	input.pop_back();
+	-- cursorPosition;
+}

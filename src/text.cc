@@ -26,6 +26,10 @@ void TextComponents::Free() {
 void TextComponents::RenderText(
 	SDL_Renderer* renderer, std::string text, Vec2 pos, float size, bool shadow
 ) {
+	if (text.empty()) {
+		return;
+	}
+
 	SDL_Surface* textSurface;
 	SDL_Texture* textTexture;
 	SDL_Colour   colour = {
@@ -38,6 +42,10 @@ void TextComponents::RenderText(
 	int8_t       shadowOffset = (int) round(size);
 
 	textSurface = TTF_RenderText_Solid(font, text.c_str(), colour);
+	if (textSurface == nullptr) {
+		fprintf(stderr, "[ERROR] TTF_RenderText_Solid error: %s\n", TTF_GetError());
+		exit(1);
+	}
 	textRect = {
 		pos.x, pos.y, 
 		(int)((float) textSurface->w * size), (int)((float)textSurface->h * size)
@@ -87,6 +95,10 @@ void TextComponents::RenderText(
 }
 
 Vec2 TextComponents::GetTextSize(std::string text, float size) {
+	if (text.empty()) {
+		return {0, 0};
+	}
+
 	SDL_Surface* textSurface;
 	SDL_Colour   colour = Colours::white;
 	SDL_Rect     textRect;

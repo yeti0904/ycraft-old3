@@ -6,6 +6,11 @@
 Menus::NewWorldMenu::NewWorldMenu() {
 	MenuBase();
 
+	worldName.outline  = Colours::black;
+	worldName.filled   = Colours::grey;
+	worldName.position = {15, 60};
+	worldName.size     = {APP_SCREEN_SIZE_W - 50, 25};
+
 	worldSizeSelection.options = {
 		"Tiny",   // 64x64 (2^6)
 		"Small",  // 256x256 (2^8)
@@ -17,7 +22,7 @@ Menus::NewWorldMenu::NewWorldMenu() {
 	worldSizeSelection.selectedFilled  = Colours::grey;
 	worldSizeSelection.outline         = Colours::black;
 	worldSizeSelection.filled          = worldSizeSelection.selectedFilled;
-	worldSizeSelection.position        = {15, 61};
+	worldSizeSelection.position        = {15, 117};
 	worldSizeSelection.size            = {
 		APP_SCREEN_SIZE_W - 195,
 		25
@@ -53,6 +58,16 @@ void Menus::NewWorldMenu::Update(AppState& state) {
 		mousePressed = false;
 	}
 	if (mousePressed) {
+		worldName.focused = worldName.MouseIsOver(mousePosition);
+		worldName.outline = worldName.focused? Colours::white : Colours::black;
+
+		if (worldName.focused) {
+			SDL_StartTextInput();
+		}
+		else {
+			SDL_StopTextInput();
+		}
+	
 		ssize_t sizeSelected = worldSizeSelection.MouseIsOver(mousePosition);
 		if (sizeSelected >= 0) {
 			worldSizeSelection.set = sizeSelected;
@@ -95,6 +110,45 @@ void Menus::NewWorldMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	startButton.Render(renderer, text);
 	backButton.Render(renderer, text);
 
-	text.RenderText(renderer, "World size", {15, 45}, 1.0, true);
+	text.RenderText(renderer, "World size", {15, 96}, 1.0, true);
 	worldSizeSelection.Render(renderer, text);
+
+	text.RenderText(renderer, "World name", {15, 45}, 1.0, true);
+	worldName.Render(renderer, text);
+}
+
+void Menus::NewWorldMenu::HandleEvent(SDL_Event& event) {
+	switch (event.type) {
+		case SDL_MOUSEMOTION: {
+			mousePosition.x = event.motion.x;
+			mousePosition.y = event.motion.y;
+			break;
+		}
+		case SDL_MOUSEBUTTONDOWN: {
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				mousePressed = true;
+			}
+			break;
+		}
+		case SDL_MOUSEBUTTONUP: {
+			if (event.button.button == SDL_BUTTON_LEFT) {
+				mousePressed = false;
+			}
+			break;
+		}
+		case SDL_KEYDOWN: {
+			if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
+				if (worldName.focused) {
+					worldName.Backspace();
+				}
+			}
+			break;
+		}
+		default: {
+			if (worldName.focused) {
+				worldName.HandleEvent(event);
+			}
+			break;
+		}
+	}
 }
