@@ -179,11 +179,7 @@ void Game::Render(App& app) {
 			for (
 				ssize_t j = start.x; (j < max.x) && (j < level.size.x); 
 				++j
-			) {
-				if (!level.ValidBlock({j, i})) {
-					continue;
-				}
-			    
+			) { 
 				Vec2 block;
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
@@ -207,6 +203,7 @@ void Game::Render(App& app) {
 					SDL_SetRenderDrawColor(app.video.renderer, 255, 255, 255, 255);
 					if (
 						(j > 0) &&
+						level.ValidBlock({(int) j - 1, (int) i}) &&
 						(blockdefs.defs[level.layers[0].front[i][j - 1]].type !=
 						BlockType::Solid)
 					) {
@@ -217,6 +214,7 @@ void Game::Render(App& app) {
 					}
 					if (
 						(j < level.size.x) &&
+						level.ValidBlock({(int) j + 1, (int) i}) &&
 						(blockdefs.defs[level.layers[0].front[i][j + 1]].type !=
 						BlockType::Solid)
 					) {
@@ -228,6 +226,7 @@ void Game::Render(App& app) {
 					}
 					if (
 						(i > 0) &&
+						level.ValidBlock({(int) j, (int) i - 1}) &&
 						(blockdefs.defs[level.layers[0].front[i - 1][j]].type !=
 						BlockType::Solid)
 					) {
@@ -238,6 +237,7 @@ void Game::Render(App& app) {
 					}
 					if (
 						(i < level.size.y) &&
+						level.ValidBlock({(int) j, (int) i + 1}) &&
 						(blockdefs.defs[level.layers[0].front[i + 1][j]].type !=
 						BlockType::Solid)
 					) {
