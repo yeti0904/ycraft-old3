@@ -18,7 +18,8 @@ void Util::Log(const char* format, ...) {
 	va_start(args, format);
 	
 	char* ret;
-	vasprintf(&ret, format, args);
+	int r = vasprintf(&ret, format, args);
+	(void) r;
 	
 	va_end(args);
 	
@@ -73,4 +74,20 @@ std::vector <std::string> Util::GetFilesInDirectory(std::string path) {
 std::string Util::BaseName(std::string path) {
 	size_t pos = path.rfind('/');
 	return pos == std::string::npos? path : path.substr(pos + 1);
+}
+
+void Util::Error(const char* format, ...) {
+	va_list args;
+	va_start(args, format);
+	
+	char* ret;
+	int r = vasprintf(&ret, format, args);
+	(void) r;
+	
+	va_end(args);
+	
+	fprintf(stderr, "[ERROR] %s\n", ret);
+	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERROR!", ret, nullptr);
+	free(ret);
+	exit(EXIT_FAILURE);
 }

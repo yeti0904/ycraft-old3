@@ -4,8 +4,7 @@
 
 void VideoComponents::Init() {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-		fprintf(stderr, "[ERROR] Failed to initialise SDL: %s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
+		Util::Error("Failed to initialise SDL: %s\n", SDL_GetError());
 	}
 
 	window = SDL_CreateWindow(
@@ -16,8 +15,7 @@ void VideoComponents::Init() {
 	);
 
 	if (window == nullptr) {
-		fprintf(stderr, "[ERROR] Failed to create window\n");
-		exit(EXIT_FAILURE);
+		Util::Error("Failed to create window: %s", SDL_GetError());
 	}
 	Util::Log("Created window");
 	
@@ -26,8 +24,7 @@ void VideoComponents::Init() {
 	);
 
 	if (renderer == nullptr) {
-		fprintf(stderr, "[ERROR] Failed to create renderer\n");
-		exit(EXIT_FAILURE);
+		Util::Error("Failed to create renderer: %s", SDL_GetError());
 	}
 	Util::Log("Created renderer");
 

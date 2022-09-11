@@ -31,11 +31,9 @@ void Properties::Parse(const std::string& str) {
 	}
 
 	if (tokens.size() % 3 != 0) {
-		fprintf(
-			stderr, "[ERROR] Missing tokens around line %lli\n",
-			(long long int) tokens.back().line
+		Util::Error(
+			"Missing tokens around line %lli", (long long int) tokens.back().line
 		);
-		exit(EXIT_FAILURE);
 	}
 
 	for (size_t i = 0; i < tokens.size(); ++i) {
@@ -48,25 +46,21 @@ void Properties::Parse(const std::string& str) {
 					Get(key) = tokens[i].content;
 				}
 				else {
-					fprintf(
-						stderr, "[ERROR] Expected value at line %lli\n",
+					Util::Error(
+						"Expected value at line %lli\n",
 						(long long int) tokens[i].line
 					);
-					exit(EXIT_FAILURE);
 				}
 			}
 			else {
-				fprintf(
-					stderr, "[ERROR] Expected equals at line %lli\n",
-					(long long int) tokens[i].line
+				Util::Error(
+					"Expected equals at line %lli\n", (long long int) tokens[i].line
 				);
-				exit(EXIT_FAILURE);
 			}
 		}
 		else {
-			fprintf(
-				stderr, "[ERROR] Expected key at line %lli\n",
-				(long long int) tokens[i].line
+			Util::Error(
+				"Expected key at line %lli", (long long int) tokens[i].line
 			);
 			exit(EXIT_FAILURE);
 		}

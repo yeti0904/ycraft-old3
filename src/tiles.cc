@@ -1,4 +1,5 @@
 #include "tiles.hh"
+#include "util.hh"
 
 void TileSheet::Init(SDL_Renderer* renderer, std::string path, uint32_t p_tileSize) {
 	image    = IMG_LoadTexture(renderer, path.c_str());
@@ -6,7 +7,7 @@ void TileSheet::Init(SDL_Renderer* renderer, std::string path, uint32_t p_tileSi
 	SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
 
 	if (image == nullptr) {
-		fprintf(stderr, "[ERROR] IMG_LoadTexture returned NULL\n");
+		Util::Error("IMG_LoadTexture returned NULL: %s", IMG_GetError());
 		exit(EXIT_FAILURE);
 	}
 }

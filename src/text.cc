@@ -1,5 +1,6 @@
 #include "text.hh"
 #include "colours.hh"
+#include "util.hh"
 
 TextComponents::TextComponents() {
 	font = nullptr;
@@ -7,14 +8,12 @@ TextComponents::TextComponents() {
 
 void TextComponents::Init(std::string fontPath) {
 	if (TTF_Init() == -1) {
-		fprintf(stderr, "[ERROR] Failed to initialise SDL_ttf: %s\n", TTF_GetError());
-		exit(EXIT_FAILURE);
+		Util::Error("Failed to initialise SDL_ttf: %s", TTF_GetError());
 	}
 
 	font = TTF_OpenFont(fontPath.c_str(), 16);
 	if (font == nullptr) {
-		fprintf(stderr, "[ERROR] Failed to open font: %s\n", TTF_GetError());
-		exit(EXIT_FAILURE);
+		Util::Error("Failed to open font: %s", TTF_GetError());
 	}
 }
 
@@ -43,8 +42,7 @@ void TextComponents::RenderText(
 
 	textSurface = TTF_RenderText_Solid(font, text.c_str(), colour);
 	if (textSurface == nullptr) {
-		fprintf(stderr, "[ERROR] TTF_RenderText_Solid error: %s\n", TTF_GetError());
-		exit(1);
+		Util::Error("TTF_RenderText_Solid error: %s", TTF_GetError());
 	}
 	textRect = {
 		pos.x, pos.y, 
@@ -57,12 +55,7 @@ void TextComponents::RenderText(
 	textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
 	if (textTexture == nullptr) {
-		fprintf(
-			stderr,
-			"[ERROR] SDL_CreateTextureFromSurface returned NULL: %s\n",
-			SDL_GetError()
-		);
-		exit(EXIT_FAILURE);
+		Util::Error("SDL_CreateTextureFromSurface returned NULL: %s\n", SDL_GetError());
 	}
 
 	SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
@@ -79,12 +72,10 @@ void TextComponents::RenderText(
 		textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
 		if (textTexture == nullptr) {
-			fprintf(
-				stderr,
-				"[ERROR] SDL_CreateTextureFromSurface returned NULL: %s\n",
+			Util::Error(
+			"SDL_CreateTextureFromSurface returned NULL: %s\n",
 				SDL_GetError()
 			);
-			exit(EXIT_FAILURE);
 		}
 
 		SDL_RenderCopy(renderer, textTexture, nullptr, &textRect);
@@ -105,11 +96,7 @@ Vec2 TextComponents::GetTextSize(std::string text, float size) {
 
 	textSurface = TTF_RenderText_Solid(font, text.c_str(), colour);
 	if (textSurface == nullptr) {
-		fprintf(
-			stderr, "[ERROR] TTF_RenderText_Solid returned NULL: %s\n",
-			TTF_GetError()
-		);
-		exit(EXIT_FAILURE);
+		Util::Error("TTF_RenderText_Solid returned NULL: %s", TTF_GetError());
 	}
 	textRect = {
 		0, 0,

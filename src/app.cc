@@ -6,8 +6,7 @@ App::App() {
 	Util::Log("Welcome to " APP_NAME);
 
 	if (Util::GetExecutableLocation() == "") {
-		fprintf(stderr, APP_NAME " can't run on your system\n");
-		exit(EXIT_FAILURE);
+		Util::Error(APP_NAME " can't run on your system");
 	}
 
 	run        = true;
