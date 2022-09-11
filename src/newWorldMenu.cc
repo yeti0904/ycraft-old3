@@ -136,14 +136,6 @@ void Menus::NewWorldMenu::HandleEvent(SDL_Event& event) {
 			}
 			break;
 		}
-		case SDL_KEYDOWN: {
-			if (event.key.keysym.scancode == SDL_SCANCODE_BACKSPACE) {
-				if (worldName.focused) {
-					worldName.Backspace();
-				}
-			}
-			break;
-		}
 		default: {
 			if (worldName.focused) {
 				worldName.HandleEvent(event);

@@ -98,7 +98,6 @@ namespace UI {
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 			void HandleEvent(SDL_Event& event);
 			void Reset();
-			void Backspace();
 	};
 }
 

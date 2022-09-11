@@ -8,6 +8,7 @@ Player::Player() {
 	textureID   = 240;
 	noclipping  = false;
 	updates     = 0;
+	state       = PlayerState::Static;
 	
 	walkAnimation.frames = {241, 242};
 }

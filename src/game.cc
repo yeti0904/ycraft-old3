@@ -180,6 +180,9 @@ void Game::Render(App& app) {
 				ssize_t j = start.x; (j < max.x) && (j < level.size.x); 
 				++j
 			) {
+				if (!level.ValidBlock({j, i})) {
+					continue;
+				}
 			    
 				Vec2 block;
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);

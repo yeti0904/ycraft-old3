@@ -220,27 +220,41 @@ void UI::Textbox::HandleEvent(SDL_Event& event) {
 	}
 	switch (event.type) {
 		case SDL_TEXTINPUT: {
-			input += event.text.text;
+			input.insert(cursorPosition, event.text.text);
 			cursorPosition += std::string(event.text.text).size();
 			if (std::string(event.text.text).back() == '\n') {
 				input.erase(input.find('\n'), 1);
 			}
 			break;
 		}
-		case SDL_TEXTEDITING: {
-			break;
+		case SDL_KEYDOWN: {
+			switch (event.key.keysym.scancode) {
+				case SDL_SCANCODE_BACKSPACE: {
+					if (cursorPosition == 0) {
+						break;
+					}
+					input.erase(cursorPosition - 1, 1);
+					-- cursorPosition;
+					break;
+				}
+				case SDL_SCANCODE_LEFT: {
+					if (cursorPosition != 0) {
+						-- cursorPosition;
+					}
+					break;
+				}
+				case SDL_SCANCODE_RIGHT: {
+					if ((size_t) cursorPosition < input.length()) {
+						++ cursorPosition;
+					}
+					break;
+				}
+				default: break;
+			}
 		}
 	}
 }
 
 void UI::Textbox::Reset() {
 	Textbox();
-}
-
-void UI::Textbox::Backspace() {
-	if (input.empty()) {
-		return;
-	}
-	input.pop_back();
-	-- cursorPosition;
 }
