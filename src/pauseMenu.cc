@@ -13,7 +13,7 @@ Menus::PauseMenu::PauseMenu() {
 	resumeButton.size          = {200, 25};
 	resumeButton.position      = {5, 50};
 
-	quitButton.label         = "Quit";
+	quitButton.label         = "Save & Quit";
 	quitButton.outlineColour = Colours::black;
 	quitButton.filledColour  = Colours::grey;
 	quitButton.size          = {200, 25};
@@ -33,6 +33,7 @@ void Menus::PauseMenu::Update(AppState& state, Game& game) {
 		return;
 	}
 	if (mousePressed && quitButton.MouseIsOver(mousePosition)) {
+		game.level.Save();
 		game.Deinit();
 		mousePressed = false;
 		state        = AppState::TitleScreen;

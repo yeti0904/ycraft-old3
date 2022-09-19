@@ -12,11 +12,20 @@ namespace Menus {
 	class WorldsMenu : public MenuBase {
 		public:
 			// variables
-			UI::Button backButton;
-			UI::Button newWorldButton;
+			constexpr static int      itemsPerPage = 5;
+			UI::Button                backButton;
+			UI::Button                newWorldButton;
+			UI::Button                playButton;
+			UI::Button                previousButton;
+			UI::Button                nextButton;
+			UI::ButtonArray           worlds;
+			std::vector <std::string> worldsList;
+			size_t                    page;
 
 			// functions
 			WorldsMenu();
+			void Init(std::string gamePath);
+			void LoadPage();
 			void Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 	};

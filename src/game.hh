@@ -27,7 +27,8 @@ class Game {
 
 		// functions
 		Game() {}
-		void Init(UVec2 levelSize);
+		void Init(UVec2 levelSize, bool generate);
+		void SpawnPlayer();
 		void Deinit();
 		void Update(AppState& state);
 		void HandleEvent(SDL_Event& event);

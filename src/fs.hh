@@ -11,6 +11,10 @@ namespace FS {
 		void                      Create(std::string fname);
 		void                      Write(std::string fname, std::string write);
 	}
+	namespace Directory {
+		bool Exists(std::string dname);
+		void Create(std::string dname);
+	}
 }
 
 #endif

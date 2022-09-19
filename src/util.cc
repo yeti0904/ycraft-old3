@@ -41,7 +41,7 @@ std::string Util::GetExecutableLocation() {
 			return string(buffer);
 		}
 	#elif defined(PLATFORM_WINDOWS)
-		GetModuleFileName(NULL, buffer, sizeof(buffer));
+		GetModuleFileName(nullptr, buffer, sizeof(buffer));
 		return string(buffer);
 	#endif
 	

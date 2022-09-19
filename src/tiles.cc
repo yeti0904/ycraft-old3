@@ -18,7 +18,7 @@ void TileSheet::Free() {
 
 UVec2 TileSheet::GetTexturePosition(uint32_t id) {
 	SDL_Point textureSize;
-	SDL_QueryTexture(image, NULL, NULL, &textureSize.x, &textureSize.y);
+	SDL_QueryTexture(image, nullptr, nullptr, &textureSize.x, &textureSize.y);
 
 	return {
 		id % (textureSize.x / tileSize) * tileSize,

@@ -2,7 +2,7 @@
 #include "app.hh"
 #include "constants.hh"
 
-void Game::Init(UVec2 levelSize) {
+void Game::Init(UVec2 levelSize, bool generate) {
 	blockdefs.Create(0, "Air", 0, BlockType::Gas);
 	blockdefs.Create(1, "Stone", 4, BlockType::Solid);
 	blockdefs.Create(2, "Dirt", 1, BlockType::Solid);
@@ -27,11 +27,12 @@ void Game::Init(UVec2 levelSize) {
 	// player.position.x = 5;
 	// player.position.y = 5;
 
-	level.size = levelSize;
-	level.Generate();
+	if (generate) {
+		level.size = levelSize;
+		level.Generate();
+	}
 
-	player.position.x = level.size.x / 2;
-	player.position.y = level.size.y / 2;
+	SpawnPlayer();
 	UpdateCamera();
 
 	player.inventory.hotbar[0] = {
@@ -48,6 +49,11 @@ void Game::Init(UVec2 levelSize) {
 	};
 }
 
+void Game::SpawnPlayer() {
+	player.position.x = level.size.x / 2;
+	player.position.y = level.size.y / 2;
+}
+
 void Game::Deinit() {
 	level.Destroy();
 }
@@ -57,6 +63,7 @@ void Game::Update(AppState& state) {
 		pauseMenu.Update(state, *this);
 	}
 	GetHighlightedBlock();
+	UpdateCamera();
 }
 
 void Game::HandleEvent(SDL_Event& event) {

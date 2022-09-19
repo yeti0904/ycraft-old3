@@ -1,4 +1,5 @@
 #include "fs.hh"
+#include "util.hh"
 
 // File functions
 std::string FS::File::Read(std::string fname) {
@@ -53,4 +54,15 @@ void FS::File::Write(std::string fname, std::string write) {
 	fhnd << write;
 
 	fhnd.close();
+}
+
+// Directory functions
+bool FS::Directory::Exists(std::string dname) {
+	return std::filesystem::is_directory(dname);
+}
+
+void FS::Directory::Create(std::string dname) {
+	if (!std::filesystem::create_directory(dname)) {
+		Util::Error("Failed to create directory: %s", dname.c_str());
+	}
 }

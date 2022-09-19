@@ -54,6 +54,7 @@ class App {
 		void Render();
 
 		void UpdateSettings();
+		void SetupGameFiles();
 };
 
 #endif

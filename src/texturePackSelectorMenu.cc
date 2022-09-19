@@ -54,8 +54,8 @@ Menus::TexturePackSelector::TexturePackSelector():
 void Menus::TexturePackSelector::Init(std::string gamePath) {
 	texturePacksPath = gamePath + "/texpacks";
 	texturePacks     = Util::GetFilesInDirectory(texturePacksPath);
-	LoadPage();
 	page             = 0;
+	LoadPage();
 }
 
 void Menus::TexturePackSelector::LoadPage() {

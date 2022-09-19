@@ -1,6 +1,7 @@
 #include "app.hh"
 #include "util.hh"
 #include "constants.hh"
+#include "fs.hh"
 
 App::App() {
 	Util::Log("Welcome to " APP_NAME);
@@ -18,10 +19,14 @@ App::App() {
 	credits = {
 		"programming: MESYETI",
 		"art: MESYETI, LordOfTrident",
-		"font: Zeh Fernando"
+		"font: Zeh Fernando",
+		"music: LoubiTek"
 	};
 
 	Util::Log("Found game folder: %s", gameFolder.c_str());
+
+	SetupGameFiles();
+	Util::Log("Set up game files");
 	
 	video.Init();
 	text.Init(gameFolder + "/font.ttf");
@@ -32,6 +37,9 @@ App::App() {
 	settingsMenu.settings            = &settings;
 	texturePackSelectorMenu.settings = &settings;
 	texturePackSelectorMenu.Init(gameFolder);
+	worldsMenu.Init(gameFolder);
+
+	game.level.worldsPath = gameFolder + "/maps";
 	
 /*
 	game.Init();
@@ -124,6 +132,23 @@ void App::Update() {
 		}
 		case AppState::WorldMenu: {
 			worldsMenu.Update(state);
+
+			if (state == AppState::InGame) {
+				game.Init({0, 0}, false);
+				game.level.LoadLevel(
+					gameFolder + "/maps/" +
+					worldsMenu.worlds.options[worldsMenu.worlds.set]
+				);
+				game.level.name = worldsMenu.worlds.options[worldsMenu.worlds.set];
+				game.SpawnPlayer();
+				gameTextures.Init(
+					video.renderer,
+					gameFolder + "/texpacks/" + settings.settings["texturePack"],
+					GAME_BLOCK_SIZE
+				);
+
+				SDL_ShowCursor(SDL_DISABLE);
+			}
 			break;
 		}
 		case AppState::SettingsMenu: {
@@ -136,7 +161,8 @@ void App::Update() {
 			newWorldMenu.Update(state);
 			if (state == AppState::InGame) {
 				uint32_t size = pow(2, (newWorldMenu.worldSizeSelection.set * 2) + 6);
-				game.Init({size, size});
+				game.Init({size, size}, true);
+				game.level.name = newWorldMenu.worldName.input;
 
 				gameTextures.Init(
 					video.renderer,
@@ -209,4 +235,15 @@ void App::UpdateSettings() {
 		video.window,
 		settings.settings["fullscreen"] == "true"? SDL_WINDOW_FULLSCREEN_DESKTOP : 0
 	);
+}
+
+void App::SetupGameFiles() {
+	std::vector <std::string> requiredDirectories = {
+		"texpacks", "maps"
+	};
+	for (auto& dir : requiredDirectories) {
+		if (!FS::Directory::Exists(gameFolder + "/" + dir)) {
+			FS::Directory::Create(gameFolder + "/" + dir);
+		}
+	}
 }
