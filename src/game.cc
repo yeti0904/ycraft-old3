@@ -1,14 +1,21 @@
 #include "game.hh"
 #include "app.hh"
 #include "constants.hh"
+#include "colours.hh"
+#include "app.hh"
+#include "commands.hh"
+
+Game::Game() {
+	RegisterCommands(commands);
+}
 
 void Game::Init(UVec2 levelSize, bool generate) {
-	blockdefs.Create(0, "Air", 0, BlockType::Gas);
-	blockdefs.Create(1, "Stone", 4, BlockType::Solid);
-	blockdefs.Create(2, "Dirt", 1, BlockType::Solid);
-	blockdefs.Create(3, "Grass", 0, BlockType::Solid);
+	blockdefs.Create(0, "Air",    0,  BlockType::Gas);
+	blockdefs.Create(1, "Stone",  4,  BlockType::Solid);
+	blockdefs.Create(2, "Dirt",   1,  BlockType::Solid);
+	blockdefs.Create(3, "Grass",  0,  BlockType::Solid);
 	blockdefs.Create(4, "Bricks", 12, BlockType::Solid);
-	blockdefs.Create(5, "Cobble", 5, BlockType::Solid);
+	blockdefs.Create(5, "Cobble", 5,  BlockType::Solid);
 
 	/*camera.x = 0;
 	camera.y = 0;
@@ -19,8 +26,9 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	    ((APP_SCREEN_SIZE_H / GAME_BLOCK_SIZE) / 2);*/
 
 	mousePosition = {0, 0};
+	mouseDown     = false;
 
-	paused        = false;
+	gameState        = GameState::Running;
 	blockHighlighted = false;
 	highlightedBlock = {0, 0};
     
@@ -34,6 +42,12 @@ void Game::Init(UVec2 levelSize, bool generate) {
 
 	SpawnPlayer();
 	UpdateCamera();
+
+	chatbox.outline  = Colours::nothing;
+	chatbox.filled   = Colours::transparentBlack;
+	chatbox.position = {5, APP_SCREEN_SIZE_H - 30};
+	chatbox.size     = {APP_SCREEN_SIZE_W - 10, app->text.GetTextSize("A", 1.0).y + 2};
+	chatScroll       = 0;
 
 	player.inventory.hotbar[0] = {
 		false, 3, 1
@@ -59,64 +73,139 @@ void Game::Deinit() {
 }
 
 void Game::Update(AppState& state) {
-	if (paused) {
-		pauseMenu.Update(state, *this);
+	switch (gameState) {
+		case GameState::Running: {
+			GetHighlightedBlock();
+			UpdateCamera();
+			break;
+		}
+		case GameState::Paused: {
+			pauseMenu.Update(state, *this);
+			break;
+		}
+		case GameState::InChat: {
+			break;
+		}
 	}
-	GetHighlightedBlock();
-	UpdateCamera();
 }
 
 void Game::HandleEvent(SDL_Event& event) {
-	if (paused) {
-		pauseMenu.HandleEvent(event);
-		return;
-	}
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
+	switch (gameState) {
+		case GameState::Paused: {
+			pauseMenu.HandleEvent(event);
 			break;
 		}
-		case SDL_MOUSEBUTTONDOWN: {
-			switch (event.button.button) {
-				case SDL_BUTTON_LEFT: {
-					DeleteBlock();
+		case GameState::Running: {
+			switch (event.type) {
+				case SDL_MOUSEMOTION: {
+					mousePosition.x = event.motion.x;
+					mousePosition.y = event.motion.y;
 					break;
 				}
-				case SDL_BUTTON_RIGHT: {
-					PlaceBlock();
+				case SDL_MOUSEBUTTONDOWN: {
+					switch (event.button.button) {
+						case SDL_BUTTON_LEFT: {
+							DeleteBlock();
+							mouseDown = true;
+							break;
+						}
+						case SDL_BUTTON_RIGHT: {
+							PlaceBlock();
+							break;
+						}
+					}
+					break;
+				}
+				case SDL_MOUSEBUTTONUP: {
+					mouseDown =
+						event.button.button == SDL_BUTTON_LEFT? true : mouseDown;
+					break;
+				}
+				case SDL_MOUSEWHEEL: {
+					if (event.wheel.y > 0) { // up
+						if (player.inventory.hotbarSelection == 0) {
+							player.inventory.hotbarSelection =
+								player.inventory.hotbar.size() - 1;
+						}
+						else {
+							-- player.inventory.hotbarSelection;
+						}
+					}
+					else if (event.wheel.y < 0) { // down
+						player.inventory.hotbarSelection =
+							(player.inventory.hotbarSelection + 1) %
+							player.inventory.hotbar.size();
+					}
+					break;
+				}
+				case SDL_KEYUP: {
+				    switch (event.key.keysym.scancode) {
+				        case SDL_SCANCODE_ESCAPE: {
+				            gameState = GameState::Paused;
+				            SDL_ShowCursor(SDL_ENABLE);
+				            break;
+				        }
+				        case SDL_SCANCODE_T: {
+				        	gameState       = GameState::InChat;
+				        	chatbox.focused = true;
+				        	break;
+				        }
+				        default: break;
+				    }
+				    break;
+				}
+			}
+			break;
+		}
+		case GameState::InChat: {
+			switch (event.type) {
+				case SDL_KEYUP: {
+					if (
+						(event.type == SDL_KEYUP) &&
+						(event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+					) {
+						chatbox.Reset();
+						gameState     = GameState::Running;
+						break;
+					}
+					break;
+				}
+				case SDL_KEYDOWN:
+				case SDL_TEXTINPUT: {
+					chatbox.HandleEvent(event);
+					if (!chatbox.focused) {
+						gameState     = GameState::Running;
+						if (chatbox.input == "") {}
+						else if (Chat::IsCommand(chatbox.input)) {
+							auto cmdParts = Chat::ParseCommand(chatbox.input);
+							auto command  = cmdParts[0];
+							std::vector <std::string> args = cmdParts;
+							
+							args.erase(args.begin());
+							commands.RunCommand(command, args);
+						}
+						else {
+							chat.insert(chat.begin(), {SDL_GetTicks(), chatbox.input});
+						}
+						chatbox.Reset();
+					}
+					break;
+				}
+				case SDL_MOUSEWHEEL: {
+					if (event.wheel.y > 0) { // up
+						if (chatScroll + GAME_CHAT_HEIGHT < chat.size()) {
+							++ chatScroll;
+						}
+					}
+					else if (event.wheel.y < 0) { // down
+						if (chatScroll != 0) {
+							-- chatScroll;
+						}
+					}
 					break;
 				}
 			}
 			break;
-		}
-		case SDL_MOUSEWHEEL: {
-			if (event.wheel.y > 0) { // up
-				if (player.inventory.hotbarSelection == 0) {
-					player.inventory.hotbarSelection =
-						player.inventory.hotbar.size() - 1;
-				}
-				else {
-					-- player.inventory.hotbarSelection;
-				}
-			}
-			else if (event.wheel.y < 0) { // down
-				player.inventory.hotbarSelection =
-					(player.inventory.hotbarSelection + 1) %
-					player.inventory.hotbar.size();
-			}
-			break;
-		}
-		case SDL_KEYUP: {
-		    switch (event.key.keysym.scancode) {
-		        case SDL_SCANCODE_ESCAPE: {
-		            paused = true;
-		            SDL_ShowCursor(SDL_ENABLE);
-		            break;
-		        }
-		        default: break;
-		    }
-		    break;
 		}
 	}
 }
@@ -127,7 +216,7 @@ void Game::UpdateCamera() {
 }
 
 void Game::HandleInput(const Uint8* keystate, double delta) {
-	if (paused) {
+	if (gameState != GameState::Running) {
 		return;
 	}
 	double multiplier =
@@ -169,7 +258,7 @@ void Game::HandleInput(const Uint8* keystate, double delta) {
 	if (keystate[SDL_SCANCODE_9]) player.inventory.hotbarSelection = 8;
 }
 
-void Game::Render(App& app) {
+void Game::Render() {
 	// render level
 	{
 		Vec2 max;
@@ -192,22 +281,22 @@ void Game::Render(App& app) {
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
 				
 				if (blockdefs.defs[level.layers[0].back[i][j]].type != BlockType::Gas) {
-					app.gameTextures.RenderTile(
-						app.video.renderer,
+					app->gameTextures.RenderTile(
+						app->video.renderer,
 						blockdefs.defs[level.layers[0].back[i][j]].textureID,
 						block
 					);
 				}
 				
 				if (blockdefs.defs[level.layers[0].front[i][j]].type != BlockType::Gas) {
-					app.gameTextures.RenderTile(
-						app.video.renderer,
+					app->gameTextures.RenderTile(
+						app->video.renderer,
 						blockdefs.defs[level.layers[0].front[i][j]].textureID,
 						block
 					);
 
 					// render borders
-					SDL_SetRenderDrawColor(app.video.renderer, 255, 255, 255, 255);
+					SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
 					if (
 						(j > 0) &&
 						level.ValidBlock({(int) j - 1, (int) i}) &&
@@ -215,7 +304,7 @@ void Game::Render(App& app) {
 						BlockType::Solid)
 					) {
 						SDL_RenderDrawLine(
-							app.video.renderer,
+							app->video.renderer,
 							block.x, block.y, block.x, block.y + GAME_BLOCK_SIZE - 1
 						);
 					}
@@ -226,7 +315,7 @@ void Game::Render(App& app) {
 						BlockType::Solid)
 					) {
 						SDL_RenderDrawLine(
-							app.video.renderer,
+							app->video.renderer,
 							block.x + GAME_BLOCK_SIZE - 1, block.y,
 							block.x + GAME_BLOCK_SIZE - 1, block.y + GAME_BLOCK_SIZE - 1
 						);
@@ -238,7 +327,7 @@ void Game::Render(App& app) {
 						BlockType::Solid)
 					) {
 						SDL_RenderDrawLine(
-							app.video.renderer,
+							app->video.renderer,
 							block.x, block.y, block.x + GAME_BLOCK_SIZE - 1, block.y
 						);
 					}
@@ -249,7 +338,7 @@ void Game::Render(App& app) {
 						BlockType::Solid)
 					) {
 						SDL_RenderDrawLine(
-							app.video.renderer,
+							app->video.renderer,
 							block.x, block.y + GAME_BLOCK_SIZE - 1,
 							block.x + GAME_BLOCK_SIZE - 1, block.y + GAME_BLOCK_SIZE - 1
 						);
@@ -261,21 +350,21 @@ void Game::Render(App& app) {
 					(highlightedBlock.x == (size_t) j) &&
 					(highlightedBlock.y == (size_t) i)
 				) {
-					SDL_SetRenderDrawColor(app.video.renderer, 204, 66, 94, 255);
+					SDL_SetRenderDrawColor(app->video.renderer, 204, 66, 94, 255);
 					SDL_Rect rect;
 					rect.x = block.x;
 					rect.y = block.y;
 					rect.w = GAME_BLOCK_SIZE;
 					rect.h = GAME_BLOCK_SIZE;
-					SDL_RenderDrawRect(app.video.renderer, &rect);
+					SDL_RenderDrawRect(app->video.renderer, &rect);
 				}
 			}
 		}
 	}
 
 	// render player
-	app.gameTextures.RenderTile(
-		app.video.renderer, player.GetTextureID(), 
+	app->gameTextures.RenderTile(
+		app->video.renderer, player.GetTextureID(), 
 		{
 			(int32_t) round(player.position.x - camera.x) * GAME_BLOCK_SIZE,
 			(int32_t) round(player.position.y - camera.y) * GAME_BLOCK_SIZE
@@ -292,13 +381,13 @@ void Game::Render(App& app) {
 		size_t startY = APP_SCREEN_SIZE_H - (GAME_BLOCK_SIZE + 6);
 
 		{ // background
-			SDL_SetRenderDrawColor(app.video.renderer, 255, 255, 255, 127);
+			SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 127);
 			SDL_Rect background;
 			background.x = startX;
 			background.y = startY;
 			background.w = player.inventory.hotbar.size() * GAME_BLOCK_SIZE;
 			background.h = GAME_BLOCK_SIZE;
-			SDL_RenderFillRect(app.video.renderer, &background);
+			SDL_RenderFillRect(app->video.renderer, &background);
 		}
 
 		for (size_t i = 0; i < player.inventory.hotbar.size(); ++i) {
@@ -308,8 +397,8 @@ void Game::Render(App& app) {
 				!= BlockType::Gas) &&
 				(!player.inventory.hotbar[i].empty)
 			) {
-				app.gameTextures.RenderTile(
-					app.video.renderer,
+				app->gameTextures.RenderTile(
+					app->video.renderer,
 					blockdefs.defs[player.inventory.hotbar[i].block].textureID,
 					pos
 				);
@@ -320,60 +409,85 @@ void Game::Render(App& app) {
 				box.y = pos.y;
 				box.w = GAME_BLOCK_SIZE;
 				box.h = GAME_BLOCK_SIZE;
-				SDL_SetRenderDrawColor(app.video.renderer, 255, 255, 255, 255);
-				SDL_RenderDrawRect(app.video.renderer, &box);
+				SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
+				SDL_RenderDrawRect(app->video.renderer, &box);
 			}
 		}
 
-		SDL_SetRenderDrawColor(app.video.renderer, 222, 222, 222, 127);
+		SDL_SetRenderDrawColor(app->video.renderer, 222, 222, 222, 127);
 		SDL_Rect outline;
 		outline.x = startX - 1;
 		outline.y = startY - 1;
 		outline.w = GAME_BLOCK_SIZE * player.inventory.hotbar.size() + 2;
 		outline.h = GAME_BLOCK_SIZE + 2;
-		SDL_RenderDrawRect(app.video.renderer, &outline);
+		SDL_RenderDrawRect(app->video.renderer, &outline);
 		-- outline.x;
 		-- outline.y;
 		outline.w += 2;
 		outline.h += 2;
-		SDL_SetRenderDrawColor(app.video.renderer, 31, 16, 42, 127);
-		SDL_RenderDrawRect(app.video.renderer, &outline);
+		SDL_SetRenderDrawColor(app->video.renderer, 31, 16, 42, 127);
+		SDL_RenderDrawRect(app->video.renderer, &outline);
 	}
 
 	// render paused menu
-	if (paused) {
-		pauseMenu.Render(app.video.renderer, app.text);
+	if (gameState == GameState::Paused) {
+		pauseMenu.Render(app->video.renderer, app->text);
 		return;
+	}
+
+	// render chat
+	{
+		int  letterHeight = app->text.GetTextSize("A", 1.0).y;
+		Vec2 chatPosition = {chatbox.position.x, chatbox.position.y - letterHeight - 1};
+		Vec2 textPosition = {chatbox.position.x, chatPosition.y};
+		for (size_t i = chatScroll; i < chat.size(); ++i, textPosition.y -= letterHeight) {
+			if (i > GAME_CHAT_HEIGHT - 1) {
+				break;
+			}
+			if (
+				(gameState == GameState::InChat) ||
+				!SDL_TICKS_PASSED(SDL_GetTicks(), chat[i].time + 5000)
+			) {
+				app->text.RenderText(
+					app->video.renderer, chat[i].content, textPosition, 1.0, true
+				);
+			}
+		}
 	}
 	
 	// render UI
-	app.text.RenderText(
-		app.video.renderer, "FPS: " + std::to_string(app.fps),
+	app->text.RenderText(
+		app->video.renderer, "FPS: " + std::to_string(app->fps),
 		{5, 5}, 1, true
 	);
-	app.text.RenderText(
-		app.video.renderer,
+	app->text.RenderText(
+		app->video.renderer,
 		"Pos: (" + std::to_string(player.position.x) + ", " +
 			std::to_string(player.position.y) + ")",
 		{5, 25}, 1, true
 	);
 
+	if (gameState == GameState::InChat) {
+		chatbox.Render(app->video.renderer, app->text);
+		return;
+	}
+
 	// render cursor
-	SDL_SetRenderDrawColor(app.video.renderer, 255, 255, 255, 255);
+	SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(
-		app.video.renderer, mousePosition.x, mousePosition.y - 2,
+		app->video.renderer, mousePosition.x, mousePosition.y - 2,
 		mousePosition.x, mousePosition.y - 4
 	);
 	SDL_RenderDrawLine(
-		app.video.renderer, mousePosition.x, mousePosition.y + 2,
+		app->video.renderer, mousePosition.x, mousePosition.y + 2,
 		mousePosition.x, mousePosition.y + 4
 	);
 	SDL_RenderDrawLine(
-		app.video.renderer, mousePosition.x - 2, mousePosition.y,
+		app->video.renderer, mousePosition.x - 2, mousePosition.y,
 		mousePosition.x - 4, mousePosition.y
 	);
 	SDL_RenderDrawLine(
-		app.video.renderer, mousePosition.x + 2, mousePosition.y,
+		app->video.renderer, mousePosition.x + 2, mousePosition.y,
 		mousePosition.x + 4, mousePosition.y
 	);
 }
@@ -486,4 +600,8 @@ void Game::DeleteBlock() {
 	) {
 		level.layers[0].back[y][x] = 0;
 	}
+}
+
+void Game::AddToChat(std::string message) {
+	chat.insert(chat.begin(), {SDL_GetTicks(), message});
 }

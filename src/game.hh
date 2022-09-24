@@ -7,26 +7,40 @@
 #include "level.hh"
 #include "player.hh"
 #include "pauseMenu.hh"
+#include "ui.hh"
+#include "chat.hh"
 
 class App;
 enum class AppState;
 
+enum class GameState {
+	Running = 0,
+	Paused,
+	InChat
+};
+
 class Game {
 	public:
 		// variables
-		Blockdefs blockdefs;
-		FVec2     camera; // unit: blocks
-		Level     level;
-		Player    player; // unit: blocks
-		Vec2      mousePosition;
-		WVec2     highlightedBlock;
-		bool      blockHighlighted;
-		bool      paused;
+		Blockdefs              blockdefs;
+		FVec2                  camera; // unit: blocks
+		Level                  level;
+		Player                 player; // unit: blocks
+		Vec2                   mousePosition;
+		WVec2                  highlightedBlock;
+		bool                   blockHighlighted;
+		GameState              gameState;
+		std::vector <ChatItem> chat;
+		UI::Textbox            chatbox;
+		size_t                 chatScroll;
+		bool                   mouseDown;
+		App*                   app;
+		CommandsSystem         commands;
 
 		Menus::PauseMenu pauseMenu;
 
 		// functions
-		Game() {}
+		Game();
 		void Init(UVec2 levelSize, bool generate);
 		void SpawnPlayer();
 		void Deinit();
@@ -34,10 +48,11 @@ class Game {
 		void HandleEvent(SDL_Event& event);
 		void UpdateCamera();
 		void HandleInput(const Uint8* keystate, double delta);
-		void Render(App& app);
+		void Render();
 		void GetHighlightedBlock();
 		void PlaceBlock();
 		void DeleteBlock();
+		void AddToChat(std::string message);
 };
 
 #endif

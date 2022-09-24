@@ -11,5 +11,7 @@
 #define GAME_PLAYER_SPEED      1.0
 #define GAME_PLAYER_FAST_SPEED 2.0
 #define GAME_LEVELDATA_VERSION 0
+#define GAME_CHAT_HEIGHT       7
+#define GAME_COMMAND_PREFIX    '/'
 
 #endif

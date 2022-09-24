@@ -91,3 +91,13 @@ void Util::Error(const char* format, ...) {
 	free(ret);
 	exit(EXIT_FAILURE);
 }
+
+bool Util::IsNumber(std::string str) {
+	try {
+		stod(str);
+	}
+	catch (std::exception&) {
+		return false;
+	}
+	return true;
+}

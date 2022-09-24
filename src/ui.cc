@@ -202,15 +202,20 @@ void UI::Textbox::Render(SDL_Renderer* renderer, TextComponents& text) {
 	SDL_RenderDrawRect(renderer, &box);
 
 	// render text
-	text.RenderText(renderer, input, {position.x + 1, position.y + 5}, 1.0, false);
+	Vec2 textSize = text.GetTextSize(input, 1.0);
+	text.RenderText(
+		renderer, input,
+		{position.x + 1, position.y + ((size.y / 2) - (textSize.y / 2))},
+		1.0, false
+	);
 
 	// render cursor
 	Vec2 cursorOffset = text.GetTextSize(input.substr(0, cursorPosition), 1.0);
 	SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(
 		renderer,
-		position.x + cursorOffset.x + 1, position.y + 4,
-		position.x + cursorOffset.x + 1, position.y + size.y - 5
+		position.x + cursorOffset.x + 1, position.y + 3,
+		position.x + cursorOffset.x + 1, position.y + size.y - 3
 	);
 }
 
@@ -249,6 +254,9 @@ void UI::Textbox::HandleEvent(SDL_Event& event) {
 					}
 					break;
 				}
+				case SDL_SCANCODE_RETURN: {
+					focused = false;
+				}
 				default: break;
 			}
 		}
@@ -256,5 +264,8 @@ void UI::Textbox::HandleEvent(SDL_Event& event) {
 }
 
 void UI::Textbox::Reset() {
-	Textbox();
+	input          = "";
+	complete       = false;
+	focused        = false;
+	cursorPosition = 0;
 }

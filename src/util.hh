@@ -13,6 +13,7 @@ namespace Util {
 	std::vector <std::string> GetFilesInDirectory(std::string path);
 	std::string               BaseName(std::string path);
 	void                      Error(const char* format, ...);
+	bool                      IsNumber(std::string str);
 }
 
 #endif

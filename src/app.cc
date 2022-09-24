@@ -2,6 +2,7 @@
 #include "util.hh"
 #include "constants.hh"
 #include "fs.hh"
+#include "chat.hh"
 
 App::App() {
 	Util::Log("Welcome to " APP_NAME);
@@ -32,6 +33,8 @@ App::App() {
 	text.Init(gameFolder + "/font.ttf");
 	image.Init();
 
+	InitCommands(this);
+
 	settings.Load(gameFolder);
 	UpdateSettings();
 	settingsMenu.settings            = &settings;
@@ -40,6 +43,7 @@ App::App() {
 	worldsMenu.Init(gameFolder);
 
 	game.level.worldsPath = gameFolder + "/maps";
+	game.app              = this;
 	
 /*
 	game.Init();
@@ -117,7 +121,7 @@ void App::Update() {
 		case AppState::InGame: {
 			game.Update(state);
 		
-			const Uint8* keystate = SDL_GetKeyboardState(NULL);
+			const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 			game.HandleInput(keystate, deltaTime);
 			break;			
 		}
@@ -202,7 +206,7 @@ void App::Render() {
 
 	switch (state) {
 		case AppState::InGame: {
-			game.Render(*this);
+			game.Render();
 			break;
 		}
 		case AppState::TitleScreen: {

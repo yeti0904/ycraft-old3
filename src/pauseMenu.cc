@@ -27,8 +27,8 @@ void Menus::PauseMenu::Update(AppState& state, Game& game) {
 		Colours::white : Colours::black;
 
 	if (mousePressed && resumeButton.MouseIsOver(mousePosition)) {
-		game.paused  = false;
-		mousePressed = false;
+		game.gameState  = GameState::Running;
+		mousePressed    = false;
 		SDL_ShowCursor(SDL_DISABLE);
 		return;
 	}
