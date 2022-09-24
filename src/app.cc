@@ -167,6 +167,9 @@ void App::Update() {
 				uint32_t size = pow(2, (newWorldMenu.worldSizeSelection.set * 2) + 6);
 				game.Init({size, size}, true);
 				game.level.name = newWorldMenu.worldName.input;
+				if (game.level.name == "") {
+					game.level.name = "My World";
+				}
 
 				gameTextures.Init(
 					video.renderer,
