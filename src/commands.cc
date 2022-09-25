@@ -29,6 +29,7 @@ void Commands::Tp(std::vector <std::string>& args, App& app) {
 	for (size_t i = 0; i < 2; ++i) {
 		if (!Util::IsNumber(args[i])) {
 			app.game.AddToChat("TP: arguments must be integers");
+			return;
 		}
 	}
 
