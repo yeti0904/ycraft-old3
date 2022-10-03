@@ -283,7 +283,6 @@ void App::DownloadAssets() {
 	for (auto& file : requiredFiles) {
 		std::string path = gameFolder + "/" + file;
 		if (!FS::File::Exists(path)) {
-			puts((std::string(APP_RESOURCES_URL) + file).c_str());
 			curl.Download(
 				std::string(APP_RESOURCES_URL) + file, gameFolder + "/" + file
 			);
