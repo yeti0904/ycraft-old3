@@ -26,7 +26,10 @@ App::App() {
 
 	Util::Log("Found game folder: %s", gameFolder.c_str());
 
+	
+	curl.Init();
 	SetupGameFiles();
+	DownloadAssets();
 	Util::Log("Set up game files");
 	
 	video.Init();
@@ -61,6 +64,7 @@ App::~App() {
 	video.Free();
 	text.Free();
 	image.Free();
+	curl.Free();
 
 	Util::Log("Goodbye");
 }
@@ -251,6 +255,38 @@ void App::SetupGameFiles() {
 	for (auto& dir : requiredDirectories) {
 		if (!FS::Directory::Exists(gameFolder + "/" + dir)) {
 			FS::Directory::Create(gameFolder + "/" + dir);
+		}
+	}
+}
+
+void App::DownloadAssets() {
+	std::vector <std::string> requiredFiles = {
+		"font.ttf", "texpacks/default.png"
+	};
+	{
+		bool needsDownload = false;
+		for (auto& file : requiredFiles) {
+			if (!FS::File::Exists(gameFolder + "/" + file)) {
+				needsDownload = true;
+			}
+		}
+		if (!needsDownload) {
+			return;
+		}
+	}
+
+	SDL_ShowSimpleMessageBox(
+		SDL_MESSAGEBOX_INFORMATION, "Information",
+		"Some assets are going to be downloaded from the internet", nullptr
+	);
+
+	for (auto& file : requiredFiles) {
+		std::string path = gameFolder + "/" + file;
+		if (!FS::File::Exists(path)) {
+			puts((std::string(APP_RESOURCES_URL) + file).c_str());
+			curl.Download(
+				std::string(APP_RESOURCES_URL) + file, gameFolder + "/" + file
+			);
 		}
 	}
 }

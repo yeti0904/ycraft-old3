@@ -13,6 +13,7 @@
 #include "settings.hh"
 #include "newWorldMenu.hh"
 #include "texturePackSelectorMenu.hh"
+#include "curl.hh"
 
 enum class AppState {
 	InGame = 0,
@@ -30,6 +31,7 @@ class App {
 		VideoComponents           video;
 		TextComponents            text;
 		ImageComponents           image;
+		CurlComponents            curl;
 		std::string               gameFolder;
 		TileSheet                 gameTextures;
 		std::vector <std::string> credits;
@@ -55,6 +57,7 @@ class App {
 
 		void UpdateSettings();
 		void SetupGameFiles();
+		void DownloadAssets();
 };
 
 #endif

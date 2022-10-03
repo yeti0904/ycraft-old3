@@ -14,13 +14,17 @@ CXX = clang++
 endif
 CXXVER = c++17
 CXXFLAGS = \
-	-O3 \
 	-std=${CXXVER} \
 	-Wall \
 	-Wextra \
 	-pedantic \
-	-g \
 	-Wno-deprecated-declarations
+
+ifeq (${releasemode}, on)
+CXXFLAGS += -O3 -s
+else
+CXXFLAGS += -g
+endif
 
 ifeq (${platform}, windows)
 CXXFLAGS += \
@@ -42,7 +46,7 @@ ifeq (${debug}, on)
 CXXFLAGS += -DDEBUG_EXCEPTION
 endif
 
-CXXLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lm
+CXXLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lm -lcurl
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
