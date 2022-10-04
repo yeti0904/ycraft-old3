@@ -263,16 +263,15 @@ void App::DownloadAssets() {
 	std::vector <std::string> requiredFiles = {
 		"font.ttf", "texpacks/default.png"
 	};
-	{
-		bool needsDownload = false;
-		for (auto& file : requiredFiles) {
-			if (!FS::File::Exists(gameFolder + "/" + file)) {
-				needsDownload = true;
-			}
+	
+	bool needsDownload = false;
+	for (auto& file : requiredFiles) {
+		if (!FS::File::Exists(gameFolder + "/" + file)) {
+			needsDownload = true;
 		}
-		if (!needsDownload) {
-			return;
-		}
+	}
+	if (!needsDownload) {
+		return;
 	}
 
 	SDL_ShowSimpleMessageBox(
