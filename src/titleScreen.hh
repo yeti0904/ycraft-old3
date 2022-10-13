@@ -14,6 +14,7 @@ namespace Menus {
 			UI::Button playButton;
 			UI::Button exitButton;
 			UI::Button settingsButton;
+			UI::Button creditsButton;
 	
 			// functions
 			TitleScreen();

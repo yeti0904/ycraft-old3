@@ -15,6 +15,7 @@
 #include "texturePackSelectorMenu.hh"
 #include "curl.hh"
 #include "audio.hh"
+#include "creditsScreen.hh"
 
 enum class AppState {
 	InGame = 0,
@@ -22,34 +23,35 @@ enum class AppState {
 	WorldMenu,
 	SettingsMenu,
 	NewWorldMenu,
-	TexturePackSelectorMenu
+	TexturePackSelectorMenu,
+	CreditsScreen
 };
 
 class App {
 	public:
 		// variables
-		bool                      run;
-		std::string               gameFolder;
-		VideoComponents           video;
-		TextComponents            text;
-		ImageComponents           image;
-		CurlComponents            curl;
-		AudioComponents           audio;
-		TileSheet                 gameTextures;
-		std::vector <std::string> credits;
-		Game                      game;
-		Uint64                    deltaNow;
-		Uint64                    deltaLast;
-		double                    deltaTime;
-		uint16_t                  fps;
-		AppState                  state;
-		SettingsManager           settings;
+		bool            run;
+		std::string     gameFolder;
+		VideoComponents video;
+		TextComponents  text;
+		ImageComponents image;
+		CurlComponents  curl;
+		AudioComponents audio;
+		TileSheet       gameTextures;
+		Game            game;
+		Uint64          deltaNow;
+		Uint64          deltaLast;
+		double          deltaTime;
+		uint16_t        fps;
+		AppState        state;
+		SettingsManager settings;
 
 		Menus::TitleScreen         titleScreen;
 		Menus::WorldsMenu          worldsMenu;
 		Menus::SettingsMenu        settingsMenu;
 		Menus::NewWorldMenu        newWorldMenu;
 		Menus::TexturePackSelector texturePackSelectorMenu;
+		Menus::CreditsScreen       creditsScreen;
 
 		// functions
 		App();

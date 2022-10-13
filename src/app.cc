@@ -20,13 +20,6 @@ App::App():
 	deltaNow   = SDL_GetPerformanceCounter();
 	state      = AppState::TitleScreen;
 
-	credits = {
-		"programming: MESYETI",
-		"art: MESYETI, LordOfTrident",
-		"font: Zeh Fernando",
-		"music: LoubiTek"
-	};
-
 	Util::Log("Found game folder: %s", gameFolder.c_str());
 
 	
@@ -129,6 +122,9 @@ void App::Update() {
 						texturePackSelectorMenu.HandleEvent(event);
 						break;
 					}
+					case AppState::CreditsScreen: {
+						creditsScreen.HandleEvent(event);
+					}
 				}
 				break;
 			}
@@ -216,6 +212,10 @@ void App::Update() {
 			}
 			break;
 		}
+		case AppState::CreditsScreen: {
+			creditsScreen.Update(state);
+			break;
+		}
 	}
 
 	Render();
@@ -248,6 +248,10 @@ void App::Render() {
 		}
 		case AppState::TexturePackSelectorMenu: {
 			texturePackSelectorMenu.Render(video.renderer, text);
+			break;
+		}
+		case AppState::CreditsScreen: {
+			creditsScreen.Render(video.renderer, text);
 			break;
 		}
 	}

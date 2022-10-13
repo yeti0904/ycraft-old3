@@ -24,13 +24,24 @@ Menus::TitleScreen::TitleScreen() {
 		130
 	};
 
+	creditsButton.label = "Credits";
+	creditsButton.outlineColour = Colours::black;
+	creditsButton.filledColour  = Colours::grey;
+	creditsButton.size          = {200, 25};
+	creditsButton.position      = {
+		(APP_SCREEN_SIZE_W / 2) - (creditsButton.size.x / 2),
+		160
+	};
+
+
+
 	exitButton.label = "Exit";
 	exitButton.outlineColour = Colours::black;
 	exitButton.filledColour  = Colours::grey;
 	exitButton.size          = {200, 25};
 	exitButton.position      = {
 		(APP_SCREEN_SIZE_W / 2) - (exitButton.size.x / 2),
-		160
+		190
 	};
 }
 
@@ -41,6 +52,8 @@ bool Menus::TitleScreen::Update(AppState& state) {
 		Colours::white : Colours::black;
 	settingsButton.outlineColour =
 		settingsButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+	creditsButton.outlineColour =
+		creditsButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
 		state = AppState::WorldMenu;
@@ -48,6 +61,10 @@ bool Menus::TitleScreen::Update(AppState& state) {
 	}
 	if (mousePressed && settingsButton.MouseIsOver(mousePosition)) {
 		state = AppState::SettingsMenu;
+		mousePressed = false;
+	}
+	if (mousePressed && creditsButton.MouseIsOver(mousePosition)) {
+		state = AppState::CreditsScreen;
 		mousePressed = false;
 	}
 	if (mousePressed && exitButton.MouseIsOver(mousePosition)) {
@@ -77,4 +94,5 @@ void Menus::TitleScreen::Render(SDL_Renderer* renderer, TextComponents& text) {
 	playButton.Render(renderer, text);
 	exitButton.Render(renderer, text);
 	settingsButton.Render(renderer, text);
+	creditsButton.Render(renderer, text);
 }
