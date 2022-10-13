@@ -35,8 +35,9 @@ void AudioComponents::LoadMusic(std::string directory) {
 	if (files.empty()) {
 		return;
 	}
-	
-	auto chosen = files[Util::RandomRange(0, files.size())];
+
+	auto index  = Util::RandomRange(0, files.size() - 1);
+	auto chosen = files[index];
 	music = Mix_LoadMUS((chosen).c_str());
 	if (music == nullptr) {
 		Util::Error("Failed to open music %s: %s", chosen.c_str(), Mix_GetError());
@@ -44,4 +45,9 @@ void AudioComponents::LoadMusic(std::string directory) {
 	if (Mix_PlayMusic(music, 0) != 0) {
 		Util::Error("Failed to play music %s: %s", chosen.c_str(), Mix_GetError());
 	}
+}
+
+void AudioComponents::FreeMusic() {
+	Mix_FreeMusic(music);
+	music = nullptr;
 }

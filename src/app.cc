@@ -10,6 +10,8 @@ App::App():
 {
 	Util::Log("Welcome to " APP_NAME);
 
+	srand(time(nullptr));
+
 	if (Util::GetExecutableLocation() == "") {
 		Util::Error(APP_NAME " can't run on your system");
 	}

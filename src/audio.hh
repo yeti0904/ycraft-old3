@@ -12,7 +12,7 @@ class AudioComponents {
 		~AudioComponents();
 		void Init();
 		void LoadMusic(std::string directory);
-		void Free();
+		void FreeMusic();
 };
 
 #endif

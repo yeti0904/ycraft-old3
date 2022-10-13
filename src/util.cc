@@ -184,6 +184,5 @@ std::vector <std::string> Util::GetFilesOfType(std::string path, std::string typ
 }
 
 int Util::RandomRange(int min, int max) {
-	srand(time(nullptr));
 	return min + rand() % ((max + 1) - min);
 }
