@@ -79,7 +79,6 @@ void Level::LoadFromRawLayerData(
 		line.resize(layerSize.x);
 	}
 
-	printf("layerSize: (%i, %i)\n", (int) layerSize.x, (int) layerSize.y);
 /*
 	for (size_t i = 0; i < layerSize.x * layerSize.y; ++i) {
 		const size_t x = i == 0? 0 : layerSize.x % i;

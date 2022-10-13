@@ -18,6 +18,7 @@
 #include <cmath>
 #include <ctime>
 #if defined(PLATFORM_WINDOWS)
+	#include <winsock2.h>
 	#include <windows.h>
 #else
 	#include <unistd.h>
@@ -32,6 +33,7 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <thread>
 #include <fstream>
 #include <filesystem>
 #include <unordered_map>
@@ -40,7 +42,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
-#include <curl/curl.h>
+#include <SDL2/SDL_mixer.h>
+#include <curl.h>
 
 // types
 typedef uint16_t blockID_t;

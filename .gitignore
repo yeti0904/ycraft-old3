@@ -3,3 +3,4 @@ sdl2
 sdl2image
 sdl2ttf
 bin/*.properties
+curl

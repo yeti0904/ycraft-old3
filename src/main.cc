@@ -1,7 +1,7 @@
 #include "app.hh"
 #include "util.hh"
 
-int main(void) {
+int main(int, char**) {
 	#ifndef DEBUG_EXCEPTION
 	try {
 	#endif
@@ -16,6 +16,5 @@ int main(void) {
 		Util::Error(error.what());
 	}
 	#endif
-
 	return 0;
 }

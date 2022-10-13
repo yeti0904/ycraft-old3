@@ -13,15 +13,36 @@ std::string Util::CurrentTime() {
 	return std::string(buffer);
 }
 
-void Util::Log(const char* format, ...) {
-	va_list args;
-	va_start(args, format);
-	
-	char* ret;
-	int r = vasprintf(&ret, format, args);
-	(void) r;
-	
-	va_end(args);
+void Util::Log(const char* format, ...) { // most of this is taken from vsprintf(3)
+	size_t n = 0;
+	size_t size = 0;
+	char*  ret = nullptr;
+	va_list ap;
+
+	// Determine required size. 
+
+	va_start(ap, format);
+	n = vsnprintf(ret, size, format, ap);
+	va_end(ap);
+
+	if (n < 0) {
+		return;
+	}
+
+	size = n + 1; // One extra byte for '\0'
+	ret = (char*) malloc(size);
+	if (ret == nullptr) {
+		return;
+	}
+
+	va_start(ap, format);
+	n = vsnprintf(ret, size, format, ap);
+	va_end(ap);
+
+	if (n < 0) {
+		free(ret);
+	    return;
+	}
 	
 	printf("[%s] %s\n", CurrentTime().c_str(), ret);
 	free(ret);
@@ -42,7 +63,7 @@ std::string Util::GetExecutableLocation() {
 		}
 	#elif defined(PLATFORM_WINDOWS)
 		GetModuleFileName(nullptr, buffer, sizeof(buffer));
-		return string(buffer);
+		return std::string(buffer);
 	#endif
 	
 	return "";
@@ -65,7 +86,7 @@ std::vector <std::string> Util::GetFilesInDirectory(std::string path) {
 	std::vector <std::string> ret;
 	for (auto& entry : std::filesystem::directory_iterator(path)) {
 		if (entry.is_regular_file()) {
-			ret.push_back(entry.path());
+			ret.push_back(entry.path().string());
 		}
 	}
 	return ret;
@@ -77,14 +98,35 @@ std::string Util::BaseName(std::string path) {
 }
 
 void Util::Error(const char* format, ...) {
-	va_list args;
-	va_start(args, format);
-	
-	char* ret;
-	int r = vasprintf(&ret, format, args);
-	(void) r;
-	
-	va_end(args);
+	size_t n = 0;
+	size_t size = 0;
+	char*  ret = nullptr;
+	va_list ap;
+
+	// Determine required size. 
+
+	va_start(ap, format);
+	n = vsnprintf(ret, size, format, ap);
+	va_end(ap);
+
+	if (n < 0) {
+		return;
+	}
+
+	size = n + 1; // One extra byte for '\0'
+	ret = (char*) malloc(size);
+	if (ret == nullptr) {
+		return;
+	}
+
+	va_start(ap, format);
+	n = vsnprintf(ret, size, format, ap);
+	va_end(ap);
+
+	if (n < 0) {
+		free(ret);
+	    return;
+	}
 	
 	fprintf(stderr, "[ERROR] %s\n", ret);
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERROR!", ret, nullptr);
@@ -100,4 +142,48 @@ bool Util::IsNumber(std::string str) {
 		return false;
 	}
 	return true;
+}
+
+std::string Util::CorrectURL(std::string str) {
+	std::string ret;
+
+	for (auto& ch : str) {
+		switch (ch) {
+			case ' ': {
+				ret += "%20";
+				break;
+			}
+			default: {
+				ret += ch;
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool Util::StringEndsWith(std::string base, std::string end) {
+	// https://stackoverflow.com/a/2072890/12577005
+	if (end.size() > base.size()) {
+		return false;
+	}
+	return std::equal(end.rbegin(), end.rend(), base.rbegin());
+}
+
+std::vector <std::string> Util::GetFilesOfType(std::string path, std::string type) {
+	auto                      files = Util::GetFilesInDirectory(path);
+	std::vector <std::string> ret;
+
+	for (auto& file : files) {
+		if (Util::StringEndsWith(file, type)) {
+			ret.push_back(file);
+		}
+	}
+
+	return ret;
+}
+
+int Util::RandomRange(int min, int max) {
+	srand(time(nullptr));
+	return min + rand() % ((max + 1) - min);
 }

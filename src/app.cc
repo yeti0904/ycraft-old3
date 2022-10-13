@@ -4,15 +4,16 @@
 #include "fs.hh"
 #include "chat.hh"
 
-App::App() {
+App::App():
+	run(true),
+	gameFolder(Util::DirName(Util::GetExecutableLocation()))
+{
 	Util::Log("Welcome to " APP_NAME);
 
 	if (Util::GetExecutableLocation() == "") {
 		Util::Error(APP_NAME " can't run on your system");
 	}
-
-	run        = true;
-	gameFolder = Util::DirName(Util::GetExecutableLocation());
+	
 	deltaLast  = 0;
 	deltaNow   = SDL_GetPerformanceCounter();
 	state      = AppState::TitleScreen;
@@ -35,6 +36,8 @@ App::App() {
 	video.Init();
 	text.Init(gameFolder + "/font.ttf");
 	image.Init();
+	audio.Init();
+	audio.LoadMusic(gameFolder + "/music");
 
 	InitCommands(this);
 
@@ -61,6 +64,10 @@ App::App() {
 }
 
 App::~App() {
+	if (Mix_PlayingMusic()) {
+		Mix_HaltMusic();
+	}
+
 	video.Free();
 	text.Free();
 	image.Free();
@@ -70,6 +77,11 @@ App::~App() {
 }
 
 void App::Update() {
+	// play music if none playing
+	if (!Mix_PlayingMusic()) {
+		audio.LoadMusic(gameFolder + "/music");
+	}
+
 	// get delta time
 	deltaLast = deltaNow;
 	deltaNow  = SDL_GetPerformanceCounter();
@@ -250,7 +262,7 @@ void App::UpdateSettings() {
 
 void App::SetupGameFiles() {
 	std::vector <std::string> requiredDirectories = {
-		"texpacks", "maps"
+		"texpacks", "maps", "music"
 	};
 	for (auto& dir : requiredDirectories) {
 		if (!FS::Directory::Exists(gameFolder + "/" + dir)) {
@@ -261,7 +273,10 @@ void App::SetupGameFiles() {
 
 void App::DownloadAssets() {
 	std::vector <std::string> requiredFiles = {
-		"font.ttf", "texpacks/default.png"
+		"font.ttf", "texpacks/default.png",
+		"music/098761584987960161196106.mp3",
+		"music/Misery_Rope_Here.mp3",
+		"music/Nevertheless_Life_Is_Beautiful.mp3"
 	};
 	
 	bool needsDownload = false;
@@ -283,7 +298,8 @@ void App::DownloadAssets() {
 		std::string path = gameFolder + "/" + file;
 		if (!FS::File::Exists(path)) {
 			curl.Download(
-				std::string(APP_RESOURCES_URL) + file, gameFolder + "/" + file
+				std::string(APP_RESOURCES_URL) + file,
+				gameFolder + "/" + file
 			);
 		}
 	}

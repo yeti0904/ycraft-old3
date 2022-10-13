@@ -14,6 +14,7 @@
 #include "newWorldMenu.hh"
 #include "texturePackSelectorMenu.hh"
 #include "curl.hh"
+#include "audio.hh"
 
 enum class AppState {
 	InGame = 0,
@@ -28,11 +29,12 @@ class App {
 	public:
 		// variables
 		bool                      run;
+		std::string               gameFolder;
 		VideoComponents           video;
 		TextComponents            text;
 		ImageComponents           image;
 		CurlComponents            curl;
-		std::string               gameFolder;
+		AudioComponents           audio;
 		TileSheet                 gameTextures;
 		std::vector <std::string> credits;
 		Game                      game;

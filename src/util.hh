@@ -14,6 +14,10 @@ namespace Util {
 	std::string               BaseName(std::string path);
 	void                      Error(const char* format, ...);
 	bool                      IsNumber(std::string str);
+	std::string               CorrectURL(std::string str);
+	bool                      StringEndsWith(std::string base, std::string end);
+	std::vector <std::string> GetFilesOfType(std::string path, std::string type);
+	int                       RandomRange(int min, int max);
 }
 
 #endif

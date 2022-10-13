@@ -12,6 +12,9 @@ CXX = x86_64-w64-mingw32-g++
 else
 CXX = clang++
 endif
+
+CCACHE = ccache
+
 CXXVER = c++17
 CXXFLAGS = \
 	-std=${CXXVER} \
@@ -27,36 +30,34 @@ CXXFLAGS += -g
 endif
 
 ifeq (${platform}, windows)
-CXXFLAGS += \
-	-I./sdl2/x86_64-w64-mingw32/include -Dmain=SDL_main \
-	-L./sdl2/x86_64-w64-mingw32/lib -lmingw32 \
-	-lSDL2main ./sdl2/x86_64-w64-mingw32/lib/libSDL2.a \
-	-mwindows -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 \
-	-ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 \
-	-lsetupapi -lversion -luuid \
-	-I./sdl2ttf/x86_64-w64-mingw32/include -L./sdl2ttf/x86_64-w64-mingw32/lib \
-	-lSDL2_ttf \
-	-I./sdl2image/x86_64-w64-mingw32/include -L./sdl2image/x86_64-w64-mingw32/lib \
-	-lSDL2_image
+	CXXFLAGS += -I./sdl2/x86_64-w64-mingw32/include/ -Dmain=SDL_main \
+				-I./curl/include/curl
 else
-CXXFLAGS += -I/usr/include/SDL2
+	CXXFLAGS += -I/usr/include/curl
 endif
 
 ifeq (${debug}, on)
-CXXFLAGS += -DDEBUG_EXCEPTION
+	CXXFLAGS += -DDEBUG_EXCEPTION
 endif
 
-CXXLIBS = -lSDL2 -lSDL2_ttf -lSDL2_image -lm -lcurl
+ifeq (${platform}, windows)
+	CXXLIBS += -L./sdl2/x86_64-w64-mingw32/lib -mwindows \
+				-L./sdl2image/x86_64-w64-mingw32/lib \
+				-L./sdl2ttf/x86_64-w64-mingw32/lib \
+				-L./curl/lib -lmingw32 -static-libgcc -static-libstdc++
+endif
+
+CXXLIBS += -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer -lm -lcurl
 
 # rules
 compile: ./bin ${OBJ} ${SRC}
-	${CXX} -o ${APP} ${OBJ} ${CXXLIBS}
+	${CCACHE} ${CXX} -o ${APP} ${OBJ} ${CXXLIBS}
 
 ./bin:
 	mkdir -p bin
 
 bin/%.o: src/%.cc ${DEPS}
-	${CXX} -c $< ${CXXFLAGS} -o $@
+	${CCACHE} ${CXX} -c $< ${CXXFLAGS} -o $@
 
 clean:
 	rm bin/*.o $(APP)
