@@ -8,7 +8,8 @@ void SettingsManager::Load(std::string gamePath) {
 		FS::File::Write(
 			settingsPath,
 			"fullscreen = false\n"
-			"texturePack = default.png"
+			"texturePack = default.png\n"
+			"playMusic = true"
 		);
 	}
 	settings.Parse(FS::File::Read(settingsPath));

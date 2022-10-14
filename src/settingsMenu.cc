@@ -33,10 +33,17 @@ Menus::SettingsMenu::SettingsMenu():
 	texturePacksButton.size          = {200, 25};
 	texturePacksButton.outlineColour = Colours::black;
 	texturePacksButton.filledColour  = Colours::grey;
+
+	musicCheckbox.position.x = 14;
+	musicCheckbox.position.y = 90;
+	musicCheckbox.size.x     = 8;
+	musicCheckbox.size.y     = 9;
+	musicCheckbox.colour     = Colours::white;
 }
 
 void Menus::SettingsMenu::Init() {
 	fullscreenCheckbox.activated = settings->settings["fullscreen"] == "true";
+	musicCheckbox.activated      = settings->settings["playMusic"] == "true";
 }
 
 bool Menus::SettingsMenu::Update(AppState& state) {
@@ -47,12 +54,13 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 	texturePacksButton.outlineColour =
 		texturePacksButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 
-	if (mousePressed && applyButton.MouseIsOver(mousePosition)) {
+	/*if (mousePressed && applyButton.MouseIsOver(mousePosition)) {
 		mousePressed = false;
 		settings->Write();
 		return true; // update settings
-	}
+	}*/
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+		settings->Write();
 		state        = AppState::TitleScreen;
 		mousePressed = false;
 	}
@@ -61,6 +69,14 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 		mousePressed                     = false;
 		settings->settings["fullscreen"] =
 			fullscreenCheckbox.activated? "true" : "false";
+		return true;
+	}
+	if (mousePressed && musicCheckbox.MouseIsOver(mousePosition)) {
+		musicCheckbox.activated     = !musicCheckbox.activated;
+		mousePressed                     = false;
+		settings->settings["playMusic"] =
+			musicCheckbox.activated? "true" : "false";
+		return true;
 	}
 	if (mousePressed && texturePacksButton.MouseIsOver(mousePosition)) {
 		state        = AppState::TexturePackSelectorMenu;
@@ -101,7 +117,7 @@ void Menus::SettingsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 
 	// draw buttons
 	backButton.Render(renderer, text);
-	applyButton.Render(renderer, text);
+	//applyButton.Render(renderer, text);
 	texturePacksButton.Render(renderer, text);
 
 	// draw settings stuff
@@ -109,6 +125,12 @@ void Menus::SettingsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	text.RenderText(
 		renderer, "Enable fullscreen",
 		{fullscreenCheckbox.position.x + 12, fullscreenCheckbox.position.y - 3},
+		1.0, true
+	);
+	musicCheckbox.Render(renderer);
+	text.RenderText(
+		renderer, "Play music",
+		{musicCheckbox.position.x + 12, musicCheckbox.position.y - 3},
 		1.0, true
 	);
 }

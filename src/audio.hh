@@ -7,6 +7,7 @@ class AudioComponents {
 	public:
 		Mix_Music*                music;
 		std::vector <std::string> musicFiles;
+		bool                      enabled;
 
 		AudioComponents();
 		~AudioComponents();

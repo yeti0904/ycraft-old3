@@ -73,7 +73,7 @@ App::~App() {
 
 void App::Update() {
 	// play music if none playing
-	if (!Mix_PlayingMusic()) {
+	if (!Mix_PlayingMusic() && settings.settings["playMusic"] == "true") {
 		audio.LoadMusic(gameFolder + "/music");
 	}
 
@@ -264,6 +264,10 @@ void App::UpdateSettings() {
 		video.window,
 		settings.settings["fullscreen"] == "true"? SDL_WINDOW_FULLSCREEN_DESKTOP : 0
 	);
+	audio.enabled = settings.settings["playMusic"] == "true";
+	if (!audio.enabled && Mix_PlayingMusic()) {
+		Mix_HaltMusic();
+	}
 }
 
 void App::SetupGameFiles() {

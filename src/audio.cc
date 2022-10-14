@@ -30,6 +30,10 @@ void AudioComponents::Init() {
 }
 
 void AudioComponents::LoadMusic(std::string directory) {
+	if (!enabled) {
+		return;
+	}
+
 	auto files = Util::GetFilesOfType(directory, ".mp3");
 
 	if (files.empty()) {
