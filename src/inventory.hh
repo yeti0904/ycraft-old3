@@ -9,14 +9,18 @@ struct InventoryEntry {
 	uint16_t  amount;
 };
 
+typedef std::array <std::array <InventoryEntry, 9>, 5> InventoryArray;
+typedef std::array <InventoryEntry, 9>                 InventoryLine;
+
 class Inventory {
 	public:
 		// variables
-		std::array <InventoryEntry, 9> hotbar;
-		size_t                         hotbarSelection;
+		InventoryArray inventory;
+		size_t         hotbarSelection;
 
 		// functions
-		Inventory();	
+		Inventory();
+		InventoryLine& Hotbar();
 };
 
 #endif

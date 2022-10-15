@@ -50,16 +50,16 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	chatbox.size     = {APP_SCREEN_SIZE_W - 10, app->text.GetTextSize("A", 1.0).y + 2};
 	chatScroll       = 0;
 
-	player.inventory.hotbar[0] = {
+	player.inventory.Hotbar()[0] = {
 		false, 3, 1
 	};
-	player.inventory.hotbar[1] = {
+	player.inventory.Hotbar()[1] = {
 		false, 1, 1
 	};
-	player.inventory.hotbar[2] = {
+	player.inventory.Hotbar()[2] = {
 		false, 4, 1
 	};
-	player.inventory.hotbar[3] = {
+	player.inventory.Hotbar()[3] = {
 		false, 5, 1
 	};
 }
@@ -127,7 +127,7 @@ void Game::HandleEvent(SDL_Event& event) {
 					if (event.wheel.y > 0) { // up
 						if (player.inventory.hotbarSelection == 0) {
 							player.inventory.hotbarSelection =
-								player.inventory.hotbar.size() - 1;
+								player.inventory.Hotbar().size() - 1;
 						}
 						else {
 							-- player.inventory.hotbarSelection;
@@ -136,7 +136,7 @@ void Game::HandleEvent(SDL_Event& event) {
 					else if (event.wheel.y < 0) { // down
 						player.inventory.hotbarSelection =
 							(player.inventory.hotbarSelection + 1) %
-							player.inventory.hotbar.size();
+							player.inventory.Hotbar().size();
 					}
 					break;
 				}
@@ -382,7 +382,7 @@ void Game::Render() {
 	{
 		size_t startX =
 			(APP_SCREEN_SIZE_W / 2) -
-			((GAME_BLOCK_SIZE * player.inventory.hotbar.size()) / 2);
+			((GAME_BLOCK_SIZE * player.inventory.Hotbar().size()) / 2);
 		size_t startY = APP_SCREEN_SIZE_H - (GAME_BLOCK_SIZE + 6);
 
 		{ // background
@@ -390,21 +390,21 @@ void Game::Render() {
 			SDL_Rect background;
 			background.x = startX;
 			background.y = startY;
-			background.w = player.inventory.hotbar.size() * GAME_BLOCK_SIZE;
+			background.w = player.inventory.Hotbar().size() * GAME_BLOCK_SIZE;
 			background.h = GAME_BLOCK_SIZE;
 			SDL_RenderFillRect(app->video.renderer, &background);
 		}
 
-		for (size_t i = 0; i < player.inventory.hotbar.size(); ++i) {
+		for (size_t i = 0; i < player.inventory.Hotbar().size(); ++i) {
 			Vec2 pos = {(int32_t) (startX + (i * GAME_BLOCK_SIZE)), (int32_t) startY};
 			if (
-				(blockdefs.defs[player.inventory.hotbar[i].block].type
+				(blockdefs.defs[player.inventory.Hotbar()[i].block].type
 				!= BlockType::Gas) &&
-				(!player.inventory.hotbar[i].empty)
+				(!player.inventory.Hotbar()[i].empty)
 			) {
 				app->gameTextures.RenderTile(
 					app->video.renderer,
-					blockdefs.defs[player.inventory.hotbar[i].block].textureID,
+					blockdefs.defs[player.inventory.Hotbar()[i].block].textureID,
 					pos
 				);
 			}
@@ -423,7 +423,7 @@ void Game::Render() {
 		SDL_Rect outline;
 		outline.x = startX - 1;
 		outline.y = startY - 1;
-		outline.w = GAME_BLOCK_SIZE * player.inventory.hotbar.size() + 2;
+		outline.w = GAME_BLOCK_SIZE * player.inventory.Hotbar().size() + 2;
 		outline.h = GAME_BLOCK_SIZE + 2;
 		SDL_RenderDrawRect(app->video.renderer, &outline);
 		-- outline.x;
@@ -571,7 +571,7 @@ void Game::PlaceBlock() {
 	if (
 		blockdefs.defs[level.layers[0].back[y][x]].type == BlockType::Gas
 	) {
-		level.layers[0].back[y][x] = player.inventory.hotbar[
+		level.layers[0].back[y][x] = player.inventory.Hotbar()[
 			player.inventory.hotbarSelection
 		].block;
 		return;
@@ -580,7 +580,7 @@ void Game::PlaceBlock() {
 	if (
 		blockdefs.defs[level.layers[0].front[y][x]].type == BlockType::Gas
 	) {
-		level.layers[0].front[y][x] = player.inventory.hotbar[
+		level.layers[0].front[y][x] = player.inventory.Hotbar()[
 			player.inventory.hotbarSelection
 		].block;
 	}
