@@ -11,11 +11,12 @@ class TileSheet {
 		SDL_Texture* image;
 
 		// functions
-		TileSheet() {}
+		TileSheet();
 		void  Init(SDL_Renderer* renderer, std::string path, uint32_t p_tileSize);
 		void  Free();
 		UVec2 GetTexturePosition(uint32_t id);
 		void  RenderTile(SDL_Renderer* renderer, uint32_t id, Vec2 pos);
+		void  RenderSubTile(SDL_Renderer* renderer, uint32_t id, Vec2 pos, Rect source);
 };
 
 #endif

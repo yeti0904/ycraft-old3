@@ -18,6 +18,7 @@ namespace Util {
 	bool                      StringEndsWith(std::string base, std::string end);
 	std::vector <std::string> GetFilesOfType(std::string path, std::string type);
 	int                       RandomRange(int min, int max);
+	float                     FRandomRange(float min, float max);
 }
 
 #endif

@@ -14,5 +14,8 @@
 #define GAME_LEVELDATA_VERSION 0
 #define GAME_CHAT_HEIGHT       7
 #define GAME_COMMAND_PREFIX    '/'
+#define GAME_PARTICLE_SIZE     ((Vec2){2, 2})
+#define GAME_PARTICLE_DURATION 3000
+#define GAME_MAX_PARTICLES     100
 
 #endif

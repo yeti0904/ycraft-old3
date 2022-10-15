@@ -4,6 +4,7 @@
 #include "colours.hh"
 #include "app.hh"
 #include "commands.hh"
+#include "util.hh"
 
 Game::Game() {
 	RegisterCommands(commands);
@@ -77,6 +78,7 @@ void Game::Update(AppState& state) {
 		case GameState::Running: {
 			GetHighlightedBlock();
 			UpdateCamera();
+			particles.UpdateParticles();
 			break;
 		}
 		case GameState::Paused: {
@@ -362,6 +364,9 @@ void Game::Render() {
 		}
 	}
 
+	// render particles
+	particles.Render(app->video, camera);
+
 	// render player
 	app->gameTextures.RenderTile(
 		app->video.renderer, player.GetTextureID(), 
@@ -586,19 +591,26 @@ void Game::DeleteBlock() {
 		return;
 	}
 	
-	size_t y = highlightedBlock.y;
-	size_t x = highlightedBlock.x;
+	size_t    y = highlightedBlock.y;
+	size_t    x = highlightedBlock.x;
+	blockID_t id;
 	if (
 		blockdefs.defs[level.layers[0].front[y][x]].type != BlockType::Gas
 	) {
+		id = level.layers[0].front[y][x];
 		level.layers[0].front[y][x] = 0;
-		return;
 	}
-
-	if (
+	else if (
 		blockdefs.defs[level.layers[0].back[y][x]].type != BlockType::Gas
 	) {
+		id = level.layers[0].back[y][x];
 		level.layers[0].back[y][x] = 0;
+	}
+
+	for (int i = 0; i < Util::RandomRange(15, 30); ++i) {
+		particles.NewParticle(
+			blockdefs.defs[id].textureID, {(uint32_t) x, (uint32_t) y}
+		);
 	}
 }
 

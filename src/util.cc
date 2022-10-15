@@ -186,3 +186,7 @@ std::vector <std::string> Util::GetFilesOfType(std::string path, std::string typ
 int Util::RandomRange(int min, int max) {
 	return min + rand() % ((max + 1) - min);
 }
+
+float Util::FRandomRange(float min, float max) {
+	return min + (float) rand() / ((float) ((float) RAND_MAX / (max - min)));
+}

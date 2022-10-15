@@ -9,6 +9,7 @@
 #include "pauseMenu.hh"
 #include "ui.hh"
 #include "chat.hh"
+#include "particles.hh"
 
 class App;
 enum class AppState;
@@ -36,6 +37,7 @@ class Game {
 		bool                   mouseDown;
 		App*                   app;
 		CommandsSystem         commands;
+		Particles::Manager     particles;
 
 		Menus::PauseMenu pauseMenu;
 

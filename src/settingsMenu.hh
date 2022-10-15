@@ -13,7 +13,7 @@ namespace Menus {
 		public:
 			// variables
 			UI::Button       backButton;
-			UI::Button       applyButton;
+			//UI::Button       applyButton;
 			UI::Checkbox     fullscreenCheckbox;
 			UI::Button       texturePacksButton;
 			UI::Checkbox     musicCheckbox;

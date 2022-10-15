@@ -14,14 +14,14 @@ Menus::SettingsMenu::SettingsMenu():
 	backButton.size          = {200, 25};
 	backButton.outlineColour = Colours::black;
 	backButton.filledColour  = Colours::grey;
-
+/*
 	applyButton.label         = "Apply settings";
 	applyButton.position.x    = (APP_SCREEN_SIZE_W / 2) + 15;
 	applyButton.position.y    = APP_SCREEN_SIZE_H - 30;
 	applyButton.size          = {200, 25};
 	applyButton.outlineColour = Colours::black;
 	applyButton.filledColour  = Colours::grey;
-
+*/
 	fullscreenCheckbox.position.x = 14;
 	fullscreenCheckbox.position.y = 44;
 	fullscreenCheckbox.size.x     = 8;
@@ -49,8 +49,8 @@ void Menus::SettingsMenu::Init() {
 bool Menus::SettingsMenu::Update(AppState& state) {
 	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
 		Colours::white : Colours::black;
-	applyButton.outlineColour =
-		applyButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+	// applyButton.outlineColour =
+		// applyButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 	texturePacksButton.outlineColour =
 		texturePacksButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 

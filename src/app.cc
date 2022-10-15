@@ -43,8 +43,9 @@ App::App():
 	texturePackSelectorMenu.Init(gameFolder);
 	worldsMenu.Init(gameFolder);
 
-	game.level.worldsPath = gameFolder + "/maps";
-	game.app              = this;
+	game.level.worldsPath    = gameFolder + "/maps";
+	game.app                 = this;
+	game.particles.tileSheet = &gameTextures;
 	
 /*
 	game.Init();
@@ -67,6 +68,7 @@ App::~App() {
 	text.Free();
 	image.Free();
 	curl.Free();
+	gameTextures.Free();
 
 	Util::Log("Goodbye");
 }
