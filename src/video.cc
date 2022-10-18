@@ -36,3 +36,16 @@ void VideoComponents::Free() {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 }
+
+void VideoComponents::DrawTriangle(
+	FVec2 point1, FVec2 point2, FVec2 point3, SDL_Color colour
+) {
+	std::vector <SDL_Vertex> verts =
+	{
+		{SDL_FPoint{point1.x, point1.y}, colour, SDL_FPoint{0}},
+		{SDL_FPoint{point2.x, point2.y}, colour, SDL_FPoint{0}},
+		{SDL_FPoint{point3.x, point3.y}, colour, SDL_FPoint{0}}
+	};
+
+	SDL_RenderGeometry(renderer, nullptr, verts.data(), verts.size(), nullptr, 0);
+}

@@ -10,6 +10,7 @@
 #include "ui.hh"
 #include "chat.hh"
 #include "particles.hh"
+#include "inventoryScreen.hh"
 
 class App;
 enum class AppState;
@@ -17,7 +18,8 @@ enum class AppState;
 enum class GameState {
 	Running = 0,
 	Paused,
-	InChat
+	InChat,
+	Inventory
 };
 
 class Game {
@@ -40,6 +42,7 @@ class Game {
 		Particles::Manager     particles;
 
 		Menus::PauseMenu pauseMenu;
+		InventoryScreen  inventoryScreen;
 
 		// functions
 		Game();

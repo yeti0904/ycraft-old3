@@ -21,7 +21,6 @@ App::App():
 	state      = AppState::TitleScreen;
 
 	Util::Log("Found game folder: %s", gameFolder.c_str());
-
 	
 	curl.Init();
 	SetupGameFiles();

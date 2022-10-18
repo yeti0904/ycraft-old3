@@ -3,6 +3,7 @@
 
 #include "_components.hh"
 #include "settings.hh"
+#include "types.hh"
 
 class VideoComponents {
 	public:
@@ -13,6 +14,7 @@ class VideoComponents {
 		// functions
 		VideoComponents() {}
 		void Init();
+		void DrawTriangle(FVec2 point1, FVec2 point2, FVec2 point3, SDL_Color colour);
 		void Free();
 };
 

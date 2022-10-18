@@ -17,5 +17,6 @@
 #define GAME_PARTICLE_SIZE     ((Vec2){2, 2})
 #define GAME_PARTICLE_DURATION 3000
 #define GAME_MAX_PARTICLES     100
+#define GAME_SHADOW_OFFSET     4
 
 #endif

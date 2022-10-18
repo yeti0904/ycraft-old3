@@ -1,4 +1,3 @@
-
 #include "app.hh"
 #include "util.hh"
 

@@ -62,6 +62,8 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	player.inventory.Hotbar()[3] = {
 		false, 5, 1
 	};
+
+	inventoryScreen.inventory = &player.inventory;
 }
 
 void Game::SpawnPlayer() {
@@ -150,6 +152,10 @@ void Game::HandleEvent(SDL_Event& event) {
 				        case SDL_SCANCODE_T: {
 				        	gameState       = GameState::InChat;
 				        	chatbox.focused = true;
+				        	break;
+				        }
+				        case SDL_SCANCODE_E: {
+				        	gameState = GameState::Inventory;
 				        	break;
 				        }
 				        default: break;
@@ -289,8 +295,68 @@ void Game::Render() {
 						block
 					);
 				}
-				
+			}
+		}
+
+		for (
+			ssize_t i = start.y; (i < max.y) && (i < level.size.y); ++i
+		) {
+			for (
+				ssize_t j = start.x; (j < max.x) && (j < level.size.x); ++j
+			) {
+				Vec2 block;
+				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
+				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
+			
 				if (blockdefs.defs[level.layers[0].front[i][j]].type != BlockType::Gas) {
+					// render shadow
+					SDL_SetRenderDrawColor(app->video.renderer, 0, 0, 0, 127);
+					SDL_Rect shadow = {
+						block.x + GAME_SHADOW_OFFSET, block.y + GAME_SHADOW_OFFSET,
+						GAME_BLOCK_SIZE, GAME_BLOCK_SIZE
+					};
+					SDL_RenderFillRect(app->video.renderer, &shadow);
+					if (
+						(j == 0) ||
+						(
+							blockdefs.defs[level.layers[0].front[i][j - 1]].type ==
+							BlockType::Gas
+						)
+					) {
+						app->video.DrawTriangle(
+							{(float) block.x, (float) block.y + GAME_BLOCK_SIZE},
+							{
+								(float) block.x + GAME_SHADOW_OFFSET,
+								(float) block.y + GAME_BLOCK_SIZE
+							},
+							{
+								(float) block.x + GAME_SHADOW_OFFSET,
+								(float) block.y + GAME_BLOCK_SIZE + GAME_SHADOW_OFFSET
+							},
+							Colours::transparentBlack
+						);
+					}
+					if (
+						(i == 0) ||
+						(
+							blockdefs.defs[level.layers[0].front[i - 1][j]].type ==
+							BlockType::Gas
+						)
+					) {
+						app->video.DrawTriangle(
+							{(float) block.x + GAME_BLOCK_SIZE, (float) block.y},
+							{
+								(float) block.x + GAME_BLOCK_SIZE,
+								(float) block.y + GAME_SHADOW_OFFSET
+							},
+							{
+								(float) block.x + GAME_BLOCK_SIZE + GAME_SHADOW_OFFSET,
+								(float) block.y + GAME_SHADOW_OFFSET
+							},
+							Colours::transparentBlack
+						);
+					}
+					// render texture
 					app->gameTextures.RenderTile(
 						app->video.renderer,
 						blockdefs.defs[level.layers[0].front[i][j]].textureID,
@@ -594,23 +660,28 @@ void Game::DeleteBlock() {
 	size_t    y = highlightedBlock.y;
 	size_t    x = highlightedBlock.x;
 	blockID_t id;
+	bool      createParticles = false;
 	if (
 		blockdefs.defs[level.layers[0].front[y][x]].type != BlockType::Gas
 	) {
 		id = level.layers[0].front[y][x];
 		level.layers[0].front[y][x] = 0;
+		createParticles             = true;
 	}
 	else if (
 		blockdefs.defs[level.layers[0].back[y][x]].type != BlockType::Gas
 	) {
 		id = level.layers[0].back[y][x];
 		level.layers[0].back[y][x] = 0;
+		createParticles            = true;
 	}
 
-	for (int i = 0; i < Util::RandomRange(15, 30); ++i) {
-		particles.NewParticle(
-			blockdefs.defs[id].textureID, {(uint32_t) x, (uint32_t) y}
-		);
+	if (createParticles) {
+		for (int i = 0; i < Util::RandomRange(15, 30); ++i) {
+			particles.NewParticle(
+				blockdefs.defs[id].textureID, {(uint32_t) x, (uint32_t) y}
+			);
+		}
 	}
 }
 
