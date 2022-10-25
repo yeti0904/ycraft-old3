@@ -64,6 +64,7 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	};
 
 	inventoryScreen.inventory = &player.inventory;
+	inventoryScreen.parent    = this;
 }
 
 void Game::SpawnPlayer() {
@@ -89,6 +90,9 @@ void Game::Update(AppState& state) {
 		}
 		case GameState::InChat: {
 			break;
+		}
+		case GameState::Inventory: {
+		    inventoryScreen.Update();
 		}
 	}
 }
@@ -156,6 +160,7 @@ void Game::HandleEvent(SDL_Event& event) {
 				        }
 				        case SDL_SCANCODE_E: {
 				        	gameState = GameState::Inventory;
+				        	SDL_ShowCursor(SDL_ENABLE);
 				        	break;
 				        }
 				        default: break;
@@ -214,6 +219,10 @@ void Game::HandleEvent(SDL_Event& event) {
 				}
 			}
 			break;
+		}
+		case GameState::Inventory: {
+		    inventoryScreen.HandleEvent(event);
+		    break;
 		}
 	}
 }
@@ -541,6 +550,10 @@ void Game::Render() {
 	if (gameState == GameState::InChat) {
 		chatbox.Render(app->video.renderer, app->text);
 		return;
+	}
+	if (gameState == GameState::Inventory) {
+	    inventoryScreen.Render(app->video.renderer, app->text);
+	    return;
 	}
 
 	// render cursor

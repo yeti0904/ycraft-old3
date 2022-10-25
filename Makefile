@@ -26,7 +26,7 @@ CXXFLAGS = \
 ifeq (${releasemode}, on)
 CXXFLAGS += -O3 -s
 else
-CXXFLAGS += -g
+CXXFLAGS += -O0 -g
 endif
 
 ifeq (${platform}, windows)

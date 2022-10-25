@@ -16,13 +16,16 @@ class InventoryScreen {
 		bool       isItemSelected;
 		UVec2      selectedItem;
 		UVec2      mousePosition;
-		bool       mouseClicked;
+		bool       mousePressed;
+		Vec2       mouseHoveringOver;
+		Vec2       oldPos;
+		Game*      parent;
 
 		// functions
 		InventoryScreen();
-		void Update(Game& game);
+		void Update();
 		void HandleEvent(SDL_Event event);
-		void Render(SDL_Renderer* renderer, TextComponents& text, Game& game);
+		void Render(SDL_Renderer* renderer, TextComponents& text);
 };
 
 #endif

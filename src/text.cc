@@ -31,12 +31,13 @@ void TextComponents::RenderText(
 
 	SDL_Surface* textSurface;
 	SDL_Texture* textTexture;
-	SDL_Colour   colour = {
+	/*SDL_Colour   colour = {
 		(Uint8) (shadow? 0 : 255),
 		(Uint8) (shadow? 0 : 255),
 		(Uint8) (shadow? 0 : 255),
 		255
-	};
+	};*/
+	SDL_Colour colour = shadow? Colours::black : Colours::white;
 	SDL_Rect     textRect;
 	int8_t       shadowOffset = (int) round(size);
 

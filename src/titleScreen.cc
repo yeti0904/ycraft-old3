@@ -76,7 +76,7 @@ bool Menus::TitleScreen::Update(AppState& state) {
 
 void Menus::TitleScreen::Render(SDL_Renderer* renderer, TextComponents& text) {
 	// draw background
-	SDL_SetRenderDrawColor(renderer, 109, 128, 250, 255);
+	SDL_SetRenderDrawColor(renderer, Colours::bg.r, Colours::bg.g, Colours::bg.b, 255);
 	SDL_RenderClear(renderer);
 
 	// render title screen

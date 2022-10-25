@@ -14,7 +14,7 @@ std::string Util::CurrentTime() {
 }
 
 void Util::Log(const char* format, ...) { // most of this is taken from vsprintf(3)
-	size_t n = 0;
+	int    n = 0;
 	size_t size = 0;
 	char*  ret = nullptr;
 	va_list ap;
