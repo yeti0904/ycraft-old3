@@ -57,18 +57,18 @@ bool Menus::TitleScreen::Update(AppState& state) {
 
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
 		state = AppState::WorldMenu;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && settingsButton.MouseIsOver(mousePosition)) {
 		state = AppState::SettingsMenu;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && creditsButton.MouseIsOver(mousePosition)) {
 		state = AppState::CreditsScreen;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && exitButton.MouseIsOver(mousePosition)) {
-		mousePressed = false;
+		Reset();
 		return false;
 	}
 	return true;

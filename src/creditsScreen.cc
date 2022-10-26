@@ -28,7 +28,7 @@ void Menus::CreditsScreen::Update(AppState& state) {
 
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
 		state        = AppState::TitleScreen;
-		mousePressed = false;
+		Reset();
 	}
 }
 

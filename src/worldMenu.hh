@@ -28,6 +28,7 @@ namespace Menus {
 			void LoadPage();
 			void Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
+			void Reset();
 	};
 }
 

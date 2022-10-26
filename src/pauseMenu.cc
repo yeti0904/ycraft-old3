@@ -28,14 +28,14 @@ void Menus::PauseMenu::Update(AppState& state, Game& game) {
 
 	if (mousePressed && resumeButton.MouseIsOver(mousePosition)) {
 		game.gameState  = GameState::Running;
-		mousePressed    = false;
+		Reset();
 		SDL_ShowCursor(SDL_DISABLE);
 		return;
 	}
 	if (mousePressed && quitButton.MouseIsOver(mousePosition)) {
 		game.level.Save();
 		game.Deinit();
-		mousePressed = false;
+		Reset();
 		state        = AppState::TitleScreen;
 		return;
 	}

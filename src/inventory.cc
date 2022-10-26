@@ -12,3 +12,11 @@ Inventory::Inventory() {
 InventoryLine& Inventory::Hotbar() {
 	return inventory.back();
 }
+
+void Inventory::MakeEmpty() {
+	for (auto& line : inventory) {
+		for (auto& item : line) {
+			item = {true, 0, 0};
+		}
+	}
+}

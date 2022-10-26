@@ -74,6 +74,7 @@ void Game::SpawnPlayer() {
 
 void Game::Deinit() {
 	level.Destroy();
+	player.inventory.MakeEmpty();
 }
 
 void Game::Update(AppState& state) {

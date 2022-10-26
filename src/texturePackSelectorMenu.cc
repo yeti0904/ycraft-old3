@@ -113,7 +113,7 @@ void Menus::TexturePackSelector::Update(AppState& state) {
 	}
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
 		state        = AppState::SettingsMenu;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && reloadButton.MouseIsOver(mousePosition)) {
 		texturePacks = Util::GetFilesInDirectory(texturePacksPath);
@@ -151,4 +151,11 @@ void Menus::TexturePackSelector::Render(SDL_Renderer* renderer, TextComponents& 
 	nextButton.Render(renderer, text);
 	backButton.Render(renderer, text);
 	reloadButton.Render(renderer, text);
+}
+
+void Menus::TexturePackSelector::Reset() {
+	mousePosition = {0, 0};
+	mousePressed  = false;
+	page = 0;
+	LoadPage();
 }

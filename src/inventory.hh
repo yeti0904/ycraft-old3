@@ -21,6 +21,7 @@ class Inventory {
 		// functions
 		Inventory();
 		InventoryLine& Hotbar();
+		void           MakeEmpty();
 };
 
 #endif

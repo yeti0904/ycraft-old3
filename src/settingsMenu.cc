@@ -62,7 +62,7 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
 		settings->Write();
 		state        = AppState::TitleScreen;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && fullscreenCheckbox.MouseIsOver(mousePosition)) {
 		fullscreenCheckbox.activated     = !fullscreenCheckbox.activated;
@@ -81,6 +81,7 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 	if (mousePressed && texturePacksButton.MouseIsOver(mousePosition)) {
 		state        = AppState::TexturePackSelectorMenu;
 		mousePressed = false;
+		Reset();
 	}
 
 	return false;

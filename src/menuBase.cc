@@ -28,3 +28,8 @@ void MenuBase::HandleEvent(SDL_Event& event) {
 		}
 	}
 }
+
+void MenuBase::Reset() {
+	mousePosition = {0, 0};
+	mousePressed  = false;
+}

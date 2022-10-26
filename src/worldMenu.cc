@@ -103,7 +103,7 @@ void Menus::WorldsMenu::Update(AppState& state) {
 	}
 	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
 		state = AppState::TitleScreen;
-		mousePressed = false;
+		Reset();
 	}
 	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
 		state = AppState::InGame;
@@ -157,4 +157,11 @@ void Menus::WorldsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	previousButton.Render(renderer, text);
 	nextButton.Render(renderer, text);
 	worlds.Render(renderer, text);
+}
+
+void Menus::WorldsMenu::Reset() {
+	mousePosition = {0, 0};
+	mousePressed  = false;
+	page          = 0;
+	LoadPage();
 }

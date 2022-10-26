@@ -22,6 +22,7 @@ namespace Menus {
 			void Update(AppState& state);
 			void Render(SDL_Renderer* renderer, TextComponents& text);
 			void HandleEvent(SDL_Event& event) override;
+			void Reset() override;
 	};
 }
 

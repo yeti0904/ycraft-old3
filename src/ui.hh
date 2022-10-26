@@ -47,7 +47,8 @@ namespace UI {
 				UIElement();
 			}
 			bool MouseIsOver(Vec2 cursor);
-			void Render(SDL_Renderer* renderer);	
+			void Render(SDL_Renderer* renderer);
+			void Reset();
 	};
 
 	class ButtonArray : public UIElement {

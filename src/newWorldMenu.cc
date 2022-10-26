@@ -144,3 +144,9 @@ void Menus::NewWorldMenu::HandleEvent(SDL_Event& event) {
 		}
 	}
 }
+
+void Menus::NewWorldMenu::Reset() {
+	mousePosition = {0, 0};
+	mousePressed  = false;
+	worldName.Reset();
+}
