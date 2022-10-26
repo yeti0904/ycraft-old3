@@ -47,6 +47,10 @@ ifeq (${platform}, windows)
 				-L./curl/lib -lmingw32 -static-libgcc -static-libstdc++
 endif
 
+ifeq (${triangles}, off)
+	CXXFLAGS += -DDISABLE_TRIANGLES
+endif
+
 CXXLIBS += -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_mixer -lm -lcurl
 
 # rules

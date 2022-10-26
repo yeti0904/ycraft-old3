@@ -8,6 +8,11 @@ $ make
 
 a binary will be placed in the `bin` folder
 
+if compilation fails because of undefined `SDL_RenderGeometry` then compile again but do:
+```
+$ make triangles=off
+```
+
 ### dependencies
 SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, libcurl
 
