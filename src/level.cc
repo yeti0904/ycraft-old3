@@ -24,7 +24,7 @@ void Level::Destroy() {
 
 bool Level::ValidBlock(Vec2 block) {
 	return (
-		(block.x > 0) && (block.y > 0) &&
+		(block.x >= 0) && (block.y >= 0) &&
 		(block.x < (int) size.x) && (block.y < (int) size.y)
 	);
 }

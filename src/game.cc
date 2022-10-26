@@ -286,6 +286,10 @@ void Game::Render() {
 		start.x = camera.x > 0? camera.x : 0;
 		start.y = camera.y > 0? camera.y : 0;
 
+		// fix shadow visual bug
+		start.x -= start.x == 0? 0 : 1;
+		start.y -= start.y == 0? 0 : 1;
+
 		for (
 			ssize_t i = start.y; (i < max.y) && (i < level.size.y); ++i
 		) {
@@ -374,7 +378,7 @@ void Game::Render() {
 
 					// render borders
 					SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
-					if (
+					if ( // left
 						(j > 0) &&
 						level.ValidBlock({(int) j - 1, (int) i}) &&
 						(blockdefs.defs[level.layers[0].front[i][j - 1]].type !=
@@ -385,7 +389,7 @@ void Game::Render() {
 							block.x, block.y, block.x, block.y + GAME_BLOCK_SIZE - 1
 						);
 					}
-					if (
+					if ( // right
 						(j < level.size.x) &&
 						level.ValidBlock({(int) j + 1, (int) i}) &&
 						(blockdefs.defs[level.layers[0].front[i][j + 1]].type !=
@@ -397,7 +401,7 @@ void Game::Render() {
 							block.x + GAME_BLOCK_SIZE - 1, block.y + GAME_BLOCK_SIZE - 1
 						);
 					}
-					if (
+					if ( // up
 						(i > 0) &&
 						level.ValidBlock({(int) j, (int) i - 1}) &&
 						(blockdefs.defs[level.layers[0].front[i - 1][j]].type !=
@@ -408,7 +412,7 @@ void Game::Render() {
 							block.x, block.y, block.x + GAME_BLOCK_SIZE - 1, block.y
 						);
 					}
-					if (
+					if ( // down
 						(i < level.size.y) &&
 						level.ValidBlock({(int) j, (int) i + 1}) &&
 						(blockdefs.defs[level.layers[0].front[i + 1][j]].type !=
