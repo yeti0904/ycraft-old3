@@ -86,7 +86,7 @@ void InventoryScreen::HandleEvent(SDL_Event event) {
 	}
 }
 
-void InventoryScreen::Render(SDL_Renderer* renderer, TextComponents& text) {
+void InventoryScreen::Render(SDL_Renderer* renderer, TextComponents&) {
 	SDL_Color outline = Colours::white;
 	SDL_Color filled  = Colours::lightgrey;
 

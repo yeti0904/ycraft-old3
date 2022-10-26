@@ -83,11 +83,11 @@ void Particles::Manager::Render(VideoComponents& video, FVec2 camera) {
 		}
 
 		SDL_Rect destRect = {
-			particlePos.x, particlePos.y, GAME_PARTICLE_SIZE.x, GAME_PARTICLE_SIZE.y
+			particlePos.x, particlePos.y, GAME_PARTICLE_SIZE, GAME_PARTICLE_SIZE
 		};
 		SDL_Rect sourceRect = {
 			particle.textureSource.x, particle.textureSource.y,
-			GAME_PARTICLE_SIZE.x, GAME_PARTICLE_SIZE.y
+			GAME_PARTICLE_SIZE, GAME_PARTICLE_SIZE
 		};
 		SDL_RenderCopy(video.renderer, tileSheet->image, &sourceRect, &destRect);
 	}

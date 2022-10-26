@@ -21,7 +21,7 @@ CXXFLAGS = \
 	-Wall \
 	-Wextra \
 	-pedantic \
-	-Wno-deprecated-declarations
+	-Wno-deprecated-declarations -Wno-missing-field-initializers
 
 ifeq (${releasemode}, on)
 CXXFLAGS += -O3 -s
