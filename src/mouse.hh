@@ -6,6 +6,7 @@
 namespace Mouse {
 	Vec2& Position();
 	bool& Pressed();
+	bool& Clicked(); // only lasts for 1 frame
 }
 
 #endif

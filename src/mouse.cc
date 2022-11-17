@@ -11,3 +11,9 @@ bool& Mouse::Pressed() {
 
 	return pressed;
 }
+
+bool& Mouse::Clicked() {
+	static bool clicked = false;
+
+	return clicked;
+}

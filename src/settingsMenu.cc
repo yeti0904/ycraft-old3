@@ -66,13 +66,13 @@ bool Menus::SettingsMenu::Update(AppState& state) {
 		state        = AppState::TitleScreen;
 		Reset();
 	}
-	if (Mouse::Pressed() && fullscreenCheckbox.MouseIsOver(Mouse::Position())) {
+	if (Mouse::Clicked() && fullscreenCheckbox.MouseIsOver(Mouse::Position())) {
 		fullscreenCheckbox.activated     = !fullscreenCheckbox.activated;
 		settings->settings["fullscreen"] =
 			fullscreenCheckbox.activated? "true" : "false";
 		return true;
 	}
-	if (Mouse::Pressed() && musicCheckbox.MouseIsOver(Mouse::Position())) {
+	if (Mouse::Clicked() && musicCheckbox.MouseIsOver(Mouse::Position())) {
 		musicCheckbox.activated     = !musicCheckbox.activated;
 		settings->settings["playMusic"] =
 			musicCheckbox.activated? "true" : "false";

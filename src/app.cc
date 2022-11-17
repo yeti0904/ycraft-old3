@@ -104,6 +104,7 @@ void App::Update() {
 			}
 			case SDL_MOUSEBUTTONDOWN: {
 				Mouse::Pressed() = true;
+				Mouse::Clicked() = true;
 				goto callHandleEventFunctions;
 				break;
 			}
@@ -237,6 +238,8 @@ void App::Update() {
 	}
 
 	Render();
+
+	Mouse::Clicked() = false;
 }
 
 void App::Render() {
