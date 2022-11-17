@@ -3,6 +3,7 @@
 #include "game.hh"
 #include "constants.hh"
 #include "colours.hh"
+#include "mouse.hh"
 
 Menus::PauseMenu::PauseMenu() {
 	MenuBase();
@@ -21,18 +22,18 @@ Menus::PauseMenu::PauseMenu() {
 }
 
 void Menus::PauseMenu::Update(AppState& state, Game& game) {
-	resumeButton.outlineColour = resumeButton.MouseIsOver(mousePosition)?
+	resumeButton.outlineColour = resumeButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
-	quitButton.outlineColour = quitButton.MouseIsOver(mousePosition)?
+	quitButton.outlineColour = quitButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 
-	if (mousePressed && resumeButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && resumeButton.MouseIsOver(Mouse::Position())) {
 		game.gameState  = GameState::Running;
 		Reset();
 		SDL_ShowCursor(SDL_DISABLE);
 		return;
 	}
-	if (mousePressed && quitButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && quitButton.MouseIsOver(Mouse::Position())) {
 		game.level.Save();
 		game.Deinit();
 		Reset();

@@ -2,6 +2,7 @@
 #include "constants.hh"
 #include "app.hh"
 #include "colours.hh"
+#include "mouse.hh"
 
 Menus::SettingsMenu::SettingsMenu():
 	settings(nullptr)
@@ -47,40 +48,38 @@ void Menus::SettingsMenu::Init() {
 }
 
 bool Menus::SettingsMenu::Update(AppState& state) {
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+	backButton.outlineColour = backButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 	// applyButton.outlineColour =
 		// applyButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
 	texturePacksButton.outlineColour =
-		texturePacksButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		texturePacksButton.MouseIsOver(Mouse::Position())?
+			Colours::white : Colours::black;
 
 	/*if (mousePressed && applyButton.MouseIsOver(mousePosition)) {
 		mousePressed = false;
 		settings->Write();
 		return true; // update settings
 	}*/
-	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && backButton.MouseIsOver(Mouse::Position())) {
 		settings->Write();
 		state        = AppState::TitleScreen;
 		Reset();
 	}
-	if (mousePressed && fullscreenCheckbox.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && fullscreenCheckbox.MouseIsOver(Mouse::Position())) {
 		fullscreenCheckbox.activated     = !fullscreenCheckbox.activated;
-		mousePressed                     = false;
 		settings->settings["fullscreen"] =
 			fullscreenCheckbox.activated? "true" : "false";
 		return true;
 	}
-	if (mousePressed && musicCheckbox.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && musicCheckbox.MouseIsOver(Mouse::Position())) {
 		musicCheckbox.activated     = !musicCheckbox.activated;
-		mousePressed                     = false;
 		settings->settings["playMusic"] =
 			musicCheckbox.activated? "true" : "false";
 		return true;
 	}
-	if (mousePressed && texturePacksButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && texturePacksButton.MouseIsOver(Mouse::Position())) {
 		state        = AppState::TexturePackSelectorMenu;
-		mousePressed = false;
 		Reset();
 	}
 

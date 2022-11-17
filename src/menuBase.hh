@@ -7,9 +7,6 @@
 class MenuBase {
 	public:
 		// variables
-		Vec2 mousePosition;
-		bool mousePressed;
-
 		// functions
 		MenuBase();
 		virtual void HandleEvent(SDL_Event& event);

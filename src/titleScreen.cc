@@ -2,6 +2,7 @@
 #include "constants.hh"
 #include "app.hh"
 #include "colours.hh"
+#include "mouse.hh"
 
 Menus::TitleScreen::TitleScreen() {
 	MenuBase();
@@ -46,28 +47,28 @@ Menus::TitleScreen::TitleScreen() {
 }
 
 bool Menus::TitleScreen::Update(AppState& state) {
-	playButton.outlineColour = playButton.MouseIsOver(mousePosition)?
+	playButton.outlineColour = playButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
-	exitButton.outlineColour = exitButton.MouseIsOver(mousePosition)?
+	exitButton.outlineColour = exitButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 	settingsButton.outlineColour =
-		settingsButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		settingsButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 	creditsButton.outlineColour =
-		creditsButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		creditsButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 
-	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && playButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::WorldMenu;
 		Reset();
 	}
-	if (mousePressed && settingsButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && settingsButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::SettingsMenu;
 		Reset();
 	}
-	if (mousePressed && creditsButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && creditsButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::CreditsScreen;
 		Reset();
 	}
-	if (mousePressed && exitButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && exitButton.MouseIsOver(Mouse::Position())) {
 		Reset();
 		return false;
 	}

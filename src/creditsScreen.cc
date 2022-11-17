@@ -2,6 +2,7 @@
 #include "app.hh"
 #include "colours.hh"
 #include "constants.hh"
+#include "mouse.hh"
 
 Menus::CreditsScreen::CreditsScreen() {
 	MenuBase();
@@ -23,10 +24,10 @@ Menus::CreditsScreen::CreditsScreen() {
 }
 
 void Menus::CreditsScreen::Update(AppState& state) {
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+	backButton.outlineColour = backButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 
-	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && backButton.MouseIsOver(Mouse::Position())) {
 		state        = AppState::TitleScreen;
 		Reset();
 	}

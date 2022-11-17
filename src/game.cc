@@ -5,6 +5,7 @@
 #include "app.hh"
 #include "commands.hh"
 #include "util.hh"
+#include "mouse.hh"
 
 Game::Game() {
 	RegisterCommands(commands);
@@ -25,9 +26,6 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	    ((APP_SCREEN_SIZE_W / GAME_BLOCK_SIZE) / 2);
 	player.position.y =
 	    ((APP_SCREEN_SIZE_H / GAME_BLOCK_SIZE) / 2);*/
-
-	mousePosition = {0, 0};
-	mouseDown     = false;
 
 	gameState        = GameState::Running;
 	blockHighlighted = false;
@@ -106,16 +104,10 @@ void Game::HandleEvent(SDL_Event& event) {
 		}
 		case GameState::Running: {
 			switch (event.type) {
-				case SDL_MOUSEMOTION: {
-					mousePosition.x = event.motion.x;
-					mousePosition.y = event.motion.y;
-					break;
-				}
 				case SDL_MOUSEBUTTONDOWN: {
 					switch (event.button.button) {
 						case SDL_BUTTON_LEFT: {
 							DeleteBlock();
-							mouseDown = true;
 							break;
 						}
 						case SDL_BUTTON_RIGHT: {
@@ -123,11 +115,6 @@ void Game::HandleEvent(SDL_Event& event) {
 							break;
 						}
 					}
-					break;
-				}
-				case SDL_MOUSEBUTTONUP: {
-					mouseDown =
-						event.button.button == SDL_BUTTON_LEFT? true : mouseDown;
 					break;
 				}
 				case SDL_MOUSEWHEEL: {
@@ -564,20 +551,20 @@ void Game::Render() {
 	// render cursor
 	SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
 	SDL_RenderDrawLine(
-		app->video.renderer, mousePosition.x, mousePosition.y - 2,
-		mousePosition.x, mousePosition.y - 4
+		app->video.renderer, Mouse::Position().x, Mouse::Position().y - 2,
+		Mouse::Position().x, Mouse::Position().y - 4
 	);
 	SDL_RenderDrawLine(
-		app->video.renderer, mousePosition.x, mousePosition.y + 2,
-		mousePosition.x, mousePosition.y + 4
+		app->video.renderer, Mouse::Position().x, Mouse::Position().y + 2,
+		Mouse::Position().x, Mouse::Position().y + 4
 	);
 	SDL_RenderDrawLine(
-		app->video.renderer, mousePosition.x - 2, mousePosition.y,
-		mousePosition.x - 4, mousePosition.y
+		app->video.renderer, Mouse::Position().x - 2, Mouse::Position().y,
+		Mouse::Position().x - 4, Mouse::Position().y
 	);
 	SDL_RenderDrawLine(
-		app->video.renderer, mousePosition.x + 2, mousePosition.y,
-		mousePosition.x + 4, mousePosition.y
+		app->video.renderer, Mouse::Position().x + 2, Mouse::Position().y,
+		Mouse::Position().x + 4, Mouse::Position().y
 	);
 }
 
@@ -604,10 +591,10 @@ void Game::GetHighlightedBlock() {
 			block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
 
 			if (
-				(mousePosition.x >= block.x) &&
-				(mousePosition.y >= block.y) &&
-				(mousePosition.x < block.x + GAME_BLOCK_SIZE) &&
-				(mousePosition.y < block.y + GAME_BLOCK_SIZE)
+				(Mouse::Position().x >= block.x) &&
+				(Mouse::Position().y >= block.y) &&
+				(Mouse::Position().x < block.x + GAME_BLOCK_SIZE) &&
+				(Mouse::Position().y < block.y + GAME_BLOCK_SIZE)
 			) {
 				if (
 					(player.position.x - j > 5) ||

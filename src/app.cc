@@ -3,6 +3,7 @@
 #include "constants.hh"
 #include "fs.hh"
 #include "chat.hh"
+#include "mouse.hh"
 
 App::App():
 	run(true),
@@ -97,7 +98,22 @@ void App::Update() {
 				run = false;
 				break;
 			}
+			case SDL_MOUSEMOTION: {
+				Mouse::Position() = {event.motion.x, event.motion.y};
+				break;
+			}
+			case SDL_MOUSEBUTTONDOWN: {
+				Mouse::Pressed() = true;
+				goto callHandleEventFunctions;
+				break;
+			}
+			case SDL_MOUSEBUTTONUP: {
+				Mouse::Pressed() = false;
+				goto callHandleEventFunctions;
+				break;
+			}
 			default: {
+				callHandleEventFunctions:
 				switch (state) {
 					case AppState::InGame: {
 						game.HandleEvent(event);
@@ -125,6 +141,7 @@ void App::Update() {
 					}
 					case AppState::CreditsScreen: {
 						creditsScreen.HandleEvent(event);
+						break;
 					}
 				}
 				break;

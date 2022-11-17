@@ -2,6 +2,7 @@
 #include "app.hh"
 #include "constants.hh"
 #include "colours.hh"
+#include "mouse.hh"
 
 Menus::NewWorldMenu::NewWorldMenu() {
 	MenuBase();
@@ -44,21 +45,19 @@ Menus::NewWorldMenu::NewWorldMenu() {
 }
 
 void Menus::NewWorldMenu::Update(AppState& state) {
-	startButton.outlineColour = startButton.MouseIsOver(mousePosition)?
+	startButton.outlineColour = startButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
-	backButton.outlineColour  = backButton.MouseIsOver(mousePosition)?
+	backButton.outlineColour  = backButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 
-	if (mousePressed && startButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && startButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::InGame;
-		mousePressed = false;
 	}
-	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && backButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::WorldMenu;
-		mousePressed = false;
 	}
-	if (mousePressed) {
-		worldName.focused = worldName.MouseIsOver(mousePosition);
+	if (Mouse::Pressed()) {
+		worldName.focused = worldName.MouseIsOver(Mouse::Position());
 		worldName.outline = worldName.focused? Colours::white : Colours::black;
 
 		if (worldName.focused) {
@@ -68,13 +67,13 @@ void Menus::NewWorldMenu::Update(AppState& state) {
 			SDL_StopTextInput();
 		}
 	
-		ssize_t sizeSelected = worldSizeSelection.MouseIsOver(mousePosition);
+		ssize_t sizeSelected = worldSizeSelection.MouseIsOver(Mouse::Position());
 		if (sizeSelected >= 0) {
 			worldSizeSelection.set = sizeSelected;
 		}
 	}
 
-	worldSizeSelection.UpdateSelected(mousePosition);
+	worldSizeSelection.UpdateSelected(Mouse::Position());
 }
 
 void Menus::NewWorldMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
@@ -118,35 +117,11 @@ void Menus::NewWorldMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 }
 
 void Menus::NewWorldMenu::HandleEvent(SDL_Event& event) {
-	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
-		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
-			break;
-		}
-		default: {
-			if (worldName.focused) {
-				worldName.HandleEvent(event);
-			}
-			break;
-		}
+	if (worldName.focused) {
+		worldName.HandleEvent(event);
 	}
 }
 
 void Menus::NewWorldMenu::Reset() {
-	mousePosition = {0, 0};
-	mousePressed  = false;
 	worldName.Reset();
 }

@@ -4,6 +4,7 @@
 #include "constants.hh"
 #include "colours.hh"
 #include "util.hh"
+#include "mouse.hh"
 
 Menus::WorldsMenu::WorldsMenu():
 	page(0)
@@ -86,51 +87,47 @@ void Menus::WorldsMenu::LoadPage() {
 }
 
 void Menus::WorldsMenu::Update(AppState& state) {
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+	backButton.outlineColour = backButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 	newWorldButton.outlineColour =
-		newWorldButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		newWorldButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 	playButton.outlineColour =
-		playButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		playButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 	previousButton.outlineColour =
-		previousButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		previousButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 	nextButton.outlineColour =
-		nextButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		nextButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 
-	if (mousePressed && newWorldButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && newWorldButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::NewWorldMenu;
-		mousePressed = false;
 	}
-	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && backButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::TitleScreen;
 		Reset();
 	}
-	if (mousePressed && playButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && playButton.MouseIsOver(Mouse::Position())) {
 		state = AppState::InGame;
-		mousePressed = false;
 	}
-	if (mousePressed) {
-		ssize_t worldSelected = worlds.MouseIsOver(mousePosition);
+	if (Mouse::Pressed()) {
+		ssize_t worldSelected = worlds.MouseIsOver(Mouse::Position());
 		if (worldSelected >= 0) {
 			worlds.set = worldSelected;
 		}
 	}
-	if (mousePressed && previousButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && previousButton.MouseIsOver(Mouse::Position())) {
 		if (page != 0) {
 			-- page;
 			LoadPage();
 		}
-		mousePressed = false;
 	}
-	if (mousePressed && nextButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && nextButton.MouseIsOver(Mouse::Position())) {
 		if (page < (worldsList.size() / itemsPerPage)) {
 			++ page;
 			LoadPage();
 		}
-		mousePressed = false;
 	}
 
-	worlds.UpdateSelected(mousePosition);
+	worlds.UpdateSelected(Mouse::Position());
 }
 
 void Menus::WorldsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
@@ -160,8 +157,6 @@ void Menus::WorldsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 }
 
 void Menus::WorldsMenu::Reset() {
-	mousePosition = {0, 0};
-	mousePressed  = false;
 	page          = 0;
 	LoadPage();
 }

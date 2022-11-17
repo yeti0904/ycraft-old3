@@ -29,14 +29,12 @@ class Game {
 		FVec2                  camera; // unit: blocks
 		Level                  level;
 		Player                 player; // unit: blocks
-		Vec2                   mousePosition;
 		WVec2                  highlightedBlock;
 		bool                   blockHighlighted;
 		GameState              gameState;
 		std::vector <ChatItem> chat;
 		UI::Textbox            chatbox;
 		size_t                 chatScroll;
-		bool                   mouseDown;
 		App*                   app;
 		CommandsSystem         commands;
 		Particles::Manager     particles;

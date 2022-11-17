@@ -3,6 +3,7 @@
 #include "util.hh"
 #include "constants.hh"
 #include "colours.hh"
+#include "mouse.hh"
 
 Menus::TexturePackSelector::TexturePackSelector():
 	page(0)
@@ -89,44 +90,41 @@ void Menus::TexturePackSelector::LoadPage() {
 
 void Menus::TexturePackSelector::Update(AppState& state) {
 	previousButton.outlineColour =
-		previousButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
-	nextButton.outlineColour = nextButton.MouseIsOver(mousePosition)?
+		previousButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
+	nextButton.outlineColour = nextButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
-	backButton.outlineColour = backButton.MouseIsOver(mousePosition)?
+	backButton.outlineColour = backButton.MouseIsOver(Mouse::Position())?
 		Colours::white : Colours::black;
 	reloadButton.outlineColour =
-		reloadButton.MouseIsOver(mousePosition)? Colours::white : Colours::black;
+		reloadButton.MouseIsOver(Mouse::Position())? Colours::white : Colours::black;
 
-	if (mousePressed && previousButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && previousButton.MouseIsOver(Mouse::Position())) {
 		if (page != 0) {
 			-- page;
 			LoadPage();
 		}
-		mousePressed = false;
 	}
-	if (mousePressed && nextButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && nextButton.MouseIsOver(Mouse::Position())) {
 		if (page < (texturePacks.size() / itemsPerPage)) {
 			++ page;
 			LoadPage();
 		}
-		mousePressed = false;
 	}
-	if (mousePressed && backButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && backButton.MouseIsOver(Mouse::Position())) {
 		state        = AppState::SettingsMenu;
 		Reset();
 	}
-	if (mousePressed && reloadButton.MouseIsOver(mousePosition)) {
+	if (Mouse::Pressed() && reloadButton.MouseIsOver(Mouse::Position())) {
 		texturePacks = Util::GetFilesInDirectory(texturePacksPath);
-		mousePressed = false;
 	}
-	if (mousePressed) {
-		ssize_t texturePackSelected = options.MouseIsOver(mousePosition);
+	if (Mouse::Pressed()) {
+		ssize_t texturePackSelected = options.MouseIsOver(Mouse::Position());
 		if (texturePackSelected >= 0) {
 			options.set = texturePackSelected;
 		}
 	}
 
-	options.UpdateSelected(mousePosition);
+	options.UpdateSelected(Mouse::Position());
 }
 
 void Menus::TexturePackSelector::Render(SDL_Renderer* renderer, TextComponents& text) {
@@ -154,8 +152,6 @@ void Menus::TexturePackSelector::Render(SDL_Renderer* renderer, TextComponents& 
 }
 
 void Menus::TexturePackSelector::Reset() {
-	mousePosition = {0, 0};
-	mousePressed  = false;
 	page = 0;
 	LoadPage();
 }
