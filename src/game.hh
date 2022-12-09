@@ -41,6 +41,11 @@ class Game {
 
 		Menus::PauseMenu pauseMenu;
 		InventoryScreen  inventoryScreen;
+		SDL_GameController *   gameController;
+		int  		 		   xMovement = 0;
+		int  		 		   yMovement = 0;
+		int 				   xJoyMouse = 0;
+		int 				   yJoyMouse = 0;
 
 		// functions
 		Game();

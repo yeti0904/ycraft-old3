@@ -25,10 +25,10 @@ Menus::SettingsMenu::SettingsMenu():
 */
 	fullscreenCheckbox.position.x = 14;
 	fullscreenCheckbox.position.y = 44;
-	fullscreenCheckbox.size.x     = 8;
-	fullscreenCheckbox.size.y     = 9;
+	fullscreenCheckbox.size.x     = 15;
+	fullscreenCheckbox.size.y     = 15;
 	fullscreenCheckbox.colour     = Colours::white;
-	
+
 	texturePacksButton.label         = "Texture packs";
 	texturePacksButton.position      = {14, 60};
 	texturePacksButton.size          = {200, 25};
@@ -37,8 +37,8 @@ Menus::SettingsMenu::SettingsMenu():
 
 	musicCheckbox.position.x = 14;
 	musicCheckbox.position.y = 90;
-	musicCheckbox.size.x     = 8;
-	musicCheckbox.size.y     = 9;
+	musicCheckbox.size.x     = 15;
+	musicCheckbox.size.y     = 15;
 	musicCheckbox.colour     = Colours::white;
 }
 
@@ -124,13 +124,13 @@ void Menus::SettingsMenu::Render(SDL_Renderer* renderer, TextComponents& text) {
 	fullscreenCheckbox.Render(renderer);
 	text.RenderText(
 		renderer, "Enable fullscreen",
-		{fullscreenCheckbox.position.x + 12, fullscreenCheckbox.position.y - 3},
+		{fullscreenCheckbox.position.x + (fullscreenCheckbox.size.x+4), fullscreenCheckbox.position.y},
 		1.0, true
 	);
 	musicCheckbox.Render(renderer);
 	text.RenderText(
 		renderer, "Play music",
-		{musicCheckbox.position.x + 12, musicCheckbox.position.y - 3},
+		{musicCheckbox.position.x + (musicCheckbox.size.x+4), musicCheckbox.position.y},
 		1.0, true
 	);
 }

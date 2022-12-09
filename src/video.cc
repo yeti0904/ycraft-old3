@@ -7,10 +7,22 @@ void VideoComponents::Init() {
 		Util::Error("Failed to initialise SDL: %s\n", SDL_GetError());
 	}
 
+	if(SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER) < 0) {
+		Util::Error("Failed to initialise SDL Controller API: %s\n", SDL_GetError());
+	}
+
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
+
+	#if defined(PLATFORM_VITA)
+		// VITA: The psvita does not generate mouse events
+		SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+	#endif
+
+
 	window = SDL_CreateWindow(
 		(std::string(APP_NAME) + " " + APP_VERSION).c_str(),
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		640, 480,
+		APP_SCREEN_SIZE_W, APP_SCREEN_SIZE_H,
 		SDL_WINDOW_RESIZABLE
 	);
 
@@ -18,7 +30,7 @@ void VideoComponents::Init() {
 		Util::Error("Failed to create window: %s", SDL_GetError());
 	}
 	Util::Log("Created window");
-	
+
 	renderer = SDL_CreateRenderer(
 		window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
 	);

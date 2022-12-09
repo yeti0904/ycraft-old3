@@ -21,9 +21,22 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	blockdefs.Create(6, "Planks",       14, BlockType::Solid);
 	blockdefs.Create(7, "Stone bricks", 9,  BlockType::Solid);
 
+	if(SDL_NumJoysticks() != 0) {
+	    if(SDL_IsGameController(0)) {
+			gameController = SDL_GameControllerOpen(0);
+
+			if(gameController == NULL) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "SDL Error", "Warning: Unable to open game controller! ", nullptr);
+			} else {
+				Util::Log("You are using a controller.");
+			}
+		} else {
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "SDL Error", "Warning: Game joystick 0 is not a controller!", nullptr);
+		}
+	}
 	/*camera.x = 0;
 	camera.y = 0;
-	
+
 	player.position.x =
 	    ((APP_SCREEN_SIZE_W / GAME_BLOCK_SIZE) / 2);
 	player.position.y =
@@ -32,7 +45,7 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	gameState        = GameState::Running;
 	blockHighlighted = false;
 	highlightedBlock = {0, 0};
-    
+
 	// player.position.x = 5;
 	// player.position.y = 5;
 
@@ -105,6 +118,60 @@ void Game::Update(AppState& state) {
 }
 
 void Game::HandleEvent(SDL_Event& event) {
+	switch(event.type) {
+		case SDL_CONTROLLERBUTTONDOWN: {
+			if(event.cbutton.button == SDL_CONTROLLER_BUTTON_Y) {
+				if(gameState == GameState::Inventory) {
+					gameState = GameState::Running;
+					SDL_ShowCursor(SDL_DISABLE);
+				} else {
+					gameState = GameState::Inventory;
+					SDL_ShowCursor(SDL_ENABLE);
+				}
+			} else if(event.cbutton.button == SDL_CONTROLLER_BUTTON_START) {
+				if(gameState == GameState::Paused) {
+					gameState = GameState::Running;
+					SDL_ShowCursor(SDL_DISABLE);
+				} else {
+					gameState = GameState::Paused;
+					SDL_ShowCursor(SDL_ENABLE);
+				}
+			} else if(event.cbutton.button == SDL_CONTROLLER_BUTTON_LEFTSHOULDER) {
+				PlaceBlock();
+			} else if(event.cbutton.button == SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) {
+				DeleteBlock();
+			} else if(event.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_LEFT) {
+				if (player.inventory.hotbarSelection == 0) {
+					player.inventory.hotbarSelection =
+						player.inventory.Hotbar().size() - 1;
+				}
+				else {
+					-- player.inventory.hotbarSelection;
+				}
+			} else if(event.cbutton.button == SDL_CONTROLLER_BUTTON_DPAD_RIGHT) {
+				player.inventory.hotbarSelection =
+					(player.inventory.hotbarSelection + 1) %
+					player.inventory.Hotbar().size();
+			}
+			break;
+		}
+		case SDL_CONTROLLERDEVICEREMOVED: {
+			SDL_GameControllerClose(gameController);
+			gameController = NULL;
+			break;
+		}
+		case SDL_CONTROLLERDEVICEADDED: {
+			gameController = SDL_GameControllerOpen(0);
+
+			if(gameController == NULL) {
+				SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "SDL Error", "Warning: Unable to open game controller! ", nullptr);
+			} else {
+				Util::Log("You are using a controller.");
+			}
+			break;
+		}
+	}
+
 	switch (gameState) {
 		case GameState::Paused: {
 			pauseMenu.HandleEvent(event);
@@ -163,6 +230,49 @@ void Game::HandleEvent(SDL_Event& event) {
 				    }
 				    break;
 				}
+
+				case SDL_JOYAXISMOTION: {
+					Util::Log("JS Moved. %d and %d", event.caxis.axis, event.caxis.value);
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX) {
+						if(event.caxis.value < -4000) {
+							xMovement = -1;
+						} else if(event.caxis.value > 4000) {
+							xMovement = 1;
+						} else {
+							xMovement = 0;
+						}
+					}
+
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY) {
+						if(event.caxis.value < -4000) {
+							yMovement = -1;
+						} else if( event.caxis.value > 4000) {
+							yMovement = 1;
+						} else {
+							yMovement = 0;
+						}
+					}
+
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX) {
+						if(event.caxis.value < -4000) {
+							yJoyMouse = -1;
+						} else if(event.caxis.value > 4000) {
+							yJoyMouse = 1;
+						} else {
+							yJoyMouse = 0;
+						}
+					}
+
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY) {
+						if(event.caxis.value < -4000) {
+							xJoyMouse = -1;
+						} else if( event.caxis.value > 4000) {
+							xJoyMouse = 1;
+						} else {
+							xJoyMouse = 0;
+						}
+					}
+				}
 			}
 			break;
 		}
@@ -189,7 +299,7 @@ void Game::HandleEvent(SDL_Event& event) {
 							auto cmdParts = Chat::ParseCommand(chatbox.input);
 							auto command  = cmdParts[0];
 							std::vector <std::string> args = cmdParts;
-							
+
 							args.erase(args.begin());
 							commands.RunCommand(command, args);
 						}
@@ -258,6 +368,34 @@ void Game::HandleInput(const Uint8* keystate, double delta) {
 		player.EdgeCollision(level);
 		UpdateCamera();
 	}
+
+	if(yMovement == -1) {
+		player.GoUp(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
+		player.EdgeCollision(level);
+		UpdateCamera();
+	}
+	if(yMovement == 1) {
+		player.GoDown(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
+		player.EdgeCollision(level);
+		UpdateCamera();
+	}
+	if(xMovement == 1) {
+		player.GoRight(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
+		player.EdgeCollision(level);
+		UpdateCamera();
+	}
+	if(xMovement == -1) {
+		player.GoLeft(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
+		player.EdgeCollision(level);
+		UpdateCamera();
+	}
+
+	if(yJoyMouse == -1) Mouse::Position().y -= 1;
+	if(yJoyMouse == 1) Mouse::Position().y += 1;
+
+	if(xJoyMouse == -1) Mouse::Position().x -= 1;
+	if(xJoyMouse == 1) Mouse::Position().x += 1;
+
 	player.Update();
 
 	if (keystate[SDL_SCANCODE_1]) player.inventory.hotbarSelection = 0;
@@ -277,7 +415,7 @@ void Game::Render() {
 		Vec2 max;
 		max.x = camera.x + (APP_SCREEN_SIZE_W / GAME_BLOCK_SIZE) + 2;
 		max.y = camera.y + (APP_SCREEN_SIZE_H / GAME_BLOCK_SIZE) + 2;
-		
+
 		Vec2 start;
 		start.x = camera.x > 0? camera.x : 0;
 		start.y = camera.y > 0? camera.y : 0;
@@ -290,13 +428,13 @@ void Game::Render() {
 			ssize_t i = start.y; (i < max.y) && (i < level.size.y); ++i
 		) {
 			for (
-				ssize_t j = start.x; (j < max.x) && (j < level.size.x); 
+				ssize_t j = start.x; (j < max.x) && (j < level.size.x);
 				++j
-			) { 
+			) {
 				Vec2 block;
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
-				
+
 				if (blockdefs.defs[level.layers[0].back[i][j]].type != BlockType::Gas) {
 					app->gameTextures.RenderTile(
 						app->video.renderer,
@@ -316,7 +454,7 @@ void Game::Render() {
 				Vec2 block;
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
-			
+
 				if (blockdefs.defs[level.layers[0].front[i][j]].type != BlockType::Gas) {
 					// render shadow
 					SDL_SetRenderDrawColor(app->video.renderer, 0, 0, 0, 127);
@@ -444,7 +582,7 @@ void Game::Render() {
 
 	// render player
 	app->gameTextures.RenderTile(
-		app->video.renderer, player.GetTextureID(), 
+		app->video.renderer, player.GetTextureID(),
 		{
 			(int32_t) round(player.position.x - camera.x) * GAME_BLOCK_SIZE,
 			(int32_t) round(player.position.y - camera.y) * GAME_BLOCK_SIZE
@@ -534,7 +672,7 @@ void Game::Render() {
 			}
 		}
 	}
-	
+
 	// render UI
 	app->text.RenderText(
 		app->video.renderer, "FPS: " + std::to_string(app->fps),
@@ -582,7 +720,7 @@ void Game::GetHighlightedBlock() {
 	Vec2 max;
 	max.x = camera.x + (APP_SCREEN_SIZE_W / GAME_BLOCK_SIZE) + 2;
 	max.y = camera.y + (APP_SCREEN_SIZE_H / GAME_BLOCK_SIZE) + 2;
-	
+
 	Vec2 start;
 	start.x = (camera.x / GAME_BLOCK_SIZE) > 0? camera.x / GAME_BLOCK_SIZE : 0;
 	start.y = (camera.y / GAME_BLOCK_SIZE) > 0? camera.y / GAME_BLOCK_SIZE : 0;
@@ -591,7 +729,7 @@ void Game::GetHighlightedBlock() {
 		ssize_t i = start.y / GAME_BLOCK_SIZE; (i < max.y) && (i < level.size.y); ++i
 	) {
 		for (
-			ssize_t j = start.x / GAME_BLOCK_SIZE; (j < max.x) && (j < level.size.x); 
+			ssize_t j = start.x / GAME_BLOCK_SIZE; (j < max.x) && (j < level.size.x);
 			++j
 		) {
 			Vec2 block;
@@ -644,7 +782,7 @@ void Game::PlaceBlock() {
 	if (!blockHighlighted) {
 		return;
 	}
-	
+
 	size_t y = highlightedBlock.y;
 	size_t x = highlightedBlock.x;
 	if (
@@ -669,7 +807,7 @@ void Game::DeleteBlock() {
 	if (!blockHighlighted) {
 		return;
 	}
-	
+
 	size_t    y = highlightedBlock.y;
 	size_t    x = highlightedBlock.x;
 	blockID_t id;
