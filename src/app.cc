@@ -27,7 +27,7 @@ App::App():
 
 	Util::Log("Found game folder: %s", gameFolder.c_str());
 
-	//curl.Init();
+	curl.Init();
 	SetupGameFiles();
 	DownloadAssets();
 	Util::Log("Set up game files");
