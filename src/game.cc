@@ -12,12 +12,14 @@ Game::Game() {
 }
 
 void Game::Init(UVec2 levelSize, bool generate) {
-	blockdefs.Create(0, "Air",    0,  BlockType::Gas);
-	blockdefs.Create(1, "Stone",  4,  BlockType::Solid);
-	blockdefs.Create(2, "Dirt",   1,  BlockType::Solid);
-	blockdefs.Create(3, "Grass",  0,  BlockType::Solid);
-	blockdefs.Create(4, "Bricks", 12, BlockType::Solid);
-	blockdefs.Create(5, "Cobble", 5,  BlockType::Solid);
+	blockdefs.Create(0, "Air",          0,  BlockType::Gas);
+	blockdefs.Create(1, "Stone",        4,  BlockType::Solid);
+	blockdefs.Create(2, "Dirt",         1,  BlockType::Solid);
+	blockdefs.Create(3, "Grass",        0,  BlockType::Solid);
+	blockdefs.Create(4, "Bricks",       12, BlockType::Solid);
+	blockdefs.Create(5, "Cobble",       5,  BlockType::Solid);
+	blockdefs.Create(6, "Planks",       14, BlockType::Solid);
+	blockdefs.Create(7, "Stone bricks", 9,  BlockType::Solid);
 
 	/*camera.x = 0;
 	camera.y = 0;
@@ -59,6 +61,12 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	};
 	player.inventory.Hotbar()[3] = {
 		false, 5, 1
+	};
+	player.inventory.Hotbar()[4] = {
+		false, 6, 1
+	};
+	player.inventory.Hotbar()[5] = {
+		false, 7, 1
 	};
 
 	inventoryScreen.inventory = &player.inventory;
