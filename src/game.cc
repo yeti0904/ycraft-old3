@@ -253,7 +253,7 @@ void Game::HandleEvent(SDL_Event& event) {
 						}
 					}
 
-					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX) {
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY) {
 						if(event.caxis.value < -4000) {
 							yJoyMouse = -1;
 						} else if(event.caxis.value > 4000) {
@@ -263,7 +263,7 @@ void Game::HandleEvent(SDL_Event& event) {
 						}
 					}
 
-					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY) {
+					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX) {
 						if(event.caxis.value < -4000) {
 							xJoyMouse = -1;
 						} else if( event.caxis.value > 4000) {
