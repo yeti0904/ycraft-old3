@@ -6,13 +6,8 @@
 #define APP_AUTHOR        "MESYETI"
 #define APP_RESOURCES_URL "https://server4.mesyeti.uk/ycraft/d0.0.1/"
 
-#if defined(PLATFORM_VITA)
-    #define APP_SCREEN_SIZE_W 960
-    #define APP_SCREEN_SIZE_H 544
-#else
-    #define APP_SCREEN_SIZE_W 640
-    #define APP_SCREEN_SIZE_H 360
-#endif
+#define APP_SCREEN_SIZE_W 640
+#define APP_SCREEN_SIZE_H 360
 
 #define GAME_BLOCK_SIZE        16
 #define GAME_PLAYER_SPEED      1.0

@@ -18,11 +18,18 @@ void VideoComponents::Init() {
 		SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
 	#endif
 
+	int w = APP_SCREEN_SIZE_W;
+	int h = APP_SCREEN_SIZE_H;
+
+	#if defined(PLATFORM_VITA)
+		w = 960;
+		h = 554;
+	#endif
 
 	window = SDL_CreateWindow(
 		(std::string(APP_NAME) + " " + APP_VERSION).c_str(),
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		APP_SCREEN_SIZE_W, APP_SCREEN_SIZE_H,
+		w, h,
 		SDL_WINDOW_RESIZABLE
 	);
 
