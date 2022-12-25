@@ -56,6 +56,8 @@ class App {
 		// functions
 		App();
 		~App();
+		static App& Instance();
+		
 		void Update();
 		void Render();
 

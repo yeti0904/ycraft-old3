@@ -73,6 +73,12 @@ App::~App() {
 	Util::Log("Goodbye");
 }
 
+App& App::Instance() {
+	static App app;
+
+	return app;
+}
+
 void App::Update() {
 	// play music if none playing
 	if (!Mix_PlayingMusic() && settings.settings["playMusic"] == "true") {

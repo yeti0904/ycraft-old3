@@ -12,14 +12,15 @@ Game::Game() {
 }
 
 void Game::Init(UVec2 levelSize, bool generate) {
-	blockdefs.Create(0, "Air",          0,  BlockType::Gas);
-	blockdefs.Create(1, "Stone",        4,  BlockType::Solid);
-	blockdefs.Create(2, "Dirt",         1,  BlockType::Solid);
-	blockdefs.Create(3, "Grass",        0,  BlockType::Solid);
-	blockdefs.Create(4, "Bricks",       12, BlockType::Solid);
-	blockdefs.Create(5, "Cobble",       5,  BlockType::Solid);
-	blockdefs.Create(6, "Planks",       14, BlockType::Solid);
-	blockdefs.Create(7, "Stone bricks", 9,  BlockType::Solid);
+	blockdefs.Create(0, "Air",          0,  BlockType::Gas, false, 0);
+	blockdefs.Create(1, "Stone",        4,  BlockType::Solid, false, 0);
+	blockdefs.Create(2, "Dirt",         1,  BlockType::Solid, false, 0);
+	blockdefs.Create(3, "Grass",        0,  BlockType::Solid, false, 0);
+	blockdefs.Create(4, "Bricks",       12, BlockType::Solid, false, 0);
+	blockdefs.Create(5, "Cobble",       5,  BlockType::Solid, false, 0);
+	blockdefs.Create(6, "Planks",       14, BlockType::Solid, false, 0);
+	blockdefs.Create(7, "Stone bricks", 9,  BlockType::Solid, false, 0);
+	blockdefs.Create(8, "Lava",         11, BlockType::Liquid, true, 5);
 
 	/*camera.x = 0;
 	camera.y = 0;
@@ -67,6 +68,9 @@ void Game::Init(UVec2 levelSize, bool generate) {
 	};
 	player.inventory.Hotbar()[5] = {
 		false, 7, 1
+	};
+	player.inventory.Hotbar()[6] = {
+		false, 8, 1
 	};
 
 	inventoryScreen.inventory = &player.inventory;
@@ -316,8 +320,9 @@ void Game::Render() {
 				Vec2 block;
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
+				//Rect blockRect = {block.x, block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE};
 			
-				if (blockdefs.defs[level.layers[0].front[i][j]].type != BlockType::Gas) {
+				if (blockdefs.defs[level.layers[0].front[i][j]].type == BlockType::Solid) {
 					// render shadow
 					SDL_SetRenderDrawColor(app->video.renderer, 0, 0, 0, 127);
 					SDL_Rect shadow = {
@@ -365,13 +370,16 @@ void Game::Render() {
 							Colours::transparentBlack
 						);
 					}
+				}
+				if (blockdefs.defs[level.layers[0].front[i][j]].type != BlockType::Gas) {
 					// render texture
 					app->gameTextures.RenderTile(
 						app->video.renderer,
 						blockdefs.defs[level.layers[0].front[i][j]].textureID,
 						block
 					);
-
+				}
+				if (blockdefs.defs[level.layers[0].front[i][j]].type == BlockType::Solid) {
 					// render borders
 					SDL_SetRenderDrawColor(app->video.renderer, 255, 255, 255, 255);
 					if ( // left
@@ -421,6 +429,17 @@ void Game::Render() {
 						);
 					}
 				}
+				
+				// draw light on block
+				/* TODO: fix light
+				SDL_SetRenderDrawColor(
+					app->video.renderer, 0, 0, 0,
+					LevelLight::LightMax() -
+					level.layers[0].light.CalculateLightLevel(
+						{(int) j, (int) i}
+					)
+				);
+				SDL_RenderFillRect(app->video.renderer, &blockRect);*/
 
 				if (
 					blockHighlighted &&
@@ -434,7 +453,7 @@ void Game::Render() {
 					rect.w = GAME_BLOCK_SIZE;
 					rect.h = GAME_BLOCK_SIZE;
 					SDL_RenderDrawRect(app->video.renderer, &rect);
-				}
+				} 
 			}
 		}
 	}
@@ -644,24 +663,32 @@ void Game::PlaceBlock() {
 	if (!blockHighlighted) {
 		return;
 	}
+
+	auto& block = player.inventory.Hotbar()[
+		player.inventory.hotbarSelection
+	];
 	
 	size_t y = highlightedBlock.y;
 	size_t x = highlightedBlock.x;
 	if (
 		blockdefs.defs[level.layers[0].back[y][x]].type == BlockType::Gas
 	) {
-		level.layers[0].back[y][x] = player.inventory.Hotbar()[
-			player.inventory.hotbarSelection
-		].block;
+		level.layers[0].back[y][x] = block.block;
 		return;
 	}
 
 	if (
 		blockdefs.defs[level.layers[0].front[y][x]].type == BlockType::Gas
 	) {
-		level.layers[0].front[y][x] = player.inventory.Hotbar()[
-			player.inventory.hotbarSelection
-		].block;
+		level.layers[0].front[y][x] = block.block;
+	}
+
+	if (
+		blockdefs.defs[block.block].emitsLight
+	) {
+		level.layers[0].light.AddLightSource(
+			{(int) x, (int) y}, blockdefs.defs[block.block].brightness
+		);
 	}
 }
 
@@ -674,19 +701,24 @@ void Game::DeleteBlock() {
 	size_t    x = highlightedBlock.x;
 	blockID_t id;
 	bool      createParticles = false;
+	auto      block = level.layers[0].front[y][x];
 	if (
-		blockdefs.defs[level.layers[0].front[y][x]].type != BlockType::Gas
+		blockdefs.defs[block].type != BlockType::Gas
 	) {
 		id = level.layers[0].front[y][x];
 		level.layers[0].front[y][x] = 0;
 		createParticles             = true;
 	}
 	else if (
-		blockdefs.defs[level.layers[0].back[y][x]].type != BlockType::Gas
+		blockdefs.defs[block].type != BlockType::Gas
 	) {
 		id = level.layers[0].back[y][x];
 		level.layers[0].back[y][x] = 0;
 		createParticles            = true;
+	}
+
+	if (blockdefs.defs[block].emitsLight) {
+		level.layers[0].light.DestroyLightSource({(int) x, (int) y});
 	}
 
 	if (createParticles) {

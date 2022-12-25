@@ -4,6 +4,7 @@
 #include "_components.hh"
 #include "types.hh"
 #include "blockdefs.hh"
+#include "light.hh"
 
 struct RawLayerData {
 	std::vector <blockID_t> data;
@@ -20,6 +21,7 @@ struct RawLevelData {
 };
 
 struct LevelLayer {
+	LevelLight                            light;
 	std::vector <std::vector <blockID_t>> front;
 	std::vector <std::vector <blockID_t>> back;
 };

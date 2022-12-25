@@ -4,13 +4,12 @@
 #include "constants.hh"
 #include "app.hh"
 #include "collision.hh"
+#include "mouse.hh"
 
 InventoryScreen::InventoryScreen():
 	inventory(nullptr),
 	isItemSelected(false),
 	selectedItem{0, 0},
-	mousePosition{0, 0},
-	mousePressed(false),
 	parent(nullptr)
 {
 	box.w = 150;
@@ -25,21 +24,7 @@ void InventoryScreen::Update() {
 
 void InventoryScreen::HandleEvent(SDL_Event event) {
 	switch (event.type) {
-		case SDL_MOUSEMOTION: {
-			mousePosition.x = event.motion.x;
-			mousePosition.y = event.motion.y;
-			break;
-		}
-		case SDL_MOUSEBUTTONDOWN: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = true;
-			}
-			break;
-		}
 		case SDL_MOUSEBUTTONUP: {
-			if (event.button.button == SDL_BUTTON_LEFT) {
-				mousePressed = false;
-			}
 			if (mouseHoveringOver.x != -1) {
 				if (isItemSelected) {
 					isItemSelected = false;
@@ -108,7 +93,7 @@ void InventoryScreen::Render(SDL_Renderer* renderer, TextComponents&) {
 
 			if (
 				Collision::PointVsRect(
-					{(float) mousePosition.x, (float) mousePosition.y},
+					{(float) Mouse::Position().x, (float) Mouse::Position().y},
 					{
 						(float) itemBox.x, (float) itemBox.y,
 						(float) itemBox.w, (float) itemBox.h
@@ -139,7 +124,7 @@ void InventoryScreen::Render(SDL_Renderer* renderer, TextComponents&) {
 		auto item = inventory->inventory[selectedItem.y][selectedItem.x];
 		parent->app->gameTextures.RenderTile(
 			renderer, parent->blockdefs.defs[item.block].textureID,
-			{(int) mousePosition.x, (int) mousePosition.y}
+			{(int) Mouse::Position().x, (int) Mouse::Position().y}
 		);
 	}
 }

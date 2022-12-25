@@ -2,6 +2,7 @@
 #define YCRAFT_BLOCKDEFS_HH
 
 #include "_components.hh"
+#include "light.hh"
 
 enum class BlockType {
 	Gas = 0,
@@ -13,6 +14,9 @@ struct Block {
 	std::string name;
 	uint32_t    textureID;
 	BlockType   type;
+
+	bool         emitsLight;
+	lightLevel_t brightness;
 };
 
 class Blockdefs {
@@ -24,7 +28,8 @@ class Blockdefs {
 		Blockdefs() {}
 		bool Exists(blockID_t id);
 		void Create(
-			blockID_t id, std::string name, uint32_t textureID, BlockType type
+			blockID_t id, std::string name, uint32_t textureID, BlockType type,
+			bool emitsLight, lightLevel_t brightness
 		);
 };
 
