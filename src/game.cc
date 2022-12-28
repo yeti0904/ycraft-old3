@@ -839,25 +839,24 @@ void Game::DeleteBlock() {
 	size_t    x = highlightedBlock.x;
 	blockID_t id;
 	bool      createParticles = false;
-	auto      block = level.layers[0].front[y][x];
 	if (
-		blockdefs.defs[block].type != BlockType::Gas
+		blockdefs.defs[level.layers[0].front[y][x]].type != BlockType::Gas
 	) {
 		id = level.layers[0].front[y][x];
 		level.layers[0].front[y][x] = 0;
 		createParticles             = true;
 	}
 	else if (
-		blockdefs.defs[block].type != BlockType::Gas
+		blockdefs.defs[level.layers[0].back[y][x]].type != BlockType::Gas
 	) {
 		id = level.layers[0].back[y][x];
 		level.layers[0].back[y][x] = 0;
 		createParticles            = true;
 	}
 
-	if (blockdefs.defs[block].emitsLight) {
+	/*if (blockdefs.defs[block].emitsLight) {
 		level.layers[0].light.DestroyLightSource({(int) x, (int) y});
-	}
+	}*/
 
 	if (createParticles) {
 		for (int i = 0; i < Util::RandomRange(15, 30); ++i) {
