@@ -194,3 +194,21 @@ int Util::RandomRange(int min, int max) {
 float Util::FRandomRange(float min, float max) {
 	return min + (float) rand() / ((float) ((float) RAND_MAX / (max - min)));
 }
+
+size_t Util::Distance(Vec2 start, Vec2 end) {
+	FVec2 distance;
+	distance.x = end.x - start.x;
+	distance.y = end.y - start.y;
+
+	return std::max(abs(distance.x), abs(distance.y));
+}
+
+std::tm* Util::CurrentTimeInfo() {
+	time_t rawtime;
+	struct tm* timeinfo;
+	
+	time(&rawtime);
+	timeinfo = localtime(&rawtime);
+
+	return timeinfo;
+}

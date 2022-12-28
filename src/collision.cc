@@ -85,3 +85,8 @@ bool Collision::DynamicRectVsRect(
 	expandedTarget.h = target.h + in.h;
 }
 */
+/*
+FVec2 Collision::FixCollision(FRect target, FRect box) {
+	return {box.x - 1.x + 1.w, 2.y - 1.y + 1.h}
+}
+*/

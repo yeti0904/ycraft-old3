@@ -3,6 +3,7 @@
 #include "app.hh"
 #include "colours.hh"
 #include "mouse.hh"
+#include "util.hh"
 
 Menus::TitleScreen::TitleScreen() {
 	MenuBase();
@@ -89,6 +90,19 @@ void Menus::TitleScreen::Render(SDL_Renderer* renderer, TextComponents& text) {
 				50
 			}, 2.0, true
 		);
+
+		auto tm = Util::CurrentTimeInfo();
+
+		if ((tm->tm_mday == 25) && (tm->tm_mon == 11)) {
+			std::string celebration = "Merry Christmas!";
+			Vec2 celebrationSize    = text.GetTextSize("Merry Christmas!", 0.75);
+			text.RenderText(
+				renderer, celebration, {
+					(APP_SCREEN_SIZE_W / 2) - (celebrationSize.x / 2),
+					50 + logoSize.y + 2
+				}, 0.75, true
+			);
+		}
 	}
 
 	// draw menu

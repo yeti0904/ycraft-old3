@@ -15,8 +15,6 @@ class InventoryScreen {
 		Inventory* inventory;
 		bool       isItemSelected;
 		UVec2      selectedItem;
-		UVec2      mousePosition;
-		bool       mousePressed;
 		Vec2       mouseHoveringOver;
 		Vec2       oldPos;
 		Game*      parent;

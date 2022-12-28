@@ -33,9 +33,11 @@
 // C++ standard headers
 #include <regex>
 #include <array>
+#include <chrono>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <algorithm>
 #include <filesystem>
 #include <unordered_map>
 

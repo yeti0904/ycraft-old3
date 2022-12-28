@@ -2,7 +2,7 @@
 #define YCRAFT_CONSTANTS_HH
 
 #define APP_NAME          "ycraft"
-#define APP_VERSION       "d0.0.1"
+#define APP_VERSION       "beta 1.0"
 #define APP_AUTHOR        "MESYETI"
 #define APP_RESOURCES_URL "https://server4.mesyeti.uk/ycraft/d0.0.1/"
 
