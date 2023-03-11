@@ -10,6 +10,8 @@
 	#define PLATFORM_LINUX
 #elif defined(__unix__)
 	#define PLATFORM_UNIX
+#elif defined(__vita__)
+	#define PLATFORM_VITA
 #endif
 
 // C standard headers
@@ -40,15 +42,21 @@
 #include <unordered_map>
 
 // C libraries
+#include <curl/curl.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
-#include <curl.h>
 
 // types
 typedef uint16_t blockID_t;
 typedef uint16_t itemID_t;
 typedef uint32_t textureID_t;
+
+// Some systems miss M_PI.
+
+#ifndef M_PI
+	#define M_PI   3.14159265358979323846264338327950288
+#endif
 
 #endif

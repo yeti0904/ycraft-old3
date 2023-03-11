@@ -38,9 +38,13 @@ class Game {
 		App*                   app;
 		CommandsSystem         commands;
 		Particles::Manager     particles;
+		Menus::PauseMenu       pauseMenu;
+		InventoryScreen        inventoryScreen;
 
-		Menus::PauseMenu pauseMenu;
-		InventoryScreen  inventoryScreen;
+		SDL_GameController *   gameController;
+
+		Vec2                   joystickCursorMovement;
+		Vec2                   joystickMovement;
 
 		// functions
 		Game();

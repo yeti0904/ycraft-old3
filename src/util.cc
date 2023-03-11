@@ -3,13 +3,13 @@
 std::string Util::CurrentTime() {
 	time_t rawtime;
 	struct tm* timeinfo;
-	
+
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
-	
+
 	char buffer[80];
 	strftime(buffer, 80, "%H:%M:%S", timeinfo);
-	
+
 	return std::string(buffer);
 }
 
@@ -19,7 +19,7 @@ void Util::Log(const char* format, ...) { // most of this is taken from vsprintf
 	char*  ret = nullptr;
 	va_list ap;
 
-	// Determine required size. 
+	// Determine required size.
 
 	va_start(ap, format);
 	n = vsnprintf(ret, size, format, ap);
@@ -43,13 +43,17 @@ void Util::Log(const char* format, ...) { // most of this is taken from vsprintf
 		free(ret);
 	    return;
 	}
-	
+
 	printf("[%s] %s\n", CurrentTime().c_str(), ret);
 	free(ret);
 }
 
 std::string Util::GetExecutableLocation() {
 	char buffer[1024];
+	#if defined(PLATFORM_VITA)
+		return "ux0:/data/ycraft/";
+	#endif
+
 	#if defined(PLATFORM_LINUX)
 		ssize_t len = readlink("/proc/self/exe", buffer, sizeof(buffer));
 		if (len != -1) {
@@ -65,7 +69,7 @@ std::string Util::GetExecutableLocation() {
 		GetModuleFileName(nullptr, buffer, sizeof(buffer));
 		return std::string(buffer);
 	#endif
-	
+
 	return "";
 }
 
@@ -103,7 +107,7 @@ void Util::Error(const char* format, ...) {
 	char*  ret = nullptr;
 	va_list ap;
 
-	// Determine required size. 
+	// Determine required size.
 
 	va_start(ap, format);
 	n = vsnprintf(ret, size, format, ap);
@@ -127,7 +131,7 @@ void Util::Error(const char* format, ...) {
 		free(ret);
 	    return;
 	}
-	
+
 	fprintf(stderr, "[ERROR] %s\n", ret);
 	SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERROR!", ret, nullptr);
 	free(ret);

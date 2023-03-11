@@ -16,18 +16,22 @@ App::App():
 	if (Util::GetExecutableLocation() == "") {
 		Util::Error(APP_NAME " can't run on your system");
 	}
-	
+
+	if (!FS::Directory::Exists(gameFolder)) {
+		FS::Directory::Create(gameFolder);
+	}
+
 	deltaLast  = 0;
 	deltaNow   = SDL_GetPerformanceCounter();
 	state      = AppState::TitleScreen;
 
 	Util::Log("Found game folder: %s", gameFolder.c_str());
-	
+
 	curl.Init();
 	SetupGameFiles();
 	DownloadAssets();
 	Util::Log("Set up game files");
-	
+
 	video.Init();
 	text.Init(gameFolder + "/font.ttf");
 	image.Init();
@@ -46,7 +50,7 @@ App::App():
 	game.level.worldsPath    = gameFolder + "/maps";
 	game.app                 = this;
 	game.particles.tileSheet = &gameTextures;
-	
+
 /*
 	game.Init();
 
@@ -108,6 +112,14 @@ void App::Update() {
 				Mouse::Position() = {event.motion.x, event.motion.y};
 				break;
 			}
+			case SDL_FINGERMOTION: {
+				#if defined(PLATFORM_VITA)
+					if(event.tfinger.touchId != 0) return;
+				#endif
+				Util::Log("Motion. %d, %d", event.tfinger.x * APP_SCREEN_SIZE_W, event.tfinger.y * APP_SCREEN_SIZE_H);
+				Mouse::Position() = {(signed int)(event.tfinger.x * APP_SCREEN_SIZE_W), (signed int)(event.tfinger.y * APP_SCREEN_SIZE_H)};
+				break;
+			}
 			case SDL_MOUSEBUTTONDOWN: {
 				Mouse::Pressed() = true;
 				Mouse::Clicked() = true;
@@ -115,6 +127,28 @@ void App::Update() {
 				break;
 			}
 			case SDL_MOUSEBUTTONUP: {
+				Mouse::Pressed() = false;
+				goto callHandleEventFunctions;
+				break;
+			}
+			case SDL_FINGERDOWN: {
+				#if defined(PLATFORM_VITA)
+					if(event.tfinger.touchId != 0) return;
+				#endif
+				Util::Log("Fv");
+
+				Mouse::Pressed() = true;
+				Mouse::Clicked() = true;
+				goto callHandleEventFunctions;
+				break;
+			}
+
+			case SDL_FINGERUP: {
+				#if defined(PLATFORM_VITA)
+					if(event.tfinger.touchId != 0) return;
+				#endif
+				Util::Log("FU");
+
 				Mouse::Pressed() = false;
 				goto callHandleEventFunctions;
 				break;
@@ -159,10 +193,10 @@ void App::Update() {
 	switch (state) {
 		case AppState::InGame: {
 			game.Update(state);
-		
+
 			const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 			game.HandleInput(keystate, deltaTime);
-			break;			
+			break;
 		}
 		case AppState::TitleScreen: {
 			if (!titleScreen.Update(state)) {
@@ -232,7 +266,7 @@ void App::Update() {
 				if (path.empty()) {
 					break;
 				}
-			
+
 				settings.settings["texturePack"] = path;
 			}
 			break;
@@ -315,7 +349,7 @@ void App::DownloadAssets() {
 		"music/Misery_Rope_Here.mp3",
 		"music/Nevertheless_Life_Is_Beautiful.mp3"
 	};
-	
+
 	bool needsDownload = false;
 	for (auto& file : requiredFiles) {
 		if (!FS::File::Exists(gameFolder + "/" + file)) {

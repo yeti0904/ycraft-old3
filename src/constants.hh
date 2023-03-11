@@ -5,6 +5,7 @@
 #define APP_VERSION       "beta 1.0"
 #define APP_AUTHOR        "MESYETI"
 #define APP_RESOURCES_URL "https://server4.mesyeti.uk/ycraft/d0.0.1/"
+
 #define APP_SCREEN_SIZE_W 640
 #define APP_SCREEN_SIZE_H 360
 

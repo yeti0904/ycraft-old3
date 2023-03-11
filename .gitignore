@@ -4,3 +4,5 @@ sdl2image
 sdl2ttf
 bin/*.properties
 curl
+vita
+.vscode
