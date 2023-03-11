@@ -236,44 +236,43 @@ void Game::HandleEvent(SDL_Event& event) {
 				}
 
 				case SDL_JOYAXISMOTION: {
-					Util::Log("JS Moved. %d and %d", event.caxis.axis, event.caxis.value);
 					if(event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTX) {
 						if(event.caxis.value < -4000) {
-							xMovement = -1;
+							joystickMovement.x = -1;
 						} else if(event.caxis.value > 4000) {
-							xMovement = 1;
+							joystickMovement.x = 1;
 						} else {
-							xMovement = 0;
+							joystickMovement.x = 0;
 						}
 					}
 
 					if(event.caxis.axis == SDL_CONTROLLER_AXIS_LEFTY) {
 						if(event.caxis.value < -4000) {
-							yMovement = -1;
+							joystickMovement.y = -1;
 						} else if( event.caxis.value > 4000) {
-							yMovement = 1;
+							joystickMovement.y = 1;
 						} else {
-							yMovement = 0;
+							joystickMovement.y = 0;
 						}
 					}
 
 					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTY) {
 						if(event.caxis.value < -4000) {
-							yJoyMouse = -1;
+							joystickCursorMovement.x = -1;
 						} else if(event.caxis.value > 4000) {
-							yJoyMouse = 1;
+							joystickCursorMovement.x = 1;
 						} else {
-							yJoyMouse = 0;
+							joystickCursorMovement.x = 0;
 						}
 					}
 
 					if(event.caxis.axis == SDL_CONTROLLER_AXIS_RIGHTX) {
 						if(event.caxis.value < -4000) {
-							xJoyMouse = -1;
+							joystickCursorMovement.y = -1;
 						} else if( event.caxis.value > 4000) {
-							xJoyMouse = 1;
+							joystickCursorMovement.y = 1;
 						} else {
-							xJoyMouse = 0;
+							joystickCursorMovement.y = 0;
 						}
 					}
 				}
@@ -373,32 +372,32 @@ void Game::HandleInput(const Uint8* keystate, double delta) {
 		UpdateCamera();
 	}
 
-	if(yMovement == -1) {
+	if(joystickMovement.y == -1) {
 		player.GoUp(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
 		player.EdgeCollision(level);
 		UpdateCamera();
 	}
-	if(yMovement == 1) {
+	if(joystickMovement.y == 1) {
 		player.GoDown(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
 		player.EdgeCollision(level);
 		UpdateCamera();
 	}
-	if(xMovement == 1) {
+	if(joystickMovement.x == 1) {
 		player.GoRight(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
 		player.EdgeCollision(level);
 		UpdateCamera();
 	}
-	if(xMovement == -1) {
+	if(joystickMovement.x == -1) {
 		player.GoLeft(app->deltaTime, GAME_PLAYER_SPEED, level, blockdefs);
 		player.EdgeCollision(level);
 		UpdateCamera();
 	}
 
-	if(yJoyMouse == -1) Mouse::Position().y -= 1;
-	if(yJoyMouse == 1) Mouse::Position().y += 1;
+	if(joystickCursorMovement.y  == -1) Mouse::Position().y -= 1;
+	if(joystickCursorMovement.y  == 1) Mouse::Position().y += 1;
 
-	if(xJoyMouse == -1) Mouse::Position().x -= 1;
-	if(xJoyMouse == 1) Mouse::Position().x += 1;
+	if(joystickCursorMovement.x == -1) Mouse::Position().x -= 1;
+	if(joystickCursorMovement.x == 1) Mouse::Position().x += 1;
 
 	player.Update();
 
@@ -459,7 +458,7 @@ void Game::Render() {
 				block.x = (j * GAME_BLOCK_SIZE) - (camera.x * GAME_BLOCK_SIZE);
 				block.y = (i * GAME_BLOCK_SIZE) - (camera.y * GAME_BLOCK_SIZE);
 				//Rect blockRect = {block.x, block.y, GAME_BLOCK_SIZE, GAME_BLOCK_SIZE};
-			
+
 				if (blockdefs.defs[level.layers[0].front[i][j]].type == BlockType::Solid) {
 					// render shadow
 					SDL_SetRenderDrawColor(app->video.renderer, 0, 0, 0, 127);
@@ -567,7 +566,7 @@ void Game::Render() {
 						);
 					}
 				}
-				
+
 				// draw light on block
 				/* TODO: fix light
 				SDL_SetRenderDrawColor(
@@ -591,7 +590,7 @@ void Game::Render() {
 					rect.w = GAME_BLOCK_SIZE;
 					rect.h = GAME_BLOCK_SIZE;
 					SDL_RenderDrawRect(app->video.renderer, &rect);
-				} 
+				}
 			}
 		}
 	}
@@ -805,7 +804,7 @@ void Game::PlaceBlock() {
 	auto& block = player.inventory.Hotbar()[
 		player.inventory.hotbarSelection
 	];
-	
+
 	size_t y = highlightedBlock.y;
 	size_t x = highlightedBlock.x;
 	if (
